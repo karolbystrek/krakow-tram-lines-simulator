@@ -1,178 +1,282 @@
 {
   "blocks": [
     {
-      "block_id": "block_653",
+      "block_id": "block_471",
       "category": "tram",
-      "end_time": "22:50:00",
+      "end_time": "21:15:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-01",
-      "start_time": "04:16:00",
+      "start_time": "04:43:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_654",
+      "block_id": "block_472",
       "category": "tram",
-      "end_time": "24:53:00",
+      "end_time": "24:22:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-02",
-      "start_time": "04:29:00",
+      "start_time": "04:09:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_655",
+      "block_id": "block_473",
       "category": "tram",
-      "end_time": "23:14:00",
+      "end_time": "23:49:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-03",
-      "start_time": "04:32:00",
+      "start_time": "05:07:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_656",
+      "block_id": "block_474",
       "category": "tram",
-      "end_time": "23:38:00",
+      "end_time": "20:28:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-04",
-      "start_time": "04:50:00",
+      "start_time": "03:59:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_657",
+      "block_id": "block_475",
       "category": "tram",
-      "end_time": "23:55:00",
+      "end_time": "22:52:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-05",
-      "start_time": "04:57:00",
+      "start_time": "04:40:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_658",
+      "block_id": "block_476",
       "category": "tram",
-      "end_time": "24:09:00",
+      "end_time": "19:48:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-06",
-      "start_time": "05:12:00",
+      "start_time": "05:27:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_659",
+      "block_id": "block_477",
       "category": "tram",
-      "end_time": "23:38:00",
+      "end_time": "24:06:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-07",
-      "start_time": "03:58:00",
+      "start_time": "05:31:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_660",
+      "block_id": "block_478",
       "category": "tram",
-      "end_time": "23:56:00",
+      "end_time": "23:11:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-08",
-      "start_time": "04:04:00",
+      "start_time": "04:29:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_661",
+      "block_id": "block_479",
       "category": "tram",
-      "end_time": "24:27:00",
+      "end_time": "20:07:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_1",
       "shift": "18-09",
-      "start_time": "03:59:00",
+      "start_time": "05:43:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_817",
+      "block_id": "block_480",
       "category": "tram",
-      "end_time": "23:26:00",
+      "end_time": "20:22:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_1",
+      "shift": "18-10",
+      "start_time": "04:00:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_481",
+      "category": "tram",
+      "end_time": "23:27:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_1",
+      "shift": "18-11",
+      "start_time": "05:10:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_482",
+      "category": "tram",
+      "end_time": "20:31:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_1",
+      "shift": "18-12",
+      "start_time": "04:09:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_483",
+      "category": "tram",
+      "end_time": "20:35:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_1",
+      "shift": "18-13",
+      "start_time": "04:22:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_484",
+      "category": "tram",
+      "end_time": "21:34:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_1",
+      "shift": "18-14",
+      "start_time": "05:39:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_485",
+      "category": "tram",
+      "end_time": "23:44:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_1",
+      "shift": "18-15",
+      "start_time": "05:46:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_486",
+      "category": "tram",
+      "end_time": "21:04:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_1",
+      "shift": "18-16",
+      "start_time": "06:35:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_487",
+      "category": "tram",
+      "end_time": "24:07:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_1",
+      "shift": "18-17",
+      "start_time": "03:58:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_642",
+      "category": "tram",
+      "end_time": "23:44:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_2",
       "shift": "18-01",
-      "start_time": "04:08:00",
+      "start_time": "03:53:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_818",
+      "block_id": "block_643",
       "category": "tram",
-      "end_time": "21:16:00",
+      "end_time": "21:47:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_2",
       "shift": "18-02",
-      "start_time": "04:26:00",
+      "start_time": "04:13:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_819",
+      "block_id": "block_644",
       "category": "tram",
-      "end_time": "21:36:00",
+      "end_time": "22:06:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_2",
       "shift": "18-03",
-      "start_time": "04:53:00",
+      "start_time": "04:08:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_820",
+      "block_id": "block_645",
       "category": "tram",
-      "end_time": "21:56:00",
+      "end_time": "22:26:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_2",
       "shift": "18-04",
-      "start_time": "04:29:00",
+      "start_time": "04:09:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_821",
+      "block_id": "block_646",
       "category": "tram",
-      "end_time": "24:08:00",
+      "end_time": "24:06:00",
       "is_current": false,
       "route_short_names": [
         "18"
@@ -183,9 +287,9 @@
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_822",
+      "block_id": "block_647",
       "category": "tram",
-      "end_time": "21:48:00",
+      "end_time": "21:51:00",
       "is_current": false,
       "route_short_names": [
         "18"
@@ -196,9 +300,9 @@
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_823",
+      "block_id": "block_648",
       "category": "tram",
-      "end_time": "20:36:00",
+      "end_time": "22:08:00",
       "is_current": false,
       "route_short_names": [
         "18"
@@ -209,9 +313,9 @@
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_875",
+      "block_id": "block_700",
       "category": "tram",
-      "end_time": "28:16:00",
+      "end_time": "28:40:00",
       "is_current": false,
       "route_short_names": [
         "18",
@@ -219,18 +323,13 @@
       ],
       "service_id": "service_2",
       "shift": "62-03",
-      "start_time": "20:50:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY889",
-          "timestamp": 1760839202.0
-        }
-      ]
+      "start_time": "20:24:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_876",
+      "block_id": "block_701",
       "category": "tram",
-      "end_time": "28:46:00",
+      "end_time": "29:10:00",
       "is_current": false,
       "route_short_names": [
         "18",
@@ -238,18 +337,13 @@
       ],
       "service_id": "service_2",
       "shift": "62-04",
-      "start_time": "21:12:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY827",
-          "timestamp": 1760841178.0
-        }
-      ]
+      "start_time": "20:41:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_877",
+      "block_id": "block_702",
       "category": "tram",
-      "end_time": "29:16:00",
+      "end_time": "29:40:00",
       "is_current": false,
       "route_short_names": [
         "18",
@@ -257,16 +351,11 @@
       ],
       "service_id": "service_2",
       "shift": "62-05",
-      "start_time": "21:32:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY888",
-          "timestamp": 1760842914.0
-        }
-      ]
+      "start_time": "21:01:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_881",
+      "block_id": "block_706",
       "category": "tram",
       "end_time": "29:08:00",
       "is_current": false,
@@ -276,16 +365,11 @@
       ],
       "service_id": "service_2",
       "shift": "69-04",
-      "start_time": "20:26:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "HY711",
-          "timestamp": 1760840505.0
-        }
-      ]
+      "start_time": "20:28:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_882",
+      "block_id": "block_707",
       "category": "tram",
       "end_time": "29:36:00",
       "is_current": false,
@@ -295,148 +379,104 @@
       ],
       "service_id": "service_2",
       "shift": "69-05",
-      "start_time": "20:10:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY875",
-          "timestamp": 1760842362.0
-        }
-      ]
+      "start_time": "20:56:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_39",
+      "block_id": "block_772",
       "category": "tram",
-      "end_time": "23:26:00",
-      "is_current": true,
+      "end_time": "23:44:00",
+      "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_3",
       "shift": "18-01",
       "start_time": "04:27:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY886",
-          "timestamp": 1760887880.0
-        }
-      ]
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_40",
+      "block_id": "block_773",
       "category": "tram",
-      "end_time": "18:56:00",
+      "end_time": "19:19:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_3",
       "shift": "18-02",
-      "start_time": "04:31:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY882",
-          "timestamp": 1760887889.0
-        }
-      ]
+      "start_time": "04:09:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_41",
+      "block_id": "block_774",
       "category": "tram",
-      "end_time": "21:36:00",
-      "is_current": true,
+      "end_time": "22:05:00",
+      "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_3",
       "shift": "18-03",
       "start_time": "07:46:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY816",
-          "timestamp": 1760887889.0
-        }
-      ]
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_42",
+      "block_id": "block_775",
       "category": "tram",
-      "end_time": "19:36:00",
-      "is_current": true,
+      "end_time": "19:59:00",
+      "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_3",
       "shift": "18-04",
       "start_time": "04:28:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY811",
-          "timestamp": 1760887883.0
-        }
-      ]
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_43",
+      "block_id": "block_776",
       "category": "tram",
-      "end_time": "24:08:00",
-      "is_current": true,
+      "end_time": "24:06:00",
+      "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_3",
       "shift": "18-05",
       "start_time": "04:29:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY803",
-          "timestamp": 1760887885.0
-        }
-      ]
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_44",
+      "block_id": "block_777",
       "category": "tram",
-      "end_time": "21:48:00",
-      "is_current": true,
+      "end_time": "21:51:00",
+      "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_3",
       "shift": "18-06",
       "start_time": "08:47:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY818",
-          "timestamp": 1760887885.0
-        },
-        {
-          "kmk_id": "RF322",
-          "timestamp": 1760880075.0
-        }
-      ]
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_45",
+      "block_id": "block_778",
       "category": "tram",
-      "end_time": "20:36:00",
-      "is_current": true,
+      "end_time": "21:03:00",
+      "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_3",
       "shift": "18-07",
       "start_time": "04:21:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RY883",
-          "timestamp": 1760887886.0
-        }
-      ]
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_97",
+      "block_id": "block_830",
       "category": "tram",
-      "end_time": "25:46:00",
+      "end_time": "26:10:00",
       "is_current": false,
       "route_short_names": [
         "18",
@@ -444,13 +484,13 @@
       ],
       "service_id": "service_3",
       "shift": "62-03",
-      "start_time": "18:30:00",
+      "start_time": "18:04:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_98",
+      "block_id": "block_831",
       "category": "tram",
-      "end_time": "28:46:00",
+      "end_time": "29:10:00",
       "is_current": false,
       "route_short_names": [
         "18",
@@ -458,13 +498,13 @@
       ],
       "service_id": "service_3",
       "shift": "62-04",
-      "start_time": "21:12:00",
+      "start_time": "20:41:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_99",
+      "block_id": "block_832",
       "category": "tram",
-      "end_time": "26:46:00",
+      "end_time": "27:10:00",
       "is_current": false,
       "route_short_names": [
         "18",
@@ -472,11 +512,11 @@
       ],
       "service_id": "service_3",
       "shift": "62-05",
-      "start_time": "19:10:00",
+      "start_time": "18:44:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_103",
+      "block_id": "block_836",
       "category": "tram",
       "end_time": "26:44:00",
       "is_current": false,
@@ -486,11 +526,11 @@
       ],
       "service_id": "service_3",
       "shift": "69-04",
-      "start_time": "20:26:00",
+      "start_time": "20:28:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_104",
+      "block_id": "block_837",
       "category": "tram",
       "end_time": "28:49:00",
       "is_current": false,
@@ -500,102 +540,42 @@
       ],
       "service_id": "service_3",
       "shift": "69-05",
-      "start_time": "20:10:00",
+      "start_time": "19:44:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_222",
+      "block_id": "block_49",
       "category": "tram",
-      "end_time": "22:50:00",
-      "is_current": false,
+      "end_time": "21:15:00",
+      "is_current": true,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_4",
       "shift": "18-01",
-      "start_time": "04:16:00",
+      "start_time": "04:43:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_223",
+      "block_id": "block_50",
       "category": "tram",
-      "end_time": "24:53:00",
-      "is_current": false,
+      "end_time": "24:22:00",
+      "is_current": true,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_4",
       "shift": "18-02",
-      "start_time": "04:29:00",
-      "vehicles_on_block": []
+      "start_time": "04:09:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY830",
+          "timestamp": 1762525497.0
+        }
+      ]
     },
     {
-      "block_id": "block_224",
-      "category": "tram",
-      "end_time": "23:14:00",
-      "is_current": false,
-      "route_short_names": [
-        "18"
-      ],
-      "service_id": "service_4",
-      "shift": "18-03",
-      "start_time": "04:32:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_225",
-      "category": "tram",
-      "end_time": "21:19:00",
-      "is_current": false,
-      "route_short_names": [
-        "18"
-      ],
-      "service_id": "service_4",
-      "shift": "18-04",
-      "start_time": "04:50:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_226",
-      "category": "tram",
-      "end_time": "21:36:00",
-      "is_current": false,
-      "route_short_names": [
-        "18"
-      ],
-      "service_id": "service_4",
-      "shift": "18-05",
-      "start_time": "04:57:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_227",
-      "category": "tram",
-      "end_time": "21:53:00",
-      "is_current": false,
-      "route_short_names": [
-        "18"
-      ],
-      "service_id": "service_4",
-      "shift": "18-06",
-      "start_time": "05:12:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_228",
-      "category": "tram",
-      "end_time": "23:38:00",
-      "is_current": false,
-      "route_short_names": [
-        "18"
-      ],
-      "service_id": "service_4",
-      "shift": "18-07",
-      "start_time": "03:58:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_229",
+      "block_id": "block_51",
       "category": "tram",
       "end_time": "21:30:00",
       "is_current": false,
@@ -603,67 +583,249 @@
         "18"
       ],
       "service_id": "service_4",
-      "shift": "18-08",
-      "start_time": "04:04:00",
-      "vehicles_on_block": []
+      "shift": "18-03",
+      "start_time": "05:07:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY737",
+          "timestamp": 1762525497.0
+        }
+      ]
     },
     {
-      "block_id": "block_230",
+      "block_id": "block_52",
       "category": "tram",
-      "end_time": "22:35:00",
-      "is_current": false,
+      "end_time": "20:28:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-04",
+      "start_time": "03:59:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY806",
+          "timestamp": 1762525503.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_53",
+      "category": "tram",
+      "end_time": "22:52:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-05",
+      "start_time": "04:40:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY821",
+          "timestamp": 1762525503.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_54",
+      "category": "tram",
+      "end_time": "19:48:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-06",
+      "start_time": "05:27:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY722",
+          "timestamp": 1762525415.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_55",
+      "category": "tram",
+      "end_time": "22:00:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-07",
+      "start_time": "05:31:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY845",
+          "timestamp": 1762525501.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_56",
+      "category": "tram",
+      "end_time": "23:11:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-08",
+      "start_time": "04:29:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY803",
+          "timestamp": 1762525501.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_57",
+      "category": "tram",
+      "end_time": "20:07:00",
+      "is_current": true,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_4",
       "shift": "18-09",
-      "start_time": "03:59:00",
+      "start_time": "05:43:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_313",
+      "block_id": "block_58",
       "category": "tram",
-      "end_time": "28:16:00",
-      "is_current": false,
+      "end_time": "20:22:00",
+      "is_current": true,
       "route_short_names": [
-        "18",
-        "62"
+        "18"
       ],
       "service_id": "service_4",
-      "shift": "62-03",
-      "start_time": "20:28:00",
-      "vehicles_on_block": []
+      "shift": "18-10",
+      "start_time": "04:00:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY857",
+          "timestamp": 1762525500.0
+        }
+      ]
     },
     {
-      "block_id": "block_314",
+      "block_id": "block_59",
       "category": "tram",
-      "end_time": "28:46:00",
+      "end_time": "23:27:00",
       "is_current": false,
       "route_short_names": [
-        "18",
-        "62"
+        "18"
       ],
       "service_id": "service_4",
-      "shift": "62-04",
-      "start_time": "20:44:00",
-      "vehicles_on_block": []
+      "shift": "18-11",
+      "start_time": "05:10:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY877",
+          "timestamp": 1762525507.0
+        }
+      ]
     },
     {
-      "block_id": "block_315",
+      "block_id": "block_60",
       "category": "tram",
-      "end_time": "29:16:00",
+      "end_time": "20:31:00",
       "is_current": false,
       "route_short_names": [
-        "18",
-        "62"
+        "18"
       ],
       "service_id": "service_4",
-      "shift": "62-05",
-      "start_time": "21:05:00",
+      "shift": "18-12",
+      "start_time": "04:09:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY709",
+          "timestamp": 1762525507.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_61",
+      "category": "tram",
+      "end_time": "20:35:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-13",
+      "start_time": "04:22:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_319",
+      "block_id": "block_62",
+      "category": "tram",
+      "end_time": "21:34:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-14",
+      "start_time": "05:39:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_63",
+      "category": "tram",
+      "end_time": "23:44:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-15",
+      "start_time": "05:46:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY875",
+          "timestamp": 1762525501.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_64",
+      "category": "tram",
+      "end_time": "21:04:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-16",
+      "start_time": "06:35:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_65",
+      "category": "tram",
+      "end_time": "24:07:00",
+      "is_current": true,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_4",
+      "shift": "18-17",
+      "start_time": "03:58:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY811",
+          "timestamp": 1762525507.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_153",
       "category": "tram",
       "end_time": "29:08:00",
       "is_current": false,
@@ -677,7 +839,7 @@
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_320",
+      "block_id": "block_154",
       "category": "tram",
       "end_time": "29:36:00",
       "is_current": false,
@@ -687,131 +849,235 @@
       ],
       "service_id": "service_4",
       "shift": "69-05",
-      "start_time": "22:04:00",
+      "start_time": "20:34:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_453",
+      "block_id": "block_284",
       "category": "tram",
-      "end_time": "22:50:00",
+      "end_time": "21:15:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-01",
-      "start_time": "04:16:00",
+      "start_time": "04:43:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_454",
+      "block_id": "block_285",
       "category": "tram",
-      "end_time": "24:53:00",
+      "end_time": "24:22:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-02",
-      "start_time": "04:29:00",
+      "start_time": "04:09:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_455",
+      "block_id": "block_286",
       "category": "tram",
-      "end_time": "23:14:00",
+      "end_time": "23:49:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-03",
-      "start_time": "04:32:00",
+      "start_time": "05:07:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_456",
+      "block_id": "block_287",
       "category": "tram",
-      "end_time": "23:38:00",
+      "end_time": "20:28:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-04",
-      "start_time": "04:50:00",
+      "start_time": "03:59:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_457",
+      "block_id": "block_288",
       "category": "tram",
-      "end_time": "23:55:00",
+      "end_time": "22:52:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-05",
-      "start_time": "04:57:00",
+      "start_time": "04:40:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_458",
+      "block_id": "block_289",
       "category": "tram",
-      "end_time": "24:09:00",
+      "end_time": "19:48:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-06",
-      "start_time": "05:12:00",
+      "start_time": "05:27:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_459",
+      "block_id": "block_290",
       "category": "tram",
-      "end_time": "23:38:00",
+      "end_time": "24:06:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-07",
-      "start_time": "03:58:00",
+      "start_time": "05:31:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_460",
+      "block_id": "block_291",
       "category": "tram",
-      "end_time": "23:56:00",
+      "end_time": "23:11:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-08",
-      "start_time": "04:04:00",
+      "start_time": "04:29:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_461",
+      "block_id": "block_292",
       "category": "tram",
-      "end_time": "24:27:00",
+      "end_time": "20:07:00",
       "is_current": false,
       "route_short_names": [
         "18"
       ],
       "service_id": "service_5",
       "shift": "18-09",
-      "start_time": "03:59:00",
+      "start_time": "05:43:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_293",
+      "category": "tram",
+      "end_time": "20:22:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_5",
+      "shift": "18-10",
+      "start_time": "04:00:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_294",
+      "category": "tram",
+      "end_time": "23:27:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_5",
+      "shift": "18-11",
+      "start_time": "05:10:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_295",
+      "category": "tram",
+      "end_time": "20:31:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_5",
+      "shift": "18-12",
+      "start_time": "04:09:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_296",
+      "category": "tram",
+      "end_time": "20:35:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_5",
+      "shift": "18-13",
+      "start_time": "04:22:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_297",
+      "category": "tram",
+      "end_time": "21:34:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_5",
+      "shift": "18-14",
+      "start_time": "05:39:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_298",
+      "category": "tram",
+      "end_time": "23:44:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_5",
+      "shift": "18-15",
+      "start_time": "05:46:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_299",
+      "category": "tram",
+      "end_time": "21:04:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_5",
+      "shift": "18-16",
+      "start_time": "06:35:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_300",
+      "category": "tram",
+      "end_time": "24:07:00",
+      "is_current": false,
+      "route_short_names": [
+        "18"
+      ],
+      "service_id": "service_5",
+      "shift": "18-17",
+      "start_time": "03:58:00",
       "vehicles_on_block": []
     }
   ],
   "carrier": "MPK S.A. w Krakowie",
   "directions": [
-    "Czerwone Maki P+R",
-    "Górka Narodowa P+R"
+    "Górka Narodowa P+R",
+    "Czerwone Maki P+R"
   ],
   "services": [
     {
@@ -873,3855 +1139,105 @@
   "shapes": [
     [
       [
-        19.889106,
-        50.017986
-      ],
-      [
-        19.898122,
-        50.020825
-      ],
-      [
-        19.898122,
-        50.020825
-      ],
-      [
-        19.901995,
-        50.024685
-      ],
-      [
-        19.901942,
-        50.0247
-      ],
-      [
-        19.901997,
-        50.024778
-      ],
-      [
-        19.902293,
-        50.025188
-      ],
-      [
-        19.902564,
-        50.025495
-      ],
-      [
-        19.902832,
-        50.025736
-      ],
-      [
-        19.903205,
-        50.026007
-      ],
-      [
-        19.90342,
-        50.026138
-      ],
-      [
-        19.90353,
-        50.026199
-      ],
-      [
-        19.903606,
-        50.026239
-      ],
-      [
-        19.903796,
-        50.026334
-      ],
-      [
-        19.904064,
-        50.026452
-      ],
-      [
-        19.904336,
-        50.026569
-      ],
-      [
-        19.905189,
-        50.026934
-      ],
-      [
-        19.905411,
-        50.02703
-      ],
-      [
-        19.905449,
-        50.027046
-      ],
-      [
-        19.905545,
-        50.027088
-      ],
-      [
-        19.905564,
-        50.027096
-      ],
-      [
-        19.905654,
-        50.027134
-      ],
-      [
-        19.905708,
-        50.027157
-      ],
-      [
-        19.90604,
-        50.027299
-      ],
-      [
-        19.906093,
-        50.027322
-      ],
-      [
-        19.906093,
-        50.027322
-      ],
-      [
-        19.906561,
-        50.027521
-      ],
-      [
-        19.907492,
-        50.027898
-      ],
-      [
-        19.909859,
-        50.028856
-      ],
-      [
-        19.912228,
-        50.029814
-      ],
-      [
-        19.912567,
-        50.029952
-      ],
-      [
-        19.912639,
-        50.029982
-      ],
-      [
-        19.91273,
-        50.030019
-      ],
-      [
-        19.912779,
-        50.030039
-      ],
-      [
-        19.913094,
-        50.030166
-      ],
-      [
-        19.913094,
-        50.030166
-      ],
-      [
-        19.91312,
-        50.030177
-      ],
-      [
-        19.915586,
-        50.031174
-      ],
-      [
-        19.915986,
-        50.031325
-      ],
-      [
-        19.916608,
-        50.031547
-      ],
-      [
-        19.916801,
-        50.031614
-      ],
-      [
-        19.917721,
-        50.031938
-      ],
-      [
-        19.917886,
-        50.031993
-      ],
-      [
-        19.917983,
-        50.032021
-      ],
-      [
-        19.918202,
-        50.032069
-      ],
-      [
-        19.918362,
-        50.032093
-      ],
-      [
-        19.918525,
-        50.032109
-      ],
-      [
-        19.918684,
-        50.032119
-      ],
-      [
-        19.918898,
-        50.032116
-      ],
-      [
-        19.919039,
-        50.03211
-      ],
-      [
-        19.919192,
-        50.032093
-      ],
-      [
-        19.919405,
-        50.032057
-      ],
-      [
-        19.920217,
-        50.031869
-      ],
-      [
-        19.920564,
-        50.031788
-      ],
-      [
-        19.920667,
-        50.031763
-      ],
-      [
-        19.920892,
-        50.031706
-      ],
-      [
-        19.921186,
-        50.031632
-      ],
-      [
-        19.921186,
-        50.031632
-      ],
-      [
-        19.921239,
-        50.031619
-      ],
-      [
-        19.921752,
-        50.031482
-      ],
-      [
-        19.922935,
-        50.03117
-      ],
-      [
-        19.923178,
-        50.031107
-      ],
-      [
-        19.923581,
-        50.031009
-      ],
-      [
-        19.923885,
-        50.030944
-      ],
-      [
-        19.924149,
-        50.030894
-      ],
-      [
-        19.924608,
-        50.030821
-      ],
-      [
-        19.924724,
-        50.030803
-      ],
-      [
-        19.924889,
-        50.030779
-      ],
-      [
-        19.924876,
-        50.030744
-      ],
-      [
-        19.924991,
-        50.030727
-      ],
-      [
-        19.925195,
-        50.030697
-      ],
-      [
-        19.925261,
-        50.030689
-      ],
-      [
-        19.9254,
-        50.030675
-      ],
-      [
-        19.925641,
-        50.03065
-      ],
-      [
-        19.925785,
-        50.030635
-      ],
-      [
-        19.926104,
-        50.030601
-      ],
-      [
-        19.926185,
-        50.030593
-      ],
-      [
-        19.926815,
-        50.030527
-      ],
-      [
-        19.927011,
-        50.030513
-      ],
-      [
-        19.927136,
-        50.030511
-      ],
-      [
-        19.927398,
-        50.030511
-      ],
-      [
-        19.927622,
-        50.030509
-      ],
-      [
-        19.927885,
-        50.030512
-      ],
-      [
-        19.928501,
-        50.03051
-      ],
-      [
-        19.928538,
-        50.03051
-      ],
-      [
-        19.928538,
-        50.03051
-      ],
-      [
-        19.928816,
-        50.030511
-      ],
-      [
-        19.929508,
-        50.030512
-      ],
-      [
-        19.929664,
-        50.030511
-      ],
-      [
-        19.929842,
-        50.0305
-      ],
-      [
-        19.930052,
-        50.030491
-      ],
-      [
-        19.930169,
-        50.030488
-      ],
-      [
-        19.930351,
-        50.030491
-      ],
-      [
-        19.930416,
-        50.030491
-      ],
-      [
-        19.931326,
-        50.030494
-      ],
-      [
-        19.931472,
-        50.030494
-      ],
-      [
-        19.931741,
-        50.030495
-      ],
-      [
-        19.931874,
-        50.030497
-      ],
-      [
-        19.931874,
-        50.030497
-      ],
-      [
-        19.931897,
-        50.030497
-      ],
-      [
-        19.93204,
-        50.030496
-      ],
-      [
-        19.932185,
-        50.030497
-      ],
-      [
-        19.932353,
-        50.030491
-      ],
-      [
-        19.932476,
-        50.030483
-      ],
-      [
-        19.93266,
-        50.030466
-      ],
-      [
-        19.932759,
-        50.030454
-      ],
-      [
-        19.932895,
-        50.030435
-      ],
-      [
-        19.933034,
-        50.030411
-      ],
-      [
-        19.933252,
-        50.030367
-      ],
-      [
-        19.933441,
-        50.030318
-      ],
-      [
-        19.933545,
-        50.030289
-      ],
-      [
-        19.933724,
-        50.030232
-      ],
-      [
-        19.933921,
-        50.030161
-      ],
-      [
-        19.93399,
-        50.030136
-      ],
-      [
-        19.934312,
-        50.030027
-      ],
-      [
-        19.934425,
-        50.029989
-      ],
-      [
-        19.934472,
-        50.029972
-      ],
-      [
-        19.934514,
-        50.029958
-      ],
-      [
-        19.934746,
-        50.029878
-      ],
-      [
-        19.93503,
-        50.02978
-      ],
-      [
-        19.935228,
-        50.029709
-      ],
-      [
-        19.935543,
-        50.029614
-      ],
-      [
-        19.935654,
-        50.029582
-      ],
-      [
-        19.935934,
-        50.0295
-      ],
-      [
-        19.935945,
-        50.029496
-      ],
-      [
-        19.935945,
-        50.029496
-      ],
-      [
-        19.936165,
-        50.029432
-      ],
-      [
-        19.936206,
-        50.029426
-      ],
-      [
-        19.936228,
-        50.029422
-      ],
-      [
-        19.936255,
-        50.029421
-      ],
-      [
-        19.936292,
-        50.029421
-      ],
-      [
-        19.936317,
-        50.029423
-      ],
-      [
-        19.936344,
-        50.029428
-      ],
-      [
-        19.93638,
-        50.029436
-      ],
-      [
-        19.936409,
-        50.029445
-      ],
-      [
-        19.936435,
-        50.029455
-      ],
-      [
-        19.936458,
-        50.029469
-      ],
-      [
-        19.936475,
-        50.02948
-      ],
-      [
-        19.936489,
-        50.029491
-      ],
-      [
-        19.936519,
-        50.029521
-      ],
-      [
-        19.936544,
-        50.029553
-      ],
-      [
-        19.936569,
-        50.029606
-      ],
-      [
-        19.936632,
-        50.02972
-      ],
-      [
-        19.936821,
-        50.030087
-      ],
-      [
-        19.936864,
-        50.03017
-      ],
-      [
-        19.936879,
-        50.030196
-      ],
-      [
-        19.936901,
-        50.03024
-      ],
-      [
-        19.936942,
-        50.030323
-      ],
-      [
-        19.937032,
-        50.030491
-      ],
-      [
-        19.937032,
-        50.030491
-      ],
-      [
-        19.937086,
-        50.03059
-      ],
-      [
-        19.93713,
-        50.030673
-      ],
-      [
-        19.937217,
-        50.030836
-      ],
-      [
-        19.93729,
-        50.030964
-      ],
-      [
-        19.937466,
-        50.031232
-      ],
-      [
-        19.937552,
-        50.031379
-      ],
-      [
-        19.937662,
-        50.03158
-      ],
-      [
-        19.937769,
-        50.031784
-      ],
-      [
-        19.937825,
-        50.031891
-      ],
-      [
-        19.938102,
-        50.032411
-      ],
-      [
-        19.93836,
-        50.032899
-      ],
-      [
-        19.938387,
-        50.03295
-      ],
-      [
-        19.938387,
-        50.03295
-      ],
-      [
-        19.938434,
-        50.033038
-      ],
-      [
-        19.938446,
-        50.03306
-      ],
-      [
-        19.938455,
-        50.033078
-      ],
-      [
-        19.938486,
-        50.033138
-      ],
-      [
-        19.938496,
-        50.033156
-      ],
-      [
-        19.93855,
-        50.03326
-      ],
-      [
-        19.938605,
-        50.033364
-      ],
-      [
-        19.938796,
-        50.033727
-      ],
-      [
-        19.939504,
-        50.035069
-      ],
-      [
-        19.939522,
-        50.035103
-      ],
-      [
-        19.939589,
-        50.035219
-      ],
-      [
-        19.939609,
-        50.03525
-      ],
-      [
-        19.939679,
-        50.035342
-      ],
-      [
-        19.939712,
-        50.03538
-      ],
-      [
-        19.939752,
-        50.035419
-      ],
-      [
-        19.939826,
-        50.035481
-      ],
-      [
-        19.939847,
-        50.035499
-      ],
-      [
-        19.939939,
-        50.035578
-      ],
-      [
-        19.940061,
-        50.035676
-      ],
-      [
-        19.940283,
-        50.035861
-      ],
-      [
-        19.940364,
-        50.035927
-      ],
-      [
-        19.940364,
-        50.035927
-      ],
-      [
-        19.940464,
-        50.036009
-      ],
-      [
-        19.940518,
-        50.036056
-      ],
-      [
-        19.940558,
-        50.036098
-      ],
-      [
-        19.940594,
-        50.036138
-      ],
-      [
-        19.94062,
-        50.03617
-      ],
-      [
-        19.940644,
-        50.036206
-      ],
-      [
-        19.940663,
-        50.036241
-      ],
-      [
-        19.94068,
-        50.03628
-      ],
-      [
-        19.940698,
-        50.036329
-      ],
-      [
-        19.940725,
-        50.036447
-      ],
-      [
-        19.94075,
-        50.036559
-      ],
-      [
-        19.940762,
-        50.036613
-      ],
-      [
-        19.94077,
-        50.036653
-      ],
-      [
-        19.940785,
-        50.036721
-      ],
-      [
-        19.940795,
-        50.036762
-      ],
-      [
-        19.940799,
-        50.036779
-      ],
-      [
-        19.940834,
-        50.036939
-      ],
-      [
-        19.940904,
-        50.03726
-      ],
-      [
-        19.940949,
-        50.037452
-      ],
-      [
-        19.940958,
-        50.037496
-      ],
-      [
-        19.940977,
-        50.037552
-      ],
-      [
-        19.940991,
-        50.037586
-      ],
-      [
-        19.941011,
-        50.037627
-      ],
-      [
-        19.94104,
-        50.03768
-      ],
-      [
-        19.941082,
-        50.037756
-      ],
-      [
-        19.941418,
-        50.038364
-      ],
-      [
-        19.941552,
-        50.038606
-      ],
-      [
-        19.941849,
-        50.039136
-      ],
-      [
-        19.941899,
-        50.039227
-      ],
-      [
-        19.942341,
-        50.04001
-      ],
-      [
-        19.942438,
-        50.040182
-      ],
-      [
-        19.942629,
-        50.040533
-      ],
-      [
-        19.942688,
-        50.040642
-      ],
-      [
-        19.942787,
-        50.040819
-      ],
-      [
-        19.942937,
-        50.041088
-      ],
-      [
-        19.942979,
-        50.041162
-      ],
-      [
-        19.943041,
-        50.041273
-      ],
-      [
-        19.943073,
-        50.041331
-      ],
-      [
-        19.943079,
-        50.04134
-      ],
-      [
-        19.943121,
-        50.041417
-      ],
-      [
-        19.943242,
-        50.041633
-      ],
-      [
-        19.943242,
-        50.041633
-      ],
-      [
-        19.943246,
-        50.041641
-      ],
-      [
-        19.943302,
-        50.041744
-      ],
-      [
-        19.943345,
-        50.041802
-      ],
-      [
-        19.94337,
-        50.04183
-      ],
-      [
-        19.943403,
-        50.041861
-      ],
-      [
-        19.943424,
-        50.041878
-      ],
-      [
-        19.943451,
-        50.041897
-      ],
-      [
-        19.943501,
-        50.041928
-      ],
-      [
-        19.943561,
-        50.041962
-      ],
-      [
-        19.943789,
-        50.04208
-      ],
-      [
-        19.943883,
-        50.042129
-      ],
-      [
-        19.945204,
-        50.042816
-      ],
-      [
-        19.945219,
-        50.042824
-      ],
-      [
-        19.945341,
-        50.042888
-      ],
-      [
-        19.945456,
-        50.042948
-      ],
-      [
-        19.946545,
-        50.043516
-      ],
-      [
-        19.946696,
-        50.043594
-      ],
-      [
-        19.946696,
-        50.043594
-      ],
-      [
-        19.94681,
-        50.043652
-      ],
-      [
-        19.946821,
-        50.043658
-      ],
-      [
-        19.946857,
-        50.043681
-      ],
-      [
-        19.946885,
-        50.043704
-      ],
-      [
-        19.946898,
-        50.043716
-      ],
-      [
-        19.946924,
-        50.043739
-      ],
-      [
-        19.946933,
-        50.043754
-      ],
-      [
-        19.94695,
-        50.043785
-      ],
-      [
-        19.946953,
-        50.043799
-      ],
-      [
-        19.946961,
-        50.043835
-      ],
-      [
-        19.946961,
-        50.043867
-      ],
-      [
-        19.946961,
-        50.043869
-      ],
-      [
-        19.946953,
-        50.043907
-      ],
-      [
-        19.946912,
-        50.043955
-      ],
-      [
-        19.946875,
-        50.043993
-      ],
-      [
-        19.946861,
-        50.044009
-      ],
-      [
-        19.946678,
-        50.044146
-      ],
-      [
-        19.946601,
-        50.044198
-      ],
-      [
-        19.946588,
-        50.044207
-      ],
-      [
-        19.946373,
-        50.044336
-      ],
-      [
-        19.945951,
-        50.044587
-      ],
-      [
-        19.945821,
-        50.044674
-      ],
-      [
-        19.945803,
-        50.044688
-      ],
-      [
-        19.945766,
-        50.044718
-      ],
-      [
-        19.945754,
-        50.044728
-      ],
-      [
-        19.945675,
-        50.0448
-      ],
-      [
-        19.945633,
-        50.044843
-      ],
-      [
-        19.945567,
-        50.044914
-      ],
-      [
-        19.945465,
-        50.045013
-      ],
-      [
-        19.9454,
-        50.04508
-      ],
-      [
-        19.945181,
-        50.045306
-      ],
-      [
-        19.944476,
-        50.04603
-      ],
-      [
-        19.944463,
-        50.046047
-      ],
-      [
-        19.944339,
-        50.046169
-      ],
-      [
-        19.94427,
-        50.046242
-      ],
-      [
-        19.944191,
-        50.046326
-      ],
-      [
-        19.944109,
-        50.046426
-      ],
-      [
-        19.944039,
-        50.046543
-      ],
-      [
-        19.944032,
-        50.046554
-      ],
-      [
-        19.943956,
-        50.046734
-      ],
-      [
-        19.943952,
-        50.046744
-      ],
-      [
-        19.943766,
-        50.047292
-      ],
-      [
-        19.943741,
-        50.047365
-      ],
-      [
-        19.943658,
-        50.047634
-      ],
-      [
-        19.943611,
-        50.047754
-      ],
-      [
-        19.943475,
-        50.048054
-      ],
-      [
-        19.943448,
-        50.048114
-      ],
-      [
-        19.943448,
-        50.048114
-      ],
-      [
-        19.943361,
-        50.048311
-      ],
-      [
-        19.943322,
-        50.048396
-      ],
-      [
-        19.943237,
-        50.048589
-      ],
-      [
-        19.943204,
-        50.04869
-      ],
-      [
-        19.943198,
-        50.048727
-      ],
-      [
-        19.943193,
-        50.048751
-      ],
-      [
-        19.943188,
-        50.048911
-      ],
-      [
-        19.943186,
-        50.04897
-      ],
-      [
-        19.943184,
-        50.049016
-      ],
-      [
-        19.943175,
-        50.04908
-      ],
-      [
-        19.943169,
-        50.0491
-      ],
-      [
-        19.943144,
-        50.049186
-      ],
-      [
-        19.942974,
-        50.049539
-      ],
-      [
-        19.942968,
-        50.04955
-      ],
-      [
-        19.942818,
-        50.049853
-      ],
-      [
-        19.942729,
-        50.050045
-      ],
-      [
-        19.942668,
-        50.050199
-      ],
-      [
-        19.942568,
-        50.050473
-      ],
-      [
-        19.942508,
-        50.050612
-      ],
-      [
-        19.942458,
-        50.050727
-      ],
-      [
-        19.942409,
-        50.050842
-      ],
-      [
-        19.942409,
-        50.050842
-      ],
-      [
-        19.942403,
-        50.050857
-      ],
-      [
-        19.942376,
-        50.050917
-      ],
-      [
-        19.942312,
-        50.051058
-      ],
-      [
-        19.942139,
-        50.051386
-      ],
-      [
-        19.942103,
-        50.05144
-      ],
-      [
-        19.942085,
-        50.051458
-      ],
-      [
-        19.942019,
-        50.051526
-      ],
-      [
-        19.941945,
-        50.051578
-      ],
-      [
-        19.941884,
-        50.051621
-      ],
-      [
-        19.941817,
-        50.051668
-      ],
-      [
-        19.941748,
-        50.051717
-      ],
-      [
-        19.941687,
-        50.051759
-      ],
-      [
-        19.941648,
-        50.051787
-      ],
-      [
-        19.941504,
-        50.051888
-      ],
-      [
-        19.941435,
-        50.051936
-      ],
-      [
-        19.941382,
-        50.051975
-      ],
-      [
-        19.94132,
-        50.05202
-      ],
-      [
-        19.941236,
-        50.052081
-      ],
-      [
-        19.940922,
-        50.052321
-      ],
-      [
-        19.940773,
-        50.052454
-      ],
-      [
-        19.940729,
-        50.052493
-      ],
-      [
-        19.940529,
-        50.052704
-      ],
-      [
-        19.940413,
-        50.05284
-      ],
-      [
-        19.940324,
-        50.052946
-      ],
-      [
-        19.939883,
-        50.053458
-      ],
-      [
-        19.939613,
-        50.05373
-      ],
-      [
-        19.939503,
-        50.053836
-      ],
-      [
-        19.93934,
-        50.053974
-      ],
-      [
-        19.939328,
-        50.053986
-      ],
-      [
-        19.93931,
-        50.054006
-      ],
-      [
-        19.939298,
-        50.05402
-      ],
-      [
-        19.939275,
-        50.054071
-      ],
-      [
-        19.939269,
-        50.054107
-      ],
-      [
-        19.939275,
-        50.054148
-      ],
-      [
-        19.939288,
-        50.054178
-      ],
-      [
-        19.939301,
-        50.054196
-      ],
-      [
-        19.939313,
-        50.054212
-      ],
-      [
-        19.939333,
-        50.054238
-      ],
-      [
-        19.939439,
-        50.054316
-      ],
-      [
-        19.93952,
-        50.054373
-      ],
-      [
-        19.939623,
-        50.054453
-      ],
-      [
-        19.93966,
-        50.054482
-      ],
-      [
-        19.93966,
-        50.054482
-      ]
-    ],
-    [
-      [
-        19.93966,
-        50.054482
-      ],
-      [
-        19.939756,
-        50.054558
-      ],
-      [
-        19.939868,
-        50.054651
-      ],
-      [
-        19.939913,
-        50.054704
-      ],
-      [
-        19.939952,
-        50.054769
-      ],
-      [
-        19.939974,
-        50.054832
-      ],
-      [
-        19.93999,
-        50.054897
-      ],
-      [
-        19.940026,
-        50.055043
-      ],
-      [
-        19.940072,
-        50.055231
-      ],
-      [
-        19.940202,
-        50.055765
-      ],
-      [
-        19.940219,
-        50.05583
-      ],
-      [
-        19.940321,
-        50.056242
-      ],
-      [
-        19.940482,
-        50.0569
-      ],
-      [
-        19.940499,
-        50.056967
-      ],
-      [
-        19.940501,
-        50.056976
-      ],
-      [
-        19.940613,
-        50.057436
-      ],
-      [
-        19.940636,
-        50.05753
-      ],
-      [
-        19.940675,
-        50.057688
-      ],
-      [
-        19.940746,
-        50.057974
-      ],
-      [
-        19.940828,
-        50.058306
-      ],
-      [
-        19.940888,
-        50.058454
-      ],
-      [
-        19.940944,
-        50.058564
-      ],
-      [
-        19.940991,
-        50.058655
-      ],
-      [
-        19.941,
-        50.058672
-      ],
-      [
-        19.941027,
-        50.058715
-      ],
-      [
-        19.941055,
-        50.058753
-      ],
-      [
-        19.941074,
-        50.058775
-      ],
-      [
-        19.941094,
-        50.058796
-      ],
-      [
-        19.941159,
-        50.05886
-      ],
-      [
-        19.941234,
-        50.058922
-      ],
-      [
-        19.941432,
-        50.059063
-      ],
-      [
-        19.941817,
-        50.059341
-      ],
-      [
-        19.941817,
-        50.059341
-      ],
-      [
-        19.941818,
-        50.059342
-      ],
-      [
-        19.941907,
-        50.059404
-      ],
-      [
-        19.941939,
-        50.059428
-      ],
-      [
-        19.942021,
-        50.059487
-      ],
-      [
-        19.942141,
-        50.059573
-      ],
-      [
-        19.942151,
-        50.059581
-      ],
-      [
-        19.942202,
-        50.059618
-      ],
-      [
-        19.942318,
-        50.059702
-      ],
-      [
-        19.942338,
-        50.059716
-      ],
-      [
-        19.942616,
-        50.059916
-      ],
-      [
-        19.943364,
-        50.060455
-      ],
-      [
-        19.943654,
-        50.060664
-      ],
-      [
-        19.943748,
-        50.060736
-      ],
-      [
-        19.943764,
-        50.060748
-      ],
-      [
-        19.943923,
-        50.060896
-      ],
-      [
-        19.944002,
-        50.060984
-      ],
-      [
-        19.94407,
-        50.061068
-      ],
-      [
-        19.944093,
-        50.061104
-      ],
-      [
-        19.944132,
-        50.061164
-      ],
-      [
-        19.944152,
-        50.061194
-      ],
-      [
-        19.944643,
-        50.062027
-      ],
-      [
-        19.944856,
-        50.062391
-      ],
-      [
-        19.944915,
-        50.062516
-      ],
-      [
-        19.944963,
-        50.062667
-      ],
-      [
-        19.944982,
-        50.062778
-      ],
-      [
-        19.945081,
-        50.063341
-      ],
-      [
-        19.945081,
-        50.063389
-      ],
-      [
-        19.945082,
-        50.063442
-      ],
-      [
-        19.945075,
-        50.063509
-      ],
-      [
-        19.945044,
-        50.063736
-      ],
-      [
-        19.944984,
-        50.064192
-      ],
-      [
-        19.944984,
-        50.064192
-      ]
-    ],
-    [
-      [
-        19.944984,
-        50.064192
-      ],
-      [
-        19.944974,
-        50.064292
-      ],
-      [
-        19.944951,
-        50.064441
-      ],
-      [
-        19.944946,
-        50.064474
-      ],
-      [
-        19.944942,
-        50.064504
-      ],
-      [
-        19.944933,
-        50.064549
-      ],
-      [
-        19.944927,
-        50.064563
-      ],
-      [
-        19.944915,
-        50.064591
-      ],
-      [
-        19.944906,
-        50.064602
-      ],
-      [
-        19.944889,
-        50.064622
-      ],
-      [
-        19.944879,
-        50.064629
-      ],
-      [
-        19.944844,
-        50.064659
-      ],
-      [
-        19.944811,
-        50.064678
-      ],
-      [
-        19.944785,
-        50.064691
-      ],
-      [
-        19.944721,
-        50.064717
-      ],
-      [
-        19.944586,
-        50.06476
-      ],
-      [
-        19.94387,
-        50.065006
-      ],
-      [
-        19.943262,
-        50.065214
-      ],
-      [
-        19.943051,
-        50.065284
-      ],
-      [
-        19.942742,
-        50.06538
-      ],
-      [
-        19.942709,
-        50.065391
-      ],
-      [
-        19.942641,
-        50.065413
-      ],
-      [
-        19.94193,
-        50.065659
-      ],
-      [
-        19.94182,
-        50.065697
-      ],
-      [
-        19.941575,
-        50.065784
-      ],
-      [
-        19.941446,
-        50.065828
-      ],
-      [
-        19.940484,
-        50.066161
-      ],
-      [
-        19.940421,
-        50.066181
-      ],
-      [
-        19.940358,
-        50.066199
-      ],
-      [
-        19.940267,
-        50.066222
-      ],
-      [
-        19.9402,
-        50.066236
-      ],
-      [
-        19.940133,
-        50.066249
-      ],
-      [
-        19.940045,
-        50.066264
-      ],
-      [
-        19.939973,
-        50.066274
-      ],
-      [
-        19.939879,
-        50.066284
-      ],
-      [
-        19.939819,
-        50.066288
-      ],
-      [
-        19.939769,
-        50.066291
-      ],
-      [
-        19.93972,
-        50.066292
-      ],
-      [
-        19.939721,
-        50.066314
-      ],
-      [
-        19.937536,
-        50.069678
-      ],
-      [
-        19.937518,
-        50.069671
-      ],
-      [
-        19.93726,
-        50.069933
-      ],
-      [
-        19.936738,
-        50.070462
-      ],
-      [
-        19.936591,
-        50.070637
-      ],
-      [
-        19.936472,
-        50.070826
-      ],
-      [
-        19.936259,
-        50.071239
-      ],
-      [
-        19.936219,
-        50.071319
-      ],
-      [
-        19.936201,
-        50.071363
-      ],
-      [
-        19.936154,
-        50.071477
-      ],
-      [
-        19.936128,
-        50.071543
-      ],
-      [
-        19.935935,
-        50.072094
-      ],
-      [
-        19.935916,
-        50.072142
-      ],
-      [
-        19.935904,
-        50.072177
-      ],
-      [
-        19.935892,
-        50.072216
-      ],
-      [
-        19.935882,
-        50.072252
-      ],
-      [
-        19.935878,
-        50.072277
-      ],
-      [
-        19.93587,
-        50.072328
-      ],
-      [
-        19.935866,
-        50.072368
-      ],
-      [
-        19.935866,
-        50.072382
-      ],
-      [
-        19.935834,
-        50.073
-      ],
-      [
-        19.935825,
-        50.073148
-      ],
-      [
-        19.935827,
-        50.073177
-      ],
-      [
-        19.935834,
-        50.073206
-      ],
-      [
-        19.93585,
-        50.07324
-      ],
-      [
-        19.935868,
-        50.073268
-      ],
-      [
-        19.935894,
-        50.073299
-      ],
-      [
-        19.935923,
-        50.073326
-      ],
-      [
-        19.935964,
-        50.073354
-      ],
-      [
-        19.936015,
-        50.073383
-      ],
-      [
-        19.936056,
-        50.0734
-      ],
-      [
-        19.936104,
-        50.073415
-      ],
-      [
-        19.936144,
-        50.073426
-      ],
-      [
-        19.936188,
-        50.073434
-      ],
-      [
-        19.936221,
-        50.073439
-      ],
-      [
-        19.936582,
-        50.073487
-      ],
-      [
-        19.936629,
-        50.073493
-      ],
-      [
-        19.936629,
-        50.073493
-      ],
-      [
-        19.936865,
-        50.073524
-      ],
-      [
-        19.936931,
-        50.073533
-      ],
-      [
-        19.937003,
-        50.07354
-      ],
-      [
-        19.93707,
-        50.073546
-      ],
-      [
-        19.937151,
-        50.073551
-      ],
-      [
-        19.937237,
-        50.073554
-      ],
-      [
-        19.937325,
-        50.073556
-      ],
-      [
-        19.937631,
-        50.073557
-      ],
-      [
-        19.937674,
-        50.073558
-      ],
-      [
-        19.937713,
-        50.07356
-      ],
-      [
-        19.937748,
-        50.073563
-      ],
-      [
-        19.937778,
-        50.073567
-      ],
-      [
-        19.937801,
-        50.073571
-      ],
-      [
-        19.937831,
-        50.073578
-      ],
-      [
-        19.937858,
-        50.073588
-      ],
-      [
-        19.937885,
-        50.073598
-      ],
-      [
-        19.937911,
-        50.07361
-      ],
-      [
-        19.937927,
-        50.073619
-      ],
-      [
-        19.937946,
-        50.073631
-      ],
-      [
-        19.937975,
-        50.07365
-      ],
-      [
-        19.937999,
-        50.073667
-      ],
-      [
-        19.938064,
-        50.073716
-      ],
-      [
-        19.938132,
-        50.073766
-      ],
-      [
-        19.938246,
-        50.073848
-      ],
-      [
-        19.938529,
-        50.074056
-      ],
-      [
-        19.938583,
-        50.074099
-      ],
-      [
-        19.938776,
-        50.074241
-      ],
-      [
-        19.939359,
-        50.074671
-      ],
-      [
-        19.939517,
-        50.07479
-      ],
-      [
-        19.939611,
-        50.074862
-      ],
-      [
-        19.939963,
-        50.075144
-      ],
-      [
-        19.939997,
-        50.075169
-      ],
-      [
-        19.940022,
-        50.075186
-      ],
-      [
-        19.940031,
-        50.075192
-      ],
-      [
-        19.940047,
-        50.075201
-      ],
-      [
-        19.940076,
-        50.075218
-      ],
-      [
-        19.940112,
-        50.075236
-      ],
-      [
-        19.940145,
-        50.07525
-      ],
-      [
-        19.940168,
-        50.075259
-      ],
-      [
-        19.94019,
-        50.075267
-      ],
-      [
-        19.940238,
-        50.075285
-      ],
-      [
-        19.940489,
-        50.075375
-      ],
-      [
-        19.940736,
-        50.075462
-      ],
-      [
-        19.940858,
-        50.075507
-      ],
-      [
-        19.940896,
-        50.075522
-      ],
-      [
-        19.940929,
-        50.075538
-      ],
-      [
-        19.940944,
-        50.075547
-      ],
-      [
-        19.940956,
-        50.075555
-      ],
-      [
-        19.940973,
-        50.075567
-      ],
-      [
-        19.940988,
-        50.075581
-      ],
-      [
-        19.940999,
-        50.075591
-      ],
-      [
-        19.941006,
-        50.0756
-      ],
-      [
-        19.941017,
-        50.075619
-      ],
-      [
-        19.941024,
-        50.075636
-      ],
-      [
-        19.941029,
-        50.075653
-      ],
-      [
-        19.94103,
-        50.075666
-      ],
-      [
-        19.94103,
-        50.075681
-      ],
-      [
-        19.941029,
-        50.075698
-      ],
-      [
-        19.941025,
-        50.075713
-      ],
-      [
-        19.94102,
-        50.075728
-      ],
-      [
-        19.941012,
-        50.075743
-      ],
-      [
-        19.941006,
-        50.075752
-      ],
-      [
-        19.940996,
-        50.075765
-      ],
-      [
-        19.940983,
-        50.075776
-      ],
-      [
-        19.940966,
-        50.075791
-      ],
-      [
-        19.940951,
-        50.075802
-      ],
-      [
-        19.940935,
-        50.075812
-      ],
-      [
-        19.940914,
-        50.075823
-      ],
-      [
-        19.940894,
-        50.075832
-      ],
-      [
-        19.940871,
-        50.07584
-      ],
-      [
-        19.940822,
-        50.075854
-      ],
-      [
-        19.940731,
-        50.075877
-      ],
-      [
-        19.940631,
-        50.075901
-      ],
-      [
-        19.940291,
-        50.075986
-      ],
-      [
-        19.940291,
-        50.075986
-      ],
-      [
-        19.940223,
-        50.076002
-      ],
-      [
-        19.94002,
-        50.076053
-      ],
-      [
-        19.93999,
-        50.07606
-      ],
-      [
-        19.939781,
-        50.076112
-      ],
-      [
-        19.939729,
-        50.076126
-      ],
-      [
-        19.939689,
-        50.076138
-      ],
-      [
-        19.939651,
-        50.076152
-      ],
-      [
-        19.939609,
-        50.076169
-      ],
-      [
-        19.939574,
-        50.076185
-      ],
-      [
-        19.939541,
-        50.076203
-      ],
-      [
-        19.939507,
-        50.076225
-      ],
-      [
-        19.939481,
-        50.076242
-      ],
-      [
-        19.939476,
-        50.076246
-      ],
-      [
-        19.939445,
-        50.07627
-      ],
-      [
-        19.93935,
-        50.076351
-      ],
-      [
-        19.938468,
-        50.07712
-      ],
-      [
-        19.938062,
-        50.077486
-      ],
-      [
-        19.937974,
-        50.077596
-      ],
-      [
-        19.937925,
-        50.077686
-      ],
-      [
-        19.937885,
-        50.077785
-      ],
-      [
-        19.937864,
-        50.077893
-      ],
-      [
-        19.937861,
-        50.077992
-      ],
-      [
-        19.937864,
-        50.078028
-      ],
-      [
-        19.937872,
-        50.078075
-      ],
-      [
-        19.937885,
-        50.078115
-      ],
-      [
-        19.93792,
-        50.078206
-      ],
-      [
-        19.937976,
-        50.078301
-      ],
-      [
-        19.938052,
-        50.078392
-      ],
-      [
-        19.938138,
-        50.078481
-      ],
-      [
-        19.939092,
-        50.079368
-      ],
-      [
-        19.939237,
-        50.07953
-      ],
-      [
-        19.939296,
-        50.079629
-      ],
-      [
-        19.939331,
-        50.079735
-      ],
-      [
-        19.939332,
-        50.079828
-      ],
-      [
-        19.939321,
-        50.07992
-      ],
-      [
-        19.939284,
-        50.080013
-      ],
-      [
-        19.939214,
-        50.080124
-      ],
-      [
-        19.939154,
-        50.08019
-      ],
-      [
-        19.939068,
-        50.080262
-      ],
-      [
-        19.938928,
-        50.08034
-      ],
-      [
-        19.938774,
-        50.080407
-      ],
-      [
-        19.938555,
-        50.08048
-      ],
-      [
-        19.938307,
-        50.08056
-      ],
-      [
-        19.93791,
-        50.080689
-      ],
-      [
-        19.937622,
-        50.080784
-      ],
-      [
-        19.937622,
-        50.080784
-      ],
-      [
-        19.937546,
-        50.08081
-      ],
-      [
-        19.937495,
-        50.080827
-      ],
-      [
-        19.937404,
-        50.080863
-      ],
-      [
-        19.937316,
-        50.080899
-      ],
-      [
-        19.937208,
-        50.080943
-      ],
-      [
-        19.93568,
-        50.081681
-      ],
-      [
-        19.935598,
-        50.081725
-      ],
-      [
-        19.935517,
-        50.081777
-      ],
-      [
-        19.935435,
-        50.081842
-      ],
-      [
-        19.935369,
-        50.081909
-      ],
-      [
-        19.935308,
-        50.081986
-      ],
-      [
-        19.934948,
-        50.082462
-      ],
-      [
-        19.9349,
-        50.082529
-      ],
-      [
-        19.934859,
-        50.082597
-      ],
-      [
-        19.934783,
-        50.082753
-      ],
-      [
-        19.934647,
-        50.083035
-      ],
-      [
-        19.934584,
-        50.083136
-      ],
-      [
-        19.934339,
-        50.083477
-      ],
-      [
-        19.93415,
-        50.083727
-      ],
-      [
-        19.93415,
-        50.083727
-      ],
-      [
-        19.934083,
-        50.083815
-      ],
-      [
-        19.933989,
-        50.083941
-      ],
-      [
-        19.933868,
-        50.084122
-      ],
-      [
-        19.933809,
-        50.084229
-      ],
-      [
-        19.93373,
-        50.084418
-      ],
-      [
-        19.933563,
-        50.084878
-      ],
-      [
-        19.93336,
-        50.085414
-      ],
-      [
-        19.933265,
-        50.085679
-      ],
-      [
-        19.93318,
-        50.085915
-      ],
-      [
-        19.933157,
-        50.085992
-      ],
-      [
-        19.933142,
-        50.086074
-      ],
-      [
-        19.933121,
-        50.086206
-      ],
-      [
-        19.933043,
-        50.087057
-      ],
-      [
-        19.93294,
-        50.088136
-      ],
-      [
-        19.932931,
-        50.08822
-      ],
-      [
-        19.932916,
-        50.088328
-      ],
-      [
-        19.932904,
-        50.088384
-      ],
-      [
-        19.932869,
-        50.088539
-      ],
-      [
-        19.93278,
-        50.088955
-      ],
-      [
-        19.93278,
-        50.088955
-      ],
-      [
-        19.932744,
-        50.089123
-      ],
-      [
-        19.932701,
-        50.089327
-      ],
-      [
-        19.932673,
-        50.089448
-      ],
-      [
-        19.932652,
-        50.089513
-      ],
-      [
-        19.9326,
-        50.089645
-      ],
-      [
-        19.932565,
-        50.089734
-      ],
-      [
-        19.932539,
-        50.089794
-      ],
-      [
-        19.93251,
-        50.089858
-      ],
-      [
-        19.932357,
-        50.090177
-      ],
-      [
-        19.931943,
-        50.09101
-      ],
-      [
-        19.931871,
-        50.091129
-      ],
-      [
-        19.931813,
-        50.091221
-      ],
-      [
-        19.931655,
-        50.091474
-      ],
-      [
-        19.931606,
-        50.091543
-      ],
-      [
-        19.931568,
-        50.091594
-      ],
-      [
-        19.931534,
-        50.091635
-      ],
-      [
-        19.931488,
-        50.091686
-      ],
-      [
-        19.9314,
-        50.091787
-      ],
-      [
-        19.931103,
-        50.092118
-      ],
-      [
-        19.930961,
-        50.092286
-      ],
-      [
-        19.930859,
-        50.092424
-      ],
-      [
-        19.930719,
-        50.09267
-      ],
-      [
-        19.930434,
-        50.093199
-      ],
-      [
-        19.930269,
-        50.093504
-      ],
-      [
-        19.930212,
-        50.093592
-      ],
-      [
-        19.929882,
-        50.094091
-      ],
-      [
-        19.929835,
-        50.094161
-      ],
-      [
-        19.929835,
-        50.094161
-      ],
-      [
-        19.929803,
-        50.094208
-      ],
-      [
-        19.929782,
-        50.094239
-      ],
-      [
-        19.929759,
-        50.094279
-      ],
-      [
-        19.929739,
-        50.094324
-      ],
-      [
-        19.929725,
-        50.094365
-      ],
-      [
-        19.929721,
-        50.0944
-      ],
-      [
-        19.929719,
-        50.094434
-      ],
-      [
-        19.929721,
-        50.094466
-      ],
-      [
-        19.929726,
-        50.094494
-      ],
-      [
-        19.929735,
-        50.094524
-      ],
-      [
-        19.929743,
-        50.094549
-      ],
-      [
-        19.929758,
-        50.094577
-      ],
-      [
-        19.929775,
-        50.094608
-      ],
-      [
-        19.929799,
-        50.094638
-      ],
-      [
-        19.929823,
-        50.094666
-      ],
-      [
-        19.92986,
-        50.0947
-      ],
-      [
-        19.929894,
-        50.094727
-      ],
-      [
-        19.929944,
-        50.09476
-      ],
-      [
-        19.929996,
-        50.094788
-      ],
-      [
-        19.930048,
-        50.094811
-      ],
-      [
-        19.930096,
-        50.094829
-      ],
-      [
-        19.930154,
-        50.094846
-      ],
-      [
-        19.930196,
-        50.094855
-      ],
-      [
-        19.930247,
-        50.094865
-      ],
-      [
-        19.930982,
-        50.094978
-      ],
-      [
-        19.93107,
-        50.094992
-      ],
-      [
-        19.931147,
-        50.095003
-      ],
-      [
-        19.932521,
-        50.095213
-      ],
-      [
-        19.932604,
-        50.095226
-      ],
-      [
-        19.932762,
-        50.09525
-      ],
-      [
-        19.932839,
-        50.095261
-      ],
-      [
-        19.932891,
-        50.095267
-      ],
-      [
-        19.933005,
-        50.095277
-      ],
-      [
-        19.933127,
-        50.095285
-      ],
-      [
-        19.933216,
-        50.095288
-      ],
-      [
-        19.933369,
-        50.095286
-      ],
-      [
-        19.933479,
-        50.095282
-      ],
-      [
-        19.933591,
-        50.095274
-      ],
-      [
-        19.933747,
-        50.095258
-      ],
-      [
-        19.933999,
-        50.095216
-      ],
-      [
-        19.934124,
-        50.095186
-      ],
-      [
-        19.934247,
-        50.095152
-      ],
-      [
-        19.934511,
-        50.09507
-      ],
-      [
-        19.934671,
-        50.095015
-      ],
-      [
-        19.935174,
-        50.094844
-      ],
-      [
-        19.935191,
-        50.094838
-      ],
-      [
-        19.935191,
-        50.094838
-      ],
-      [
-        19.93542,
-        50.094762
-      ],
-      [
-        19.935611,
-        50.094708
-      ],
-      [
-        19.935738,
-        50.094676
-      ],
-      [
-        19.93585,
-        50.094652
-      ],
-      [
-        19.936043,
-        50.094619
-      ],
-      [
-        19.936215,
-        50.094598
-      ],
-      [
-        19.936408,
-        50.094581
-      ],
-      [
-        19.936519,
-        50.094575
-      ],
-      [
-        19.936631,
-        50.094574
-      ],
-      [
-        19.936816,
-        50.094574
-      ],
-      [
-        19.936952,
-        50.09458
-      ],
-      [
-        19.937064,
-        50.094587
-      ],
-      [
-        19.937165,
-        50.094597
-      ],
-      [
-        19.937221,
-        50.094603
-      ],
-      [
-        19.937395,
-        50.094631
-      ],
-      [
-        19.937432,
-        50.094638
-      ],
-      [
-        19.937555,
-        50.094662
-      ],
-      [
-        19.937681,
-        50.094688
-      ],
-      [
-        19.937806,
-        50.09472
-      ],
-      [
-        19.937936,
-        50.094759
-      ],
-      [
-        19.93809,
-        50.094811
-      ],
-      [
-        19.938278,
-        50.094878
-      ],
-      [
-        19.938723,
-        50.095039
-      ],
-      [
-        19.939179,
-        50.095197
-      ],
-      [
-        19.939504,
-        50.095301
-      ],
-      [
-        19.939747,
-        50.095374
-      ],
-      [
-        19.940185,
-        50.095514
-      ],
-      [
-        19.94041,
-        50.095585
-      ],
-      [
-        19.940775,
-        50.095694
-      ],
-      [
-        19.941,
-        50.095772
-      ],
-      [
-        19.941249,
-        50.095865
-      ],
-      [
-        19.9419,
-        50.096136
-      ],
-      [
-        19.942008,
-        50.096181
-      ],
-      [
-        19.942008,
-        50.096181
-      ],
-      [
-        19.94212,
-        50.096229
-      ],
-      [
-        19.942236,
-        50.096279
-      ],
-      [
-        19.942394,
-        50.096342
-      ],
-      [
-        19.942461,
-        50.096368
-      ],
-      [
-        19.942527,
-        50.09639
-      ],
-      [
-        19.942604,
-        50.096414
-      ],
-      [
-        19.942691,
-        50.096439
-      ],
-      [
-        19.942771,
-        50.09646
-      ],
-      [
-        19.942867,
-        50.096483
-      ],
-      [
-        19.942957,
-        50.096502
-      ],
-      [
-        19.943038,
-        50.096517
-      ],
-      [
-        19.943114,
-        50.096529
-      ],
-      [
-        19.943205,
-        50.096541
-      ],
-      [
-        19.943301,
-        50.096552
-      ],
-      [
-        19.943391,
-        50.09656
-      ],
-      [
-        19.943485,
-        50.096566
-      ],
-      [
-        19.943577,
-        50.096569
-      ],
-      [
-        19.943672,
-        50.09657
-      ],
-      [
-        19.943766,
-        50.096569
-      ],
-      [
-        19.943841,
-        50.096567
-      ],
-      [
-        19.943912,
-        50.096563
-      ],
-      [
-        19.943995,
-        50.096557
-      ],
-      [
-        19.944089,
-        50.096548
-      ],
-      [
-        19.944173,
-        50.096538
-      ],
-      [
-        19.94427,
-        50.096524
-      ],
-      [
-        19.944423,
-        50.096499
-      ],
-      [
-        19.944623,
-        50.096464
-      ],
-      [
-        19.946677,
-        50.096108
-      ],
-      [
-        19.946844,
-        50.096079
-      ],
-      [
-        19.946967,
-        50.096058
-      ],
-      [
-        19.947294,
-        50.096002
-      ],
-      [
-        19.947971,
-        50.095883
-      ],
-      [
-        19.948168,
-        50.095849
-      ],
-      [
-        19.948168,
-        50.095849
-      ],
-      [
-        19.948312,
-        50.095825
-      ],
-      [
-        19.948522,
-        50.095788
-      ],
-      [
-        19.948743,
-        50.095752
-      ],
-      [
-        19.948859,
-        50.095739
-      ],
-      [
-        19.948944,
-        50.095736
-      ],
-      [
-        19.949053,
-        50.095733
-      ],
-      [
-        19.949215,
-        50.095739
-      ],
-      [
-        19.949356,
-        50.095751
-      ],
-      [
-        19.949461,
-        50.095759
-      ],
-      [
-        19.94962,
-        50.095771
-      ],
-      [
-        19.949765,
-        50.095771
-      ],
-      [
-        19.94991,
-        50.09576
-      ],
-      [
-        19.950121,
-        50.095734
-      ],
-      [
-        19.950572,
-        50.095665
-      ],
-      [
-        19.950777,
-        50.095628
-      ],
-      [
-        19.950912,
-        50.095597
-      ],
-      [
-        19.951287,
-        50.095506
-      ],
-      [
-        19.95159,
-        50.095434
-      ],
-      [
-        19.951765,
-        50.095401
-      ],
-      [
-        19.951879,
-        50.095384
-      ],
-      [
-        19.952856,
-        50.095254
-      ],
-      [
-        19.953101,
-        50.095222
-      ],
-      [
-        19.95319,
-        50.095211
-      ],
-      [
-        19.953281,
-        50.095202
-      ],
-      [
-        19.953408,
-        50.095191
-      ],
-      [
-        19.953515,
-        50.095179
-      ],
-      [
-        19.953626,
-        50.095165
-      ],
-      [
-        19.954348,
-        50.095073
-      ],
-      [
-        19.954462,
-        50.095057
-      ],
-      [
-        19.954462,
-        50.095057
-      ],
-      [
-        19.954713,
-        50.095021
-      ],
-      [
-        19.954753,
-        50.095016
-      ],
-      [
-        19.954789,
-        50.095012
-      ],
-      [
-        19.954833,
-        50.095009
-      ],
-      [
-        19.954872,
-        50.095008
-      ],
-      [
-        19.95491,
-        50.095007
-      ],
-      [
-        19.954951,
-        50.095008
-      ],
-      [
-        19.954988,
-        50.09501
-      ],
-      [
-        19.955017,
-        50.095013
-      ],
-      [
-        19.955067,
-        50.09502
-      ],
-      [
-        19.955108,
-        50.095027
-      ],
-      [
-        19.955147,
-        50.095035
-      ],
-      [
-        19.955194,
-        50.095047
-      ],
-      [
-        19.955235,
-        50.095059
-      ],
-      [
-        19.955283,
-        50.095076
-      ],
-      [
-        19.955324,
-        50.095093
-      ],
-      [
-        19.955369,
-        50.095115
-      ],
-      [
-        19.955409,
-        50.095137
-      ],
-      [
-        19.955444,
-        50.095159
-      ],
-      [
-        19.955477,
-        50.095183
-      ],
-      [
-        19.955506,
-        50.095206
-      ],
-      [
-        19.955535,
-        50.095235
-      ],
-      [
-        19.955557,
-        50.09526
-      ],
-      [
-        19.955577,
-        50.095284
-      ],
-      [
-        19.955598,
-        50.095314
-      ],
-      [
-        19.955612,
-        50.09534
-      ],
-      [
-        19.955621,
-        50.095358
-      ],
-      [
-        19.955629,
-        50.095379
-      ],
-      [
-        19.955752,
-        50.095691
-      ],
-      [
-        19.955769,
-        50.09574
-      ],
-      [
-        19.955782,
-        50.095786
-      ],
-      [
-        19.955795,
-        50.095841
-      ],
-      [
-        19.955804,
-        50.095887
-      ],
-      [
-        19.955813,
-        50.095941
-      ],
-      [
-        19.955974,
-        50.097066
-      ],
-      [
-        19.95605,
-        50.097579
-      ],
-      [
-        19.956103,
-        50.097944
-      ],
-      [
-        19.956112,
-        50.098009
-      ],
-      [
-        19.956112,
-        50.098009
-      ],
-      [
-        19.95612,
-        50.098068
-      ],
-      [
-        19.956125,
-        50.09813
-      ],
-      [
-        19.956131,
-        50.098172
-      ],
-      [
-        19.956141,
-        50.09822
-      ],
-      [
-        19.95616,
-        50.09832
-      ],
-      [
-        19.956195,
-        50.098481
-      ],
-      [
-        19.956251,
-        50.098687
-      ],
-      [
-        19.956293,
-        50.098818
-      ],
-      [
-        19.956365,
-        50.098997
-      ],
-      [
-        19.956428,
-        50.099148
-      ],
-      [
-        19.956542,
-        50.09941
-      ],
-      [
-        19.956719,
-        50.099844
-      ],
-      [
-        19.956848,
-        50.100177
-      ],
-      [
-        19.956993,
-        50.100543
-      ],
-      [
-        19.957043,
-        50.100669
-      ],
-      [
-        19.957087,
-        50.100816
-      ],
-      [
-        19.957128,
-        50.100974
-      ],
-      [
-        19.957156,
-        50.101052
-      ],
-      [
-        19.957187,
-        50.101154
-      ],
-      [
-        19.957251,
-        50.10133
-      ],
-      [
-        19.957319,
-        50.101494
-      ],
-      [
-        19.957454,
-        50.101847
-      ],
-      [
-        19.957472,
-        50.101893
-      ],
-      [
-        19.957472,
-        50.101893
-      ],
-      [
-        19.95751,
-        50.101992
-      ],
-      [
-        19.957535,
-        50.102058
-      ],
-      [
-        19.957559,
-        50.102123
-      ],
-      [
-        19.95758,
-        50.102176
-      ],
-      [
-        19.957727,
-        50.102597
-      ],
-      [
-        19.957822,
-        50.102829
-      ],
-      [
-        19.957932,
-        50.103099
-      ],
-      [
-        19.95808,
-        50.103496
-      ],
-      [
-        19.958166,
-        50.103701
-      ],
-      [
-        19.958217,
-        50.103805
-      ],
-      [
-        19.958278,
-        50.103911
-      ],
-      [
-        19.958361,
-        50.104035
-      ],
-      [
-        19.958449,
-        50.104145
-      ],
-      [
-        19.958544,
-        50.104251
-      ],
-      [
-        19.958674,
-        50.104377
-      ],
-      [
-        19.95881,
-        50.104496
-      ],
-      [
-        19.95896,
-        50.104605
-      ],
-      [
-        19.959079,
-        50.104686
-      ],
-      [
-        19.959213,
-        50.10477
-      ],
-      [
-        19.95937,
-        50.104854
-      ],
-      [
-        19.959603,
-        50.104972
-      ],
-      [
-        19.959787,
-        50.105051
-      ],
-      [
-        19.960061,
-        50.105152
-      ],
-      [
-        19.960199,
-        50.105197
-      ],
-      [
-        19.960384,
-        50.105248
-      ],
-      [
-        19.960501,
-        50.105279
-      ],
-      [
-        19.960642,
-        50.105311
-      ],
-      [
-        19.960811,
-        50.105345
-      ],
-      [
-        19.961024,
-        50.105381
-      ],
-      [
-        19.961225,
-        50.105409
-      ],
-      [
-        19.96142,
-        50.105428
-      ],
-      [
-        19.961637,
-        50.105441
-      ],
-      [
-        19.961742,
-        50.105443
-      ],
-      [
-        19.96181,
-        50.105443
-      ],
-      [
-        19.961866,
-        50.105441
-      ],
-      [
-        19.961979,
-        50.105435
-      ],
-      [
-        19.962074,
-        50.105428
-      ],
-      [
-        19.962181,
-        50.105419
-      ],
-      [
-        19.962205,
-        50.105409
-      ],
-      [
-        19.962227,
-        50.105398
-      ],
-      [
-        19.962249,
-        50.105387
-      ],
-      [
-        19.96227,
-        50.105375
-      ],
-      [
-        19.962291,
-        50.105363
-      ],
-      [
-        19.962311,
-        50.105351
-      ],
-      [
-        19.962331,
-        50.105338
-      ],
-      [
-        19.962349,
-        50.105325
-      ],
-      [
-        19.962365,
-        50.105313
-      ],
-      [
-        19.962381,
-        50.1053
-      ],
-      [
-        19.962396,
-        50.105287
-      ],
-      [
-        19.962408,
-        50.105274
-      ],
-      [
-        19.962421,
-        50.10526
-      ],
-      [
-        19.962433,
-        50.105246
-      ],
-      [
-        19.962444,
-        50.105232
-      ],
-      [
-        19.962452,
-        50.105218
-      ],
-      [
-        19.962462,
-        50.105201
-      ],
-      [
-        19.962471,
-        50.105184
-      ],
-      [
-        19.962477,
-        50.105167
-      ],
-      [
-        19.962481,
-        50.10515
-      ],
-      [
-        19.962484,
-        50.105136
-      ],
-      [
-        19.962488,
-        50.105121
-      ],
-      [
-        19.962489,
-        50.105107
+        19.962468,
+        50.104864
       ],
       [
         19.962489,
         50.105093
       ],
       [
-        19.962468,
-        50.104864
+        19.962489,
+        50.105107
       ],
       [
-        19.96247,
-        50.104864
-      ]
-    ],
-    [
+        19.962488,
+        50.105121
+      ],
+      [
+        19.962484,
+        50.105136
+      ],
+      [
+        19.962481,
+        50.10515
+      ],
+      [
+        19.962477,
+        50.105167
+      ],
+      [
+        19.962471,
+        50.105184
+      ],
+      [
+        19.962462,
+        50.105201
+      ],
+      [
+        19.962452,
+        50.105218
+      ],
+      [
+        19.962444,
+        50.105232
+      ],
+      [
+        19.962433,
+        50.105246
+      ],
+      [
+        19.962421,
+        50.10526
+      ],
+      [
+        19.962408,
+        50.105274
+      ],
+      [
+        19.962396,
+        50.105287
+      ],
+      [
+        19.962381,
+        50.1053
+      ],
+      [
+        19.962365,
+        50.105313
+      ],
+      [
+        19.962349,
+        50.105325
+      ],
+      [
+        19.962331,
+        50.105338
+      ],
+      [
+        19.962311,
+        50.105351
+      ],
+      [
+        19.962291,
+        50.105363
+      ],
+      [
+        19.96227,
+        50.105375
+      ],
+      [
+        19.962249,
+        50.105387
+      ],
+      [
+        19.962227,
+        50.105398
+      ],
+      [
+        19.962205,
+        50.105409
+      ],
       [
         19.962181,
         50.105419
@@ -7113,912 +3629,576 @@
         50.051928
       ],
       [
-        19.94148,
-        50.051868
+        19.941434,
+        50.051892
       ],
       [
-        19.941538,
-        50.051828
+        19.941455,
+        50.051866
       ],
       [
-        19.941628,
-        50.051764
+        19.941462,
+        50.051856
       ],
       [
-        19.941666,
-        50.051737
+        19.941477,
+        50.051833
       ],
       [
-        19.941681,
-        50.051727
+        19.941488,
+        50.051805
       ],
       [
-        19.941793,
-        50.051648
+        19.941495,
+        50.051776
       ],
       [
-        19.941799,
-        50.051644
+        19.941496,
+        50.051753
       ],
       [
-        19.941919,
-        50.051558
+        19.941491,
+        50.051705
       ],
       [
-        19.941989,
-        50.051506
+        19.941483,
+        50.05168
       ],
       [
-        19.942044,
-        50.051444
+        19.941476,
+        50.051668
       ],
       [
-        19.942105,
-        50.051374
+        19.941408,
+        50.05158
       ],
       [
-        19.942274,
-        50.051051
+        19.941369,
+        50.051552
       ],
       [
-        19.942339,
-        50.05091
-      ],
-      [
-        19.942391,
-        50.050794
-      ],
-      [
-        19.942419,
-        50.050725
-      ],
-      [
-        19.942423,
-        50.050714
-      ],
-      [
-        19.942465,
-        50.050605
-      ],
-      [
-        19.942562,
-        50.050354
-      ],
-      [
-        19.942649,
-        50.050126
-      ],
-      [
-        19.942667,
-        50.050082
-      ],
-      [
-        19.942686,
-        50.050036
-      ],
-      [
-        19.942778,
-        50.049838
-      ],
-      [
-        19.942926,
-        50.049539
-      ],
-      [
-        19.942931,
-        50.04953
-      ],
-      [
-        19.942956,
-        50.049478
-      ],
-      [
-        19.943104,
-        50.049171
-      ],
-      [
-        19.943112,
-        50.049138
-      ],
-      [
-        19.94313,
-        50.049074
-      ],
-      [
-        19.943137,
-        50.04901
-      ],
-      [
-        19.943137,
-        50.04897
-      ],
-      [
-        19.943139,
-        50.048886
-      ],
-      [
-        19.943139,
-        50.048825
-      ],
-      [
-        19.943139,
-        50.04876
-      ],
-      [
-        19.943139,
-        50.048752
-      ],
-      [
-        19.943151,
-        50.048679
-      ],
-      [
-        19.943191,
-        50.048564
-      ],
-      [
-        19.943273,
-        50.048388
-      ],
-      [
-        19.943367,
-        50.048184
-      ],
-      [
-        19.943428,
-        50.048043
-      ],
-      [
-        19.943434,
-        50.04803
-      ],
-      [
-        19.943434,
-        50.04803
-      ],
-      [
-        19.943535,
-        50.047802
-      ],
-      [
-        19.94356,
-        50.047745
-      ],
-      [
-        19.943604,
-        50.047629
-      ],
-      [
-        19.943698,
-        50.047359
-      ],
-      [
-        19.943723,
-        50.047285
-      ],
-      [
-        19.943803,
-        50.04705
-      ],
-      [
-        19.943912,
-        50.046727
-      ],
-      [
-        19.943947,
-        50.046646
-      ],
-      [
-        19.943979,
-        50.046569
-      ],
-      [
-        19.943988,
-        50.046548
-      ],
-      [
-        19.944067,
-        50.046421
-      ],
-      [
-        19.944151,
-        50.046316
-      ],
-      [
-        19.944235,
-        50.046229
-      ],
-      [
-        19.944428,
-        50.04603
-      ],
-      [
-        19.944442,
-        50.046016
-      ],
-      [
-        19.945363,
-        50.045068
-      ],
-      [
-        19.945428,
-        50.045001
-      ],
-      [
-        19.945531,
-        50.0449
-      ],
-      [
-        19.945601,
-        50.044829
-      ],
-      [
-        19.945611,
-        50.044818
-      ],
-      [
-        19.945662,
-        50.044766
-      ],
-      [
-        19.945724,
-        50.04471
-      ],
-      [
-        19.945733,
-        50.044702
-      ],
-      [
-        19.945742,
-        50.044694
-      ],
-      [
-        19.945826,
-        50.044629
-      ],
-      [
-        19.945921,
-        50.044565
-      ],
-      [
-        19.946296,
-        50.044344
-      ],
-      [
-        19.946518,
-        50.044209
-      ],
-      [
-        19.946653,
-        50.04412
-      ],
-      [
-        19.946775,
-        50.04403
-      ],
-      [
-        19.946775,
-        50.04403
-      ],
-      [
-        19.946806,
-        50.044006
-      ],
-      [
-        19.946866,
-        50.043937
-      ],
-      [
-        19.946888,
-        50.043911
-      ],
-      [
-        19.946902,
-        50.04385
-      ],
-      [
-        19.9469,
-        50.043836
-      ],
-      [
-        19.946894,
-        50.043807
-      ],
-      [
-        19.946882,
-        50.043777
-      ],
-      [
-        19.946867,
-        50.043754
-      ],
-      [
-        19.94686,
-        50.043744
-      ],
-      [
-        19.946839,
-        50.043719
-      ],
-      [
-        19.946804,
-        50.04369
-      ],
-      [
-        19.946784,
-        50.043677
-      ],
-      [
-        19.946779,
-        50.043674
-      ],
-      [
-        19.946514,
-        50.043535
-      ],
-      [
-        19.945428,
-        50.04297
-      ],
-      [
-        19.945312,
-        50.04291
-      ],
-      [
-        19.94519,
-        50.042846
-      ],
-      [
-        19.945175,
-        50.042839
-      ],
-      [
-        19.943761,
-        50.042101
-      ],
-      [
-        19.943543,
-        50.041987
-      ],
-      [
-        19.943472,
-        50.041947
-      ],
-      [
-        19.943429,
-        50.041917
-      ],
-      [
-        19.943404,
-        50.041899
-      ],
-      [
-        19.943346,
-        50.041853
-      ],
-      [
-        19.943304,
-        50.041809
-      ],
-      [
-        19.943271,
-        50.041763
-      ],
-      [
-        19.943215,
-        50.041662
-      ],
-      [
-        19.943122,
-        50.041495
-      ],
-      [
-        19.943122,
-        50.041495
-      ],
-      [
-        19.943085,
-        50.041428
-      ],
-      [
-        19.94304,
-        50.041349
-      ],
-      [
-        19.943033,
-        50.041335
-      ],
-      [
-        19.942954,
-        50.041194
-      ],
-      [
-        19.942937,
-        50.041163
-      ],
-      [
-        19.942933,
-        50.041156
-      ],
-      [
-        19.9429,
-        50.041096
-      ],
-      [
-        19.942751,
-        50.040828
-      ],
-      [
-        19.942654,
-        50.040654
-      ],
-      [
-        19.942611,
-        50.040562
-      ],
-      [
-        19.942401,
-        50.040191
-      ],
-      [
-        19.942304,
-        50.040018
-      ],
-      [
-        19.941863,
-        50.039235
-      ],
-      [
-        19.941812,
-        50.039145
-      ],
-      [
-        19.941513,
-        50.038613
-      ],
-      [
-        19.941379,
-        50.038374
-      ],
-      [
-        19.941092,
-        50.037861
-      ],
-      [
-        19.941042,
-        50.037761
-      ],
-      [
-        19.940972,
-        50.037635
-      ],
-      [
-        19.940945,
-        50.037586
-      ],
-      [
-        19.940911,
-        50.037509
-      ],
-      [
-        19.9409,
-        50.037466
-      ],
-      [
-        19.940855,
-        50.037267
-      ],
-      [
-        19.940836,
-        50.037183
-      ],
-      [
-        19.940787,
-        50.03696
-      ],
-      [
-        19.940787,
-        50.03696
-      ],
-      [
-        19.940784,
-        50.036944
-      ],
-      [
-        19.940769,
-        50.036879
-      ],
-      [
-        19.940748,
-        50.036784
-      ],
-      [
-        19.940741,
-        50.036755
-      ],
-      [
-        19.940719,
-        50.036646
+        19.941112,
+        50.051368
       ],
       [
         19.9407,
-        50.036569
-      ],
-      [
-        19.940655,
-        50.036366
+        50.051072
       ],
       [
         19.940642,
-        50.036324
+        50.051035
       ],
       [
-        19.940626,
-        50.036283
+        19.940581,
+        50.051002
       ],
       [
-        19.940611,
-        50.036251
+        19.940483,
+        50.050953
       ],
       [
-        19.940593,
-        50.036219
+        19.940369,
+        50.050908
       ],
       [
-        19.940569,
-        50.036182
+        19.940284,
+        50.05088
       ],
       [
-        19.940546,
-        50.036154
+        19.940267,
+        50.050876
       ],
       [
-        19.940512,
-        50.036115
+        19.940198,
+        50.050856
       ],
       [
-        19.940475,
-        50.036077
+        19.940127,
+        50.05084
       ],
       [
-        19.940436,
-        50.036042
+        19.939867,
+        50.050799
       ],
       [
-        19.939893,
-        50.035595
+        19.939434,
+        50.050738
       ],
       [
-        19.939733,
-        50.035461
+        19.938943,
+        50.050669
       ],
       [
-        19.939653,
-        50.035381
+        19.938671,
+        50.050632
       ],
       [
-        19.939617,
-        50.03534
+        19.938671,
+        50.050631
       ],
       [
-        19.939572,
-        50.035282
+        19.930917,
+        50.048567
       ],
       [
-        19.939538,
-        50.035232
+        19.930917,
+        50.048566
       ],
       [
-        19.939501,
-        50.035171
+        19.930403,
+        50.048398
       ],
       [
-        19.939452,
-        50.035078
+        19.93025,
+        50.048348
       ],
       [
-        19.939333,
-        50.034853
+        19.930182,
+        50.048325
       ],
       [
-        19.938929,
-        50.03409
+        19.927501,
+        50.047444
       ],
       [
-        19.938702,
-        50.033642
+        19.925344,
+        50.046735
       ],
       [
-        19.938702,
-        50.033642
+        19.9253,
+        50.04672
       ],
       [
-        19.938699,
-        50.033637
+        19.9253,
+        50.04672
       ],
       [
-        19.938561,
-        50.033387
+        19.924848,
+        50.046571
       ],
       [
-        19.938506,
-        50.033281
+        19.92463,
+        50.046499
       ],
       [
-        19.938493,
-        50.033258
+        19.923835,
+        50.046238
       ],
       [
-        19.938474,
-        50.033221
+        19.923427,
+        50.046104
       ],
       [
-        19.938456,
-        50.033188
+        19.922799,
+        50.045898
       ],
       [
-        19.938438,
-        50.033154
+        19.922242,
+        50.045713
       ],
       [
-        19.938428,
-        50.033136
+        19.922129,
+        50.045666
       ],
       [
-        19.938404,
-        50.03309
+        19.922051,
+        50.045619
       ],
       [
-        19.938394,
-        50.033072
+        19.921991,
+        50.045571
       ],
       [
-        19.938358,
-        50.033003
+        19.921951,
+        50.045529
       ],
       [
-        19.938305,
-        50.032902
+        19.921917,
+        50.045483
       ],
       [
-        19.938185,
-        50.032679
+        19.921892,
+        50.045437
       ],
       [
-        19.937862,
-        50.032066
+        19.921876,
+        50.045383
       ],
       [
-        19.937719,
-        50.031795
+        19.921866,
+        50.045335
       ],
       [
-        19.937563,
-        50.031499
+        19.921868,
+        50.045291
       ],
       [
-        19.937444,
-        50.031293
+        19.921869,
+        50.045272
       ],
       [
-        19.937391,
-        50.031209
+        19.921881,
+        50.045219
       ],
       [
-        19.937299,
-        50.031071
+        19.921907,
+        50.045162
       ],
       [
-        19.937203,
-        50.030911
+        19.922006,
+        50.044988
       ],
       [
-        19.937137,
-        50.030792
+        19.92205,
+        50.044911
       ],
       [
-        19.937078,
-        50.030684
+        19.92205,
+        50.044911
       ],
       [
-        19.936967,
-        50.030476
+        19.922141,
+        50.044751
       ],
       [
-        19.936967,
-        50.030476
+        19.922196,
+        50.044649
       ],
       [
-        19.936893,
-        50.030336
+        19.922227,
+        50.044583
       ],
       [
-        19.936858,
-        50.030268
+        19.922337,
+        50.044315
       ],
       [
-        19.93685,
-        50.030253
+        19.922382,
+        50.044211
       ],
       [
-        19.936815,
-        50.030183
+        19.922432,
+        50.044114
       ],
       [
-        19.936784,
-        50.030128
+        19.922488,
+        50.044019
       ],
       [
-        19.936762,
-        50.030081
+        19.922669,
+        50.043716
       ],
       [
-        19.936756,
-        50.030068
+        19.922794,
+        50.043512
       ],
       [
-        19.936636,
-        50.029842
+        19.92313,
+        50.042963
       ],
       [
-        19.936499,
-        50.02958
+        19.923359,
+        50.042586
       ],
       [
-        19.936482,
-        50.029561
+        19.923548,
+        50.042278
       ],
       [
-        19.936441,
-        50.029524
+        19.923735,
+        50.041972
       ],
       [
-        19.936422,
-        50.029512
+        19.923888,
+        50.041745
       ],
       [
-        19.9364,
-        50.029501
+        19.924084,
+        50.041421
       ],
       [
-        19.936368,
-        50.029488
+        19.924096,
+        50.041403
       ],
       [
-        19.936341,
-        50.02948
+        19.924096,
+        50.041403
       ],
       [
-        19.936316,
-        50.029474
+        19.924191,
+        50.041248
       ],
       [
-        19.936277,
-        50.029469
+        19.924231,
+        50.041191
       ],
       [
-        19.936227,
-        50.029468
+        19.924269,
+        50.041147
       ],
       [
-        19.936193,
-        50.02947
+        19.924329,
+        50.041074
       ],
       [
-        19.93615,
-        50.029475
+        19.924382,
+        50.040999
       ],
       [
-        19.936033,
-        50.029508
+        19.92441,
+        50.040958
       ],
       [
-        19.935873,
-        50.029555
+        19.924616,
+        50.040621
       ],
       [
-        19.935677,
-        50.029612
+        19.924658,
+        50.040552
       ],
       [
-        19.935561,
-        50.029646
+        19.924705,
+        50.040468
       ],
       [
-        19.935442,
-        50.029681
+        19.924739,
+        50.040401
       ],
       [
-        19.935442,
-        50.029681
+        19.924807,
+        50.040242
       ],
       [
-        19.935452,
-        50.029682
+        19.924835,
+        50.040177
       ],
       [
-        19.929101,
-        50.03055
+        19.924871,
+        50.040109
       ],
       [
-        19.929092,
-        50.030545
+        19.924959,
+        50.039962
       ],
       [
-        19.928816,
-        50.030545
+        19.92534,
+        50.039337
       ],
       [
-        19.928408,
-        50.030548
+        19.925467,
+        50.039129
       ],
       [
-        19.927901,
-        50.030549
+        19.925558,
+        50.038977
       ],
       [
-        19.927648,
-        50.030549
+        19.925605,
+        50.038886
       ],
       [
-        19.927411,
-        50.030548
+        19.925636,
+        50.038814
       ],
       [
-        19.927142,
-        50.030548
+        19.925671,
+        50.038726
       ],
       [
-        19.92701,
-        50.030552
+        19.925702,
+        50.038631
       ],
       [
-        19.926865,
-        50.03056
+        19.925732,
+        50.038503
       ],
       [
-        19.926596,
-        50.030585
+        19.925749,
+        50.038387
       ],
       [
-        19.926143,
-        50.030634
+        19.925756,
+        50.038333
       ],
       [
-        19.926109,
-        50.030637
+        19.925764,
+        50.038162
       ],
       [
-        19.925983,
-        50.030651
+        19.925771,
+        50.038005
       ],
       [
-        19.925799,
-        50.030669
+        19.925788,
+        50.03761
+      ],
+      [
+        19.925804,
+        50.037217
+      ],
+      [
+        19.925844,
+        50.03627
+      ],
+      [
+        19.925869,
+        50.035767
+      ],
+      [
+        19.925879,
+        50.035425
+      ],
+      [
+        19.925893,
+        50.035106
+      ],
+      [
+        19.925897,
+        50.035008
+      ],
+      [
+        19.925902,
+        50.034911
+      ],
+      [
+        19.925906,
+        50.034838
+      ],
+      [
+        19.925908,
+        50.034791
+      ],
+      [
+        19.925928,
+        50.03444
+      ],
+      [
+        19.925928,
+        50.03444
+      ],
+      [
+        19.925929,
+        50.034407
+      ],
+      [
+        19.925941,
+        50.03406
+      ],
+      [
+        19.925958,
+        50.033685
+      ],
+      [
+        19.925979,
+        50.033201
+      ],
+      [
+        19.925996,
+        50.032673
+      ],
+      [
+        19.926024,
+        50.032385
+      ],
+      [
+        19.926076,
+        50.032037
+      ],
+      [
+        19.92617,
+        50.031339
+      ],
+      [
+        19.926201,
+        50.031148
+      ],
+      [
+        19.926228,
+        50.031072
+      ],
+      [
+        19.926243,
+        50.031046
+      ],
+      [
+        19.926213,
+        50.030969
+      ],
+      [
+        19.92617,
+        50.030907
+      ],
+      [
+        19.926156,
+        50.03089
+      ],
+      [
+        19.926097,
+        50.030834
+      ],
+      [
+        19.926047,
+        50.030798
+      ],
+      [
+        19.925988,
+        50.030764
+      ],
+      [
+        19.925921,
+        50.030734
+      ],
+      [
+        19.925852,
+        50.030709
+      ],
+      [
+        19.925805,
+        50.030696
+      ],
+      [
+        19.925785,
+        50.030691
       ],
       [
         19.925717,
         50.030678
       ],
       [
-        19.925679,
-        50.030681
+        19.92567,
+        50.030672
       ],
       [
-        19.92528,
-        50.030723
+        19.925627,
+        50.030667
       ],
       [
-        19.9252,
-        50.030732
+        19.925543,
+        50.030664
       ],
       [
-        19.924979,
-        50.030765
+        19.925482,
+        50.030666
       ],
       [
-        19.924804,
-        50.030791
+        19.9254,
+        50.030675
+      ],
+      [
+        19.925261,
+        50.030689
+      ],
+      [
+        19.925195,
+        50.030697
+      ],
+      [
+        19.924991,
+        50.030727
+      ],
+      [
+        19.924791,
+        50.030757
       ],
       [
         19.924791,
@@ -8312,283 +4492,2919 @@
         19.889106,
         50.017986
       ]
+    ],
+    [
+      [
+        19.889106,
+        50.017986
+      ],
+      [
+        19.898122,
+        50.020825
+      ],
+      [
+        19.898122,
+        50.020825
+      ],
+      [
+        19.901995,
+        50.024685
+      ],
+      [
+        19.901942,
+        50.0247
+      ],
+      [
+        19.901997,
+        50.024778
+      ],
+      [
+        19.902293,
+        50.025188
+      ],
+      [
+        19.902564,
+        50.025495
+      ],
+      [
+        19.902832,
+        50.025736
+      ],
+      [
+        19.903205,
+        50.026007
+      ],
+      [
+        19.90342,
+        50.026138
+      ],
+      [
+        19.90353,
+        50.026199
+      ],
+      [
+        19.903606,
+        50.026239
+      ],
+      [
+        19.903796,
+        50.026334
+      ],
+      [
+        19.904064,
+        50.026452
+      ],
+      [
+        19.904336,
+        50.026569
+      ],
+      [
+        19.905189,
+        50.026934
+      ],
+      [
+        19.905411,
+        50.02703
+      ],
+      [
+        19.905449,
+        50.027046
+      ],
+      [
+        19.905545,
+        50.027088
+      ],
+      [
+        19.905564,
+        50.027096
+      ],
+      [
+        19.905654,
+        50.027134
+      ],
+      [
+        19.905708,
+        50.027157
+      ],
+      [
+        19.90604,
+        50.027299
+      ],
+      [
+        19.906093,
+        50.027322
+      ],
+      [
+        19.906093,
+        50.027322
+      ],
+      [
+        19.906561,
+        50.027521
+      ],
+      [
+        19.907492,
+        50.027898
+      ],
+      [
+        19.909859,
+        50.028856
+      ],
+      [
+        19.912228,
+        50.029814
+      ],
+      [
+        19.912567,
+        50.029952
+      ],
+      [
+        19.912639,
+        50.029982
+      ],
+      [
+        19.91273,
+        50.030019
+      ],
+      [
+        19.912779,
+        50.030039
+      ],
+      [
+        19.913094,
+        50.030166
+      ],
+      [
+        19.913094,
+        50.030166
+      ],
+      [
+        19.91312,
+        50.030177
+      ],
+      [
+        19.915586,
+        50.031174
+      ],
+      [
+        19.915986,
+        50.031325
+      ],
+      [
+        19.916608,
+        50.031547
+      ],
+      [
+        19.916801,
+        50.031614
+      ],
+      [
+        19.917721,
+        50.031938
+      ],
+      [
+        19.917886,
+        50.031993
+      ],
+      [
+        19.917983,
+        50.032021
+      ],
+      [
+        19.918202,
+        50.032069
+      ],
+      [
+        19.918362,
+        50.032093
+      ],
+      [
+        19.918525,
+        50.032109
+      ],
+      [
+        19.918684,
+        50.032119
+      ],
+      [
+        19.918898,
+        50.032116
+      ],
+      [
+        19.919039,
+        50.03211
+      ],
+      [
+        19.919192,
+        50.032093
+      ],
+      [
+        19.919405,
+        50.032057
+      ],
+      [
+        19.920217,
+        50.031869
+      ],
+      [
+        19.920564,
+        50.031788
+      ],
+      [
+        19.920667,
+        50.031763
+      ],
+      [
+        19.920892,
+        50.031706
+      ],
+      [
+        19.921186,
+        50.031632
+      ],
+      [
+        19.921186,
+        50.031632
+      ],
+      [
+        19.921239,
+        50.031619
+      ],
+      [
+        19.921752,
+        50.031482
+      ],
+      [
+        19.922935,
+        50.03117
+      ],
+      [
+        19.923178,
+        50.031107
+      ],
+      [
+        19.923581,
+        50.031009
+      ],
+      [
+        19.923885,
+        50.030944
+      ],
+      [
+        19.924149,
+        50.030894
+      ],
+      [
+        19.924608,
+        50.030821
+      ],
+      [
+        19.924724,
+        50.030803
+      ],
+      [
+        19.924889,
+        50.030779
+      ],
+      [
+        19.924889,
+        50.030779
+      ],
+      [
+        19.924979,
+        50.030765
+      ],
+      [
+        19.9252,
+        50.030732
+      ],
+      [
+        19.92528,
+        50.030723
+      ],
+      [
+        19.925365,
+        50.030716
+      ],
+      [
+        19.92542,
+        50.030714
+      ],
+      [
+        19.925486,
+        50.030715
+      ],
+      [
+        19.925608,
+        50.030728
+      ],
+      [
+        19.925706,
+        50.030749
+      ],
+      [
+        19.925748,
+        50.030762
+      ],
+      [
+        19.925809,
+        50.030782
+      ],
+      [
+        19.925826,
+        50.030791
+      ],
+      [
+        19.925897,
+        50.030826
+      ],
+      [
+        19.925972,
+        50.030874
+      ],
+      [
+        19.926054,
+        50.030956
+      ],
+      [
+        19.92608,
+        50.030995
+      ],
+      [
+        19.926109,
+        50.031039
+      ],
+      [
+        19.926127,
+        50.031095
+      ],
+      [
+        19.926135,
+        50.031135
+      ],
+      [
+        19.926128,
+        50.031249
+      ],
+      [
+        19.926059,
+        50.031732
+      ],
+      [
+        19.926058,
+        50.031792
+      ],
+      [
+        19.926077,
+        50.031934
+      ],
+      [
+        19.926076,
+        50.032037
+      ]
+    ],
+    [
+      [
+        19.925929,
+        50.034407
+      ],
+      [
+        19.925919,
+        50.034592
+      ],
+      [
+        19.925919,
+        50.034592
+      ],
+      [
+        19.925908,
+        50.034791
+      ]
+    ],
+    [
+      [
+        19.924616,
+        50.040621
+      ],
+      [
+        19.924499,
+        50.040813
+      ],
+      [
+        19.924499,
+        50.040813
+      ],
+      [
+        19.92441,
+        50.040958
+      ]
+    ],
+    [
+      [
+        19.924191,
+        50.041248
+      ],
+      [
+        19.924084,
+        50.041421
+      ]
+    ],
+    [
+      [
+        19.922141,
+        50.044751
+      ],
+      [
+        19.922006,
+        50.044988
+      ],
+      [
+        19.921981,
+        50.045032
+      ],
+      [
+        19.921981,
+        50.045032
+      ],
+      [
+        19.921907,
+        50.045162
+      ]
+    ],
+    [
+      [
+        19.924848,
+        50.046571
+      ],
+      [
+        19.925344,
+        50.046735
+      ],
+      [
+        19.925461,
+        50.046773
+      ],
+      [
+        19.925484,
+        50.046744
+      ],
+      [
+        19.931155,
+        50.048605
+      ],
+      [
+        19.931155,
+        50.048605
+      ],
+      [
+        19.938251,
+        50.050546
+      ],
+      [
+        19.938251,
+        50.050546
+      ],
+      [
+        19.941337,
+        50.05148
+      ],
+      [
+        19.941335,
+        50.051479
+      ],
+      [
+        19.941335,
+        50.051479
+      ],
+      [
+        19.941449,
+        50.051558
+      ],
+      [
+        19.941527,
+        50.051639
+      ],
+      [
+        19.941542,
+        50.051666
+      ],
+      [
+        19.941549,
+        50.051689
+      ],
+      [
+        19.941555,
+        50.051707
+      ],
+      [
+        19.941558,
+        50.051732
+      ],
+      [
+        19.941558,
+        50.05176
+      ],
+      [
+        19.941549,
+        50.051798
+      ],
+      [
+        19.941538,
+        50.051828
+      ],
+      [
+        19.941524,
+        50.051851
+      ],
+      [
+        19.941506,
+        50.051874
+      ],
+      [
+        19.941498,
+        50.051882
+      ],
+      [
+        19.941483,
+        50.051898
+      ],
+      [
+        19.941435,
+        50.051936
+      ],
+      [
+        19.941382,
+        50.051975
+      ],
+      [
+        19.94132,
+        50.05202
+      ],
+      [
+        19.941236,
+        50.052081
+      ],
+      [
+        19.940922,
+        50.052321
+      ],
+      [
+        19.940729,
+        50.052493
+      ],
+      [
+        19.940529,
+        50.052704
+      ],
+      [
+        19.940413,
+        50.05284
+      ],
+      [
+        19.940324,
+        50.052946
+      ],
+      [
+        19.939883,
+        50.053458
+      ],
+      [
+        19.939613,
+        50.05373
+      ],
+      [
+        19.939503,
+        50.053836
+      ],
+      [
+        19.93934,
+        50.053974
+      ],
+      [
+        19.93966,
+        50.054482
+      ],
+      [
+        19.939756,
+        50.054558
+      ],
+      [
+        19.939868,
+        50.054651
+      ],
+      [
+        19.939913,
+        50.054704
+      ],
+      [
+        19.939952,
+        50.054769
+      ],
+      [
+        19.939974,
+        50.054832
+      ],
+      [
+        19.93999,
+        50.054897
+      ],
+      [
+        19.940026,
+        50.055043
+      ],
+      [
+        19.940072,
+        50.055231
+      ],
+      [
+        19.940202,
+        50.055765
+      ],
+      [
+        19.940219,
+        50.05583
+      ],
+      [
+        19.940321,
+        50.056242
+      ],
+      [
+        19.940482,
+        50.0569
+      ],
+      [
+        19.940499,
+        50.056967
+      ],
+      [
+        19.940501,
+        50.056976
+      ],
+      [
+        19.940613,
+        50.057436
+      ],
+      [
+        19.940636,
+        50.05753
+      ],
+      [
+        19.940675,
+        50.057688
+      ],
+      [
+        19.940746,
+        50.057974
+      ],
+      [
+        19.940828,
+        50.058306
+      ],
+      [
+        19.940888,
+        50.058454
+      ],
+      [
+        19.940944,
+        50.058564
+      ],
+      [
+        19.940991,
+        50.058655
+      ],
+      [
+        19.941,
+        50.058672
+      ],
+      [
+        19.941027,
+        50.058715
+      ],
+      [
+        19.941055,
+        50.058753
+      ],
+      [
+        19.941074,
+        50.058775
+      ],
+      [
+        19.941094,
+        50.058796
+      ],
+      [
+        19.941159,
+        50.05886
+      ],
+      [
+        19.941234,
+        50.058922
+      ],
+      [
+        19.941432,
+        50.059063
+      ],
+      [
+        19.941817,
+        50.059341
+      ],
+      [
+        19.941817,
+        50.059341
+      ],
+      [
+        19.941818,
+        50.059342
+      ],
+      [
+        19.941907,
+        50.059404
+      ],
+      [
+        19.941939,
+        50.059428
+      ],
+      [
+        19.942021,
+        50.059487
+      ],
+      [
+        19.942141,
+        50.059573
+      ],
+      [
+        19.942151,
+        50.059581
+      ],
+      [
+        19.942202,
+        50.059618
+      ],
+      [
+        19.942318,
+        50.059702
+      ],
+      [
+        19.942338,
+        50.059716
+      ],
+      [
+        19.942616,
+        50.059916
+      ],
+      [
+        19.943364,
+        50.060455
+      ],
+      [
+        19.943654,
+        50.060664
+      ],
+      [
+        19.943748,
+        50.060736
+      ],
+      [
+        19.943764,
+        50.060748
+      ],
+      [
+        19.943923,
+        50.060896
+      ],
+      [
+        19.944002,
+        50.060984
+      ],
+      [
+        19.94407,
+        50.061068
+      ],
+      [
+        19.944093,
+        50.061104
+      ],
+      [
+        19.944132,
+        50.061164
+      ],
+      [
+        19.944152,
+        50.061194
+      ],
+      [
+        19.944643,
+        50.062027
+      ],
+      [
+        19.944856,
+        50.062391
+      ],
+      [
+        19.944915,
+        50.062516
+      ],
+      [
+        19.944963,
+        50.062667
+      ],
+      [
+        19.944982,
+        50.062778
+      ],
+      [
+        19.945081,
+        50.063341
+      ],
+      [
+        19.945081,
+        50.063389
+      ],
+      [
+        19.945082,
+        50.063442
+      ],
+      [
+        19.945075,
+        50.063509
+      ],
+      [
+        19.945044,
+        50.063736
+      ],
+      [
+        19.944984,
+        50.064192
+      ],
+      [
+        19.944984,
+        50.064192
+      ]
+    ],
+    [
+      [
+        19.944984,
+        50.064192
+      ],
+      [
+        19.944974,
+        50.064292
+      ],
+      [
+        19.944951,
+        50.064441
+      ],
+      [
+        19.944946,
+        50.064474
+      ],
+      [
+        19.944942,
+        50.064504
+      ],
+      [
+        19.944933,
+        50.064549
+      ],
+      [
+        19.944927,
+        50.064563
+      ],
+      [
+        19.944915,
+        50.064591
+      ],
+      [
+        19.944906,
+        50.064602
+      ],
+      [
+        19.944889,
+        50.064622
+      ],
+      [
+        19.944879,
+        50.064629
+      ],
+      [
+        19.944844,
+        50.064659
+      ],
+      [
+        19.944811,
+        50.064678
+      ],
+      [
+        19.944785,
+        50.064691
+      ],
+      [
+        19.944721,
+        50.064717
+      ],
+      [
+        19.944586,
+        50.06476
+      ],
+      [
+        19.94387,
+        50.065006
+      ],
+      [
+        19.943262,
+        50.065214
+      ],
+      [
+        19.943051,
+        50.065284
+      ],
+      [
+        19.942742,
+        50.06538
+      ],
+      [
+        19.942709,
+        50.065391
+      ],
+      [
+        19.942641,
+        50.065413
+      ],
+      [
+        19.94193,
+        50.065659
+      ],
+      [
+        19.94182,
+        50.065697
+      ],
+      [
+        19.941575,
+        50.065784
+      ],
+      [
+        19.941446,
+        50.065828
+      ],
+      [
+        19.940484,
+        50.066161
+      ],
+      [
+        19.940421,
+        50.066181
+      ],
+      [
+        19.940358,
+        50.066199
+      ],
+      [
+        19.940267,
+        50.066222
+      ],
+      [
+        19.9402,
+        50.066236
+      ],
+      [
+        19.940133,
+        50.066249
+      ],
+      [
+        19.940045,
+        50.066264
+      ],
+      [
+        19.939973,
+        50.066274
+      ],
+      [
+        19.939879,
+        50.066284
+      ],
+      [
+        19.939819,
+        50.066288
+      ],
+      [
+        19.939769,
+        50.066291
+      ],
+      [
+        19.93972,
+        50.066292
+      ],
+      [
+        19.939721,
+        50.066314
+      ],
+      [
+        19.937536,
+        50.069678
+      ],
+      [
+        19.937518,
+        50.069671
+      ],
+      [
+        19.93726,
+        50.069933
+      ],
+      [
+        19.936738,
+        50.070462
+      ],
+      [
+        19.936591,
+        50.070637
+      ],
+      [
+        19.936472,
+        50.070826
+      ],
+      [
+        19.936259,
+        50.071239
+      ],
+      [
+        19.936219,
+        50.071319
+      ],
+      [
+        19.936201,
+        50.071363
+      ],
+      [
+        19.936154,
+        50.071477
+      ],
+      [
+        19.936128,
+        50.071543
+      ],
+      [
+        19.935935,
+        50.072094
+      ],
+      [
+        19.935916,
+        50.072142
+      ],
+      [
+        19.935904,
+        50.072177
+      ],
+      [
+        19.935892,
+        50.072216
+      ],
+      [
+        19.935882,
+        50.072252
+      ],
+      [
+        19.935878,
+        50.072277
+      ],
+      [
+        19.93587,
+        50.072328
+      ],
+      [
+        19.935866,
+        50.072368
+      ],
+      [
+        19.935866,
+        50.072382
+      ],
+      [
+        19.935834,
+        50.073
+      ],
+      [
+        19.935825,
+        50.073148
+      ],
+      [
+        19.935827,
+        50.073177
+      ],
+      [
+        19.935834,
+        50.073206
+      ],
+      [
+        19.93585,
+        50.07324
+      ],
+      [
+        19.935868,
+        50.073268
+      ],
+      [
+        19.935894,
+        50.073299
+      ],
+      [
+        19.935923,
+        50.073326
+      ],
+      [
+        19.935964,
+        50.073354
+      ],
+      [
+        19.936015,
+        50.073383
+      ],
+      [
+        19.936056,
+        50.0734
+      ],
+      [
+        19.936104,
+        50.073415
+      ],
+      [
+        19.936144,
+        50.073426
+      ],
+      [
+        19.936188,
+        50.073434
+      ],
+      [
+        19.936221,
+        50.073439
+      ],
+      [
+        19.936582,
+        50.073487
+      ],
+      [
+        19.936629,
+        50.073493
+      ],
+      [
+        19.936629,
+        50.073493
+      ],
+      [
+        19.936865,
+        50.073524
+      ],
+      [
+        19.936931,
+        50.073533
+      ],
+      [
+        19.937003,
+        50.07354
+      ],
+      [
+        19.93707,
+        50.073546
+      ],
+      [
+        19.937151,
+        50.073551
+      ],
+      [
+        19.937237,
+        50.073554
+      ],
+      [
+        19.937325,
+        50.073556
+      ],
+      [
+        19.937631,
+        50.073557
+      ],
+      [
+        19.937674,
+        50.073558
+      ],
+      [
+        19.937713,
+        50.07356
+      ],
+      [
+        19.937748,
+        50.073563
+      ],
+      [
+        19.937778,
+        50.073567
+      ],
+      [
+        19.937801,
+        50.073571
+      ],
+      [
+        19.937831,
+        50.073578
+      ],
+      [
+        19.937858,
+        50.073588
+      ],
+      [
+        19.937885,
+        50.073598
+      ],
+      [
+        19.937911,
+        50.07361
+      ],
+      [
+        19.937927,
+        50.073619
+      ],
+      [
+        19.937946,
+        50.073631
+      ],
+      [
+        19.937975,
+        50.07365
+      ],
+      [
+        19.937999,
+        50.073667
+      ],
+      [
+        19.938064,
+        50.073716
+      ],
+      [
+        19.938132,
+        50.073766
+      ],
+      [
+        19.938246,
+        50.073848
+      ],
+      [
+        19.938529,
+        50.074056
+      ],
+      [
+        19.938583,
+        50.074099
+      ],
+      [
+        19.938776,
+        50.074241
+      ],
+      [
+        19.939359,
+        50.074671
+      ],
+      [
+        19.939517,
+        50.07479
+      ],
+      [
+        19.939611,
+        50.074862
+      ],
+      [
+        19.939963,
+        50.075144
+      ],
+      [
+        19.939997,
+        50.075169
+      ],
+      [
+        19.940022,
+        50.075186
+      ],
+      [
+        19.940031,
+        50.075192
+      ],
+      [
+        19.940047,
+        50.075201
+      ],
+      [
+        19.940076,
+        50.075218
+      ],
+      [
+        19.940112,
+        50.075236
+      ],
+      [
+        19.940145,
+        50.07525
+      ],
+      [
+        19.940168,
+        50.075259
+      ],
+      [
+        19.94019,
+        50.075267
+      ],
+      [
+        19.940238,
+        50.075285
+      ],
+      [
+        19.940489,
+        50.075375
+      ],
+      [
+        19.940736,
+        50.075462
+      ],
+      [
+        19.940858,
+        50.075507
+      ],
+      [
+        19.940896,
+        50.075522
+      ],
+      [
+        19.940929,
+        50.075538
+      ],
+      [
+        19.940944,
+        50.075547
+      ],
+      [
+        19.940956,
+        50.075555
+      ],
+      [
+        19.940973,
+        50.075567
+      ],
+      [
+        19.940988,
+        50.075581
+      ],
+      [
+        19.940999,
+        50.075591
+      ],
+      [
+        19.941006,
+        50.0756
+      ],
+      [
+        19.941017,
+        50.075619
+      ],
+      [
+        19.941024,
+        50.075636
+      ],
+      [
+        19.941029,
+        50.075653
+      ],
+      [
+        19.94103,
+        50.075666
+      ],
+      [
+        19.94103,
+        50.075681
+      ],
+      [
+        19.941029,
+        50.075698
+      ],
+      [
+        19.941025,
+        50.075713
+      ],
+      [
+        19.94102,
+        50.075728
+      ],
+      [
+        19.941012,
+        50.075743
+      ],
+      [
+        19.941006,
+        50.075752
+      ],
+      [
+        19.940996,
+        50.075765
+      ],
+      [
+        19.940983,
+        50.075776
+      ],
+      [
+        19.940966,
+        50.075791
+      ],
+      [
+        19.940951,
+        50.075802
+      ],
+      [
+        19.940935,
+        50.075812
+      ],
+      [
+        19.940914,
+        50.075823
+      ],
+      [
+        19.940894,
+        50.075832
+      ],
+      [
+        19.940871,
+        50.07584
+      ],
+      [
+        19.940822,
+        50.075854
+      ],
+      [
+        19.940731,
+        50.075877
+      ],
+      [
+        19.940631,
+        50.075901
+      ],
+      [
+        19.940291,
+        50.075986
+      ],
+      [
+        19.940291,
+        50.075986
+      ],
+      [
+        19.940223,
+        50.076002
+      ],
+      [
+        19.94002,
+        50.076053
+      ],
+      [
+        19.93999,
+        50.07606
+      ],
+      [
+        19.939781,
+        50.076112
+      ],
+      [
+        19.939729,
+        50.076126
+      ],
+      [
+        19.939689,
+        50.076138
+      ],
+      [
+        19.939651,
+        50.076152
+      ],
+      [
+        19.939609,
+        50.076169
+      ],
+      [
+        19.939574,
+        50.076185
+      ],
+      [
+        19.939541,
+        50.076203
+      ],
+      [
+        19.939507,
+        50.076225
+      ],
+      [
+        19.939481,
+        50.076242
+      ],
+      [
+        19.939476,
+        50.076246
+      ],
+      [
+        19.939445,
+        50.07627
+      ],
+      [
+        19.93935,
+        50.076351
+      ],
+      [
+        19.938468,
+        50.07712
+      ],
+      [
+        19.938062,
+        50.077486
+      ],
+      [
+        19.937974,
+        50.077596
+      ],
+      [
+        19.937925,
+        50.077686
+      ],
+      [
+        19.937885,
+        50.077785
+      ],
+      [
+        19.937864,
+        50.077893
+      ],
+      [
+        19.937861,
+        50.077992
+      ],
+      [
+        19.937864,
+        50.078028
+      ],
+      [
+        19.937872,
+        50.078075
+      ],
+      [
+        19.937885,
+        50.078115
+      ],
+      [
+        19.93792,
+        50.078206
+      ],
+      [
+        19.937976,
+        50.078301
+      ],
+      [
+        19.938052,
+        50.078392
+      ],
+      [
+        19.938138,
+        50.078481
+      ],
+      [
+        19.939092,
+        50.079368
+      ],
+      [
+        19.939237,
+        50.07953
+      ],
+      [
+        19.939296,
+        50.079629
+      ],
+      [
+        19.939331,
+        50.079735
+      ],
+      [
+        19.939332,
+        50.079828
+      ],
+      [
+        19.939321,
+        50.07992
+      ],
+      [
+        19.939284,
+        50.080013
+      ],
+      [
+        19.939214,
+        50.080124
+      ],
+      [
+        19.939154,
+        50.08019
+      ],
+      [
+        19.939068,
+        50.080262
+      ],
+      [
+        19.938928,
+        50.08034
+      ],
+      [
+        19.938774,
+        50.080407
+      ],
+      [
+        19.938555,
+        50.08048
+      ],
+      [
+        19.938307,
+        50.08056
+      ],
+      [
+        19.93791,
+        50.080689
+      ],
+      [
+        19.937622,
+        50.080784
+      ],
+      [
+        19.937622,
+        50.080784
+      ],
+      [
+        19.937546,
+        50.08081
+      ],
+      [
+        19.937495,
+        50.080827
+      ],
+      [
+        19.937404,
+        50.080863
+      ],
+      [
+        19.937316,
+        50.080899
+      ],
+      [
+        19.937208,
+        50.080943
+      ],
+      [
+        19.93568,
+        50.081681
+      ],
+      [
+        19.935598,
+        50.081725
+      ],
+      [
+        19.935517,
+        50.081777
+      ],
+      [
+        19.935435,
+        50.081842
+      ],
+      [
+        19.935369,
+        50.081909
+      ],
+      [
+        19.935308,
+        50.081986
+      ],
+      [
+        19.934948,
+        50.082462
+      ],
+      [
+        19.9349,
+        50.082529
+      ],
+      [
+        19.934859,
+        50.082597
+      ],
+      [
+        19.934783,
+        50.082753
+      ],
+      [
+        19.934647,
+        50.083035
+      ],
+      [
+        19.934584,
+        50.083136
+      ],
+      [
+        19.934339,
+        50.083477
+      ],
+      [
+        19.93415,
+        50.083727
+      ],
+      [
+        19.93415,
+        50.083727
+      ],
+      [
+        19.934083,
+        50.083815
+      ],
+      [
+        19.933989,
+        50.083941
+      ],
+      [
+        19.933868,
+        50.084122
+      ],
+      [
+        19.933809,
+        50.084229
+      ],
+      [
+        19.93373,
+        50.084418
+      ],
+      [
+        19.933563,
+        50.084878
+      ],
+      [
+        19.93336,
+        50.085414
+      ],
+      [
+        19.933265,
+        50.085679
+      ],
+      [
+        19.93318,
+        50.085915
+      ],
+      [
+        19.933157,
+        50.085992
+      ],
+      [
+        19.933142,
+        50.086074
+      ],
+      [
+        19.933121,
+        50.086206
+      ],
+      [
+        19.933043,
+        50.087057
+      ],
+      [
+        19.93294,
+        50.088136
+      ],
+      [
+        19.932931,
+        50.08822
+      ],
+      [
+        19.932916,
+        50.088328
+      ],
+      [
+        19.932904,
+        50.088384
+      ],
+      [
+        19.932869,
+        50.088539
+      ],
+      [
+        19.93278,
+        50.088955
+      ],
+      [
+        19.93278,
+        50.088955
+      ],
+      [
+        19.932744,
+        50.089123
+      ],
+      [
+        19.932701,
+        50.089327
+      ],
+      [
+        19.932673,
+        50.089448
+      ],
+      [
+        19.932652,
+        50.089513
+      ],
+      [
+        19.9326,
+        50.089645
+      ],
+      [
+        19.932565,
+        50.089734
+      ],
+      [
+        19.932539,
+        50.089794
+      ],
+      [
+        19.93251,
+        50.089858
+      ],
+      [
+        19.932357,
+        50.090177
+      ],
+      [
+        19.931943,
+        50.09101
+      ],
+      [
+        19.931871,
+        50.091129
+      ],
+      [
+        19.931813,
+        50.091221
+      ],
+      [
+        19.931655,
+        50.091474
+      ],
+      [
+        19.931606,
+        50.091543
+      ],
+      [
+        19.931568,
+        50.091594
+      ],
+      [
+        19.931534,
+        50.091635
+      ],
+      [
+        19.931488,
+        50.091686
+      ],
+      [
+        19.9314,
+        50.091787
+      ],
+      [
+        19.931103,
+        50.092118
+      ],
+      [
+        19.930961,
+        50.092286
+      ],
+      [
+        19.930859,
+        50.092424
+      ],
+      [
+        19.930719,
+        50.09267
+      ],
+      [
+        19.930434,
+        50.093199
+      ],
+      [
+        19.930269,
+        50.093504
+      ],
+      [
+        19.930212,
+        50.093592
+      ],
+      [
+        19.929882,
+        50.094091
+      ],
+      [
+        19.929835,
+        50.094161
+      ],
+      [
+        19.929835,
+        50.094161
+      ],
+      [
+        19.929803,
+        50.094208
+      ],
+      [
+        19.929782,
+        50.094239
+      ],
+      [
+        19.929759,
+        50.094279
+      ],
+      [
+        19.929739,
+        50.094324
+      ],
+      [
+        19.929725,
+        50.094365
+      ],
+      [
+        19.929721,
+        50.0944
+      ],
+      [
+        19.929719,
+        50.094434
+      ],
+      [
+        19.929721,
+        50.094466
+      ],
+      [
+        19.929726,
+        50.094494
+      ],
+      [
+        19.929735,
+        50.094524
+      ],
+      [
+        19.929743,
+        50.094549
+      ],
+      [
+        19.929758,
+        50.094577
+      ],
+      [
+        19.929775,
+        50.094608
+      ],
+      [
+        19.929799,
+        50.094638
+      ],
+      [
+        19.929823,
+        50.094666
+      ],
+      [
+        19.92986,
+        50.0947
+      ],
+      [
+        19.929894,
+        50.094727
+      ],
+      [
+        19.929944,
+        50.09476
+      ],
+      [
+        19.929996,
+        50.094788
+      ],
+      [
+        19.930048,
+        50.094811
+      ],
+      [
+        19.930096,
+        50.094829
+      ],
+      [
+        19.930154,
+        50.094846
+      ],
+      [
+        19.930196,
+        50.094855
+      ],
+      [
+        19.930247,
+        50.094865
+      ],
+      [
+        19.930982,
+        50.094978
+      ],
+      [
+        19.93107,
+        50.094992
+      ],
+      [
+        19.931147,
+        50.095003
+      ],
+      [
+        19.932521,
+        50.095213
+      ],
+      [
+        19.932604,
+        50.095226
+      ],
+      [
+        19.932762,
+        50.09525
+      ],
+      [
+        19.932839,
+        50.095261
+      ],
+      [
+        19.932891,
+        50.095267
+      ],
+      [
+        19.933005,
+        50.095277
+      ],
+      [
+        19.933127,
+        50.095285
+      ],
+      [
+        19.933216,
+        50.095288
+      ],
+      [
+        19.933369,
+        50.095286
+      ],
+      [
+        19.933479,
+        50.095282
+      ],
+      [
+        19.933591,
+        50.095274
+      ],
+      [
+        19.933747,
+        50.095258
+      ],
+      [
+        19.933999,
+        50.095216
+      ],
+      [
+        19.934124,
+        50.095186
+      ],
+      [
+        19.934247,
+        50.095152
+      ],
+      [
+        19.934511,
+        50.09507
+      ],
+      [
+        19.934671,
+        50.095015
+      ],
+      [
+        19.935174,
+        50.094844
+      ],
+      [
+        19.935191,
+        50.094838
+      ],
+      [
+        19.935191,
+        50.094838
+      ],
+      [
+        19.93542,
+        50.094762
+      ],
+      [
+        19.935611,
+        50.094708
+      ],
+      [
+        19.935738,
+        50.094676
+      ],
+      [
+        19.93585,
+        50.094652
+      ],
+      [
+        19.936043,
+        50.094619
+      ],
+      [
+        19.936215,
+        50.094598
+      ],
+      [
+        19.936408,
+        50.094581
+      ],
+      [
+        19.936519,
+        50.094575
+      ],
+      [
+        19.936631,
+        50.094574
+      ],
+      [
+        19.936816,
+        50.094574
+      ],
+      [
+        19.936952,
+        50.09458
+      ],
+      [
+        19.937064,
+        50.094587
+      ],
+      [
+        19.937165,
+        50.094597
+      ],
+      [
+        19.937221,
+        50.094603
+      ],
+      [
+        19.937395,
+        50.094631
+      ],
+      [
+        19.937432,
+        50.094638
+      ],
+      [
+        19.937555,
+        50.094662
+      ],
+      [
+        19.937681,
+        50.094688
+      ],
+      [
+        19.937806,
+        50.09472
+      ],
+      [
+        19.937936,
+        50.094759
+      ],
+      [
+        19.93809,
+        50.094811
+      ],
+      [
+        19.938278,
+        50.094878
+      ],
+      [
+        19.938723,
+        50.095039
+      ],
+      [
+        19.939179,
+        50.095197
+      ],
+      [
+        19.939504,
+        50.095301
+      ],
+      [
+        19.939747,
+        50.095374
+      ],
+      [
+        19.940185,
+        50.095514
+      ],
+      [
+        19.94041,
+        50.095585
+      ],
+      [
+        19.940775,
+        50.095694
+      ],
+      [
+        19.941,
+        50.095772
+      ],
+      [
+        19.941249,
+        50.095865
+      ],
+      [
+        19.9419,
+        50.096136
+      ],
+      [
+        19.942008,
+        50.096181
+      ],
+      [
+        19.942008,
+        50.096181
+      ],
+      [
+        19.94212,
+        50.096229
+      ],
+      [
+        19.942236,
+        50.096279
+      ],
+      [
+        19.942394,
+        50.096342
+      ],
+      [
+        19.942461,
+        50.096368
+      ],
+      [
+        19.942527,
+        50.09639
+      ],
+      [
+        19.942604,
+        50.096414
+      ],
+      [
+        19.942691,
+        50.096439
+      ],
+      [
+        19.942771,
+        50.09646
+      ],
+      [
+        19.942867,
+        50.096483
+      ],
+      [
+        19.942957,
+        50.096502
+      ],
+      [
+        19.943038,
+        50.096517
+      ],
+      [
+        19.943114,
+        50.096529
+      ],
+      [
+        19.943205,
+        50.096541
+      ],
+      [
+        19.943301,
+        50.096552
+      ],
+      [
+        19.943391,
+        50.09656
+      ],
+      [
+        19.943485,
+        50.096566
+      ],
+      [
+        19.943577,
+        50.096569
+      ],
+      [
+        19.943672,
+        50.09657
+      ],
+      [
+        19.943766,
+        50.096569
+      ],
+      [
+        19.943841,
+        50.096567
+      ],
+      [
+        19.943912,
+        50.096563
+      ],
+      [
+        19.943995,
+        50.096557
+      ],
+      [
+        19.944089,
+        50.096548
+      ],
+      [
+        19.944173,
+        50.096538
+      ],
+      [
+        19.94427,
+        50.096524
+      ],
+      [
+        19.944423,
+        50.096499
+      ],
+      [
+        19.944623,
+        50.096464
+      ],
+      [
+        19.946677,
+        50.096108
+      ],
+      [
+        19.946844,
+        50.096079
+      ],
+      [
+        19.946967,
+        50.096058
+      ],
+      [
+        19.947294,
+        50.096002
+      ],
+      [
+        19.947971,
+        50.095883
+      ],
+      [
+        19.948168,
+        50.095849
+      ],
+      [
+        19.948168,
+        50.095849
+      ],
+      [
+        19.948312,
+        50.095825
+      ],
+      [
+        19.948522,
+        50.095788
+      ],
+      [
+        19.948743,
+        50.095752
+      ],
+      [
+        19.948859,
+        50.095739
+      ],
+      [
+        19.948944,
+        50.095736
+      ],
+      [
+        19.949053,
+        50.095733
+      ],
+      [
+        19.949215,
+        50.095739
+      ],
+      [
+        19.949356,
+        50.095751
+      ],
+      [
+        19.949461,
+        50.095759
+      ],
+      [
+        19.94962,
+        50.095771
+      ],
+      [
+        19.949765,
+        50.095771
+      ],
+      [
+        19.94991,
+        50.09576
+      ],
+      [
+        19.950121,
+        50.095734
+      ],
+      [
+        19.950572,
+        50.095665
+      ],
+      [
+        19.950777,
+        50.095628
+      ],
+      [
+        19.950912,
+        50.095597
+      ],
+      [
+        19.951287,
+        50.095506
+      ],
+      [
+        19.95159,
+        50.095434
+      ],
+      [
+        19.951765,
+        50.095401
+      ],
+      [
+        19.951879,
+        50.095384
+      ],
+      [
+        19.952856,
+        50.095254
+      ],
+      [
+        19.953101,
+        50.095222
+      ],
+      [
+        19.95319,
+        50.095211
+      ],
+      [
+        19.953281,
+        50.095202
+      ],
+      [
+        19.953408,
+        50.095191
+      ],
+      [
+        19.953515,
+        50.095179
+      ],
+      [
+        19.953626,
+        50.095165
+      ],
+      [
+        19.954348,
+        50.095073
+      ],
+      [
+        19.954462,
+        50.095057
+      ],
+      [
+        19.954462,
+        50.095057
+      ],
+      [
+        19.954713,
+        50.095021
+      ],
+      [
+        19.954753,
+        50.095016
+      ],
+      [
+        19.954789,
+        50.095012
+      ],
+      [
+        19.954833,
+        50.095009
+      ],
+      [
+        19.954872,
+        50.095008
+      ],
+      [
+        19.95491,
+        50.095007
+      ],
+      [
+        19.954951,
+        50.095008
+      ],
+      [
+        19.954988,
+        50.09501
+      ],
+      [
+        19.955017,
+        50.095013
+      ],
+      [
+        19.955067,
+        50.09502
+      ],
+      [
+        19.955108,
+        50.095027
+      ],
+      [
+        19.955147,
+        50.095035
+      ],
+      [
+        19.955194,
+        50.095047
+      ],
+      [
+        19.955235,
+        50.095059
+      ],
+      [
+        19.955283,
+        50.095076
+      ],
+      [
+        19.955324,
+        50.095093
+      ],
+      [
+        19.955369,
+        50.095115
+      ],
+      [
+        19.955409,
+        50.095137
+      ],
+      [
+        19.955444,
+        50.095159
+      ],
+      [
+        19.955477,
+        50.095183
+      ],
+      [
+        19.955506,
+        50.095206
+      ],
+      [
+        19.955535,
+        50.095235
+      ],
+      [
+        19.955557,
+        50.09526
+      ],
+      [
+        19.955577,
+        50.095284
+      ],
+      [
+        19.955598,
+        50.095314
+      ],
+      [
+        19.955612,
+        50.09534
+      ],
+      [
+        19.955621,
+        50.095358
+      ],
+      [
+        19.955629,
+        50.095379
+      ],
+      [
+        19.955752,
+        50.095691
+      ],
+      [
+        19.955769,
+        50.09574
+      ],
+      [
+        19.955782,
+        50.095786
+      ],
+      [
+        19.955795,
+        50.095841
+      ],
+      [
+        19.955804,
+        50.095887
+      ],
+      [
+        19.955813,
+        50.095941
+      ],
+      [
+        19.955974,
+        50.097066
+      ],
+      [
+        19.95605,
+        50.097579
+      ],
+      [
+        19.956103,
+        50.097944
+      ],
+      [
+        19.956112,
+        50.098009
+      ],
+      [
+        19.956112,
+        50.098009
+      ],
+      [
+        19.95612,
+        50.098068
+      ],
+      [
+        19.956125,
+        50.09813
+      ],
+      [
+        19.956131,
+        50.098172
+      ],
+      [
+        19.956141,
+        50.09822
+      ],
+      [
+        19.95616,
+        50.09832
+      ],
+      [
+        19.956195,
+        50.098481
+      ],
+      [
+        19.956251,
+        50.098687
+      ],
+      [
+        19.956293,
+        50.098818
+      ],
+      [
+        19.956365,
+        50.098997
+      ],
+      [
+        19.956428,
+        50.099148
+      ],
+      [
+        19.956542,
+        50.09941
+      ],
+      [
+        19.956719,
+        50.099844
+      ],
+      [
+        19.956848,
+        50.100177
+      ],
+      [
+        19.956993,
+        50.100543
+      ],
+      [
+        19.957043,
+        50.100669
+      ],
+      [
+        19.957087,
+        50.100816
+      ],
+      [
+        19.957128,
+        50.100974
+      ],
+      [
+        19.957156,
+        50.101052
+      ],
+      [
+        19.957187,
+        50.101154
+      ],
+      [
+        19.957251,
+        50.10133
+      ],
+      [
+        19.957319,
+        50.101494
+      ],
+      [
+        19.957454,
+        50.101847
+      ],
+      [
+        19.957472,
+        50.101893
+      ],
+      [
+        19.957472,
+        50.101893
+      ],
+      [
+        19.95751,
+        50.101992
+      ],
+      [
+        19.957535,
+        50.102058
+      ],
+      [
+        19.957559,
+        50.102123
+      ],
+      [
+        19.95758,
+        50.102176
+      ],
+      [
+        19.957727,
+        50.102597
+      ],
+      [
+        19.957822,
+        50.102829
+      ],
+      [
+        19.957932,
+        50.103099
+      ],
+      [
+        19.95808,
+        50.103496
+      ],
+      [
+        19.958166,
+        50.103701
+      ],
+      [
+        19.958217,
+        50.103805
+      ],
+      [
+        19.958278,
+        50.103911
+      ],
+      [
+        19.958361,
+        50.104035
+      ],
+      [
+        19.958449,
+        50.104145
+      ],
+      [
+        19.958544,
+        50.104251
+      ],
+      [
+        19.958674,
+        50.104377
+      ],
+      [
+        19.95881,
+        50.104496
+      ],
+      [
+        19.95896,
+        50.104605
+      ],
+      [
+        19.959079,
+        50.104686
+      ],
+      [
+        19.959213,
+        50.10477
+      ],
+      [
+        19.95937,
+        50.104854
+      ],
+      [
+        19.959603,
+        50.104972
+      ],
+      [
+        19.959787,
+        50.105051
+      ],
+      [
+        19.960061,
+        50.105152
+      ],
+      [
+        19.960199,
+        50.105197
+      ],
+      [
+        19.960384,
+        50.105248
+      ],
+      [
+        19.960501,
+        50.105279
+      ],
+      [
+        19.960642,
+        50.105311
+      ],
+      [
+        19.960811,
+        50.105345
+      ],
+      [
+        19.961024,
+        50.105381
+      ],
+      [
+        19.961225,
+        50.105409
+      ],
+      [
+        19.96142,
+        50.105428
+      ],
+      [
+        19.961637,
+        50.105441
+      ],
+      [
+        19.961742,
+        50.105443
+      ],
+      [
+        19.96181,
+        50.105443
+      ],
+      [
+        19.961866,
+        50.105441
+      ],
+      [
+        19.961979,
+        50.105435
+      ],
+      [
+        19.962074,
+        50.105428
+      ],
+      [
+        19.962181,
+        50.105419
+      ]
+    ],
+    [
+      [
+        19.962468,
+        50.104864
+      ],
+      [
+        19.96247,
+        50.104864
+      ]
     ]
   ],
   "stops": [
     {
       "direction_id": 1,
-      "stop_id": "stop_1552_378519",
-      "stop_lat": 50.104864,
-      "stop_lon": 19.96247,
-      "stop_name": "Górka Narodowa P+R",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1494_373129",
-      "stop_lat": 50.10163,
-      "stop_lon": 19.9573,
-      "stop_name": "Papierni Prądnickich",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1492_372629",
-      "stop_lat": 50.09766,
-      "stop_lon": 19.95603,
-      "stop_name": "Kuźnicy Kołłątajowskiej",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1493_373029",
-      "stop_lat": 50.09514,
-      "stop_lon": 19.95394,
-      "stop_name": "Bociana",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1488_3329",
-      "stop_lat": 50.09599,
-      "stop_lon": 19.94751,
-      "stop_name": "Siewna Wiadukt",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1490_366219",
-      "stop_lat": 50.09598,
-      "stop_lon": 19.94142,
-      "stop_name": "Górnickiego",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1489_127119",
-      "stop_lat": 50.09499,
-      "stop_lon": 19.93486,
-      "stop_name": "Białoprądnicka",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1491_372329",
-      "stop_lat": 50.09379,
-      "stop_lon": 19.93005,
-      "stop_name": "Pachońskiego P+R",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1486_372429",
-      "stop_lat": 50.088752,
-      "stop_lon": 19.93274,
-      "stop_name": "Krowodrza Górka P+R",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_183_6129",
-      "stop_lat": 50.084645,
-      "stop_lon": 19.933583,
-      "stop_name": "Bratysławska",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_570_303629",
-      "stop_lat": 50.080625,
-      "stop_lon": 19.937974,
-      "stop_name": "Szpital Narutowicza",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_186_7039",
-      "stop_lat": 50.074994,
-      "stop_lon": 19.93968,
-      "stop_name": "Dworzec Towarowy",
-      "stop_num": "03"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_187_7129",
-      "stop_lat": 50.073508,
-      "stop_lon": 19.936452,
-      "stop_name": "Nowy Kleparz",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_188_7229",
-      "stop_lat": 50.069646,
-      "stop_lon": 19.937499,
-      "stop_name": "Pędzichów",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_568_303239",
-      "stop_lat": 50.06666,
-      "stop_lon": 19.93895,
-      "stop_name": "Stary Kleparz",
-      "stop_num": "03"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_852_324229",
-      "stop_lat": 50.064792,
-      "stop_lon": 19.944409,
-      "stop_name": "Teatr Słowackiego",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_222_35719",
-      "stop_lat": 50.059797,
-      "stop_lon": 19.942404,
-      "stop_name": "Poczta Główna",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_1102_347029",
-      "stop_lat": 50.058486,
-      "stop_lon": 19.940838,
-      "stop_name": "św. Gertrudy",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_221_32529",
-      "stop_lat": 50.054324,
-      "stop_lon": 19.939295,
-      "stop_name": "Wawel",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_224_35929",
-      "stop_lat": 50.052086,
-      "stop_lon": 19.941166,
-      "stop_name": "Stradom",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_225_36019",
-      "stop_lat": 50.048028,
-      "stop_lon": 19.943426,
-      "stop_name": "Plac Wolnica",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_279_57139",
-      "stop_lat": 50.044032,
-      "stop_lon": 19.94678,
-      "stop_name": "Korona",
-      "stop_num": "03"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_280_57219",
-      "stop_lat": 50.041496,
-      "stop_lon": 19.943119,
-      "stop_name": "Smolki",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_290_61019",
-      "stop_lat": 50.036959,
-      "stop_lon": 19.940795,
-      "stop_name": "Rondo Matecznego",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_291_61119",
-      "stop_lat": 50.033644,
-      "stop_lon": 19.938697,
-      "stop_name": "Rzemieślnicza",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_314_92219",
-      "stop_lat": 50.030477,
-      "stop_lon": 19.936964,
-      "stop_name": "Łagiewniki",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_314_92259",
-      "stop_lat": 50.029682,
-      "stop_lon": 19.935452,
-      "stop_name": "Łagiewniki",
-      "stop_num": "05"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_292_61229",
-      "stop_lat": 50.03055,
-      "stop_lon": 19.929101,
-      "stop_name": "Borsucza",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_343_268619",
-      "stop_lat": 50.030792,
-      "stop_lon": 19.924804,
-      "stop_name": "Lipińskiego",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_344_268719",
-      "stop_lat": 50.031867,
-      "stop_lon": 19.920212,
-      "stop_name": "Grota-Roweckiego",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_345_268819",
-      "stop_lat": 50.029809,
-      "stop_lon": 19.912225,
-      "stop_name": "Norymberska",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_289_58919",
-      "stop_lat": 50.026932,
-      "stop_lon": 19.905181,
-      "stop_name": "Ruczaj",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_346_269019",
-      "stop_lat": 50.024044,
-      "stop_lon": 19.901485,
-      "stop_name": "Kampus UJ",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 1,
-      "stop_id": "stop_11_22",
-      "stop_lat": 50.020377,
-      "stop_lon": 19.897505,
-      "stop_name": "Kampus UP JP II",
-      "stop_num": "02"
-    },
-    {
-      "direction_id": 1,
       "stop_id": "stop_572_303819",
       "stop_lat": 50.017986,
       "stop_lon": 19.889106,
@@ -8596,15 +7412,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
-      "stop_id": "stop_572_303819",
-      "stop_lat": 50.017986,
-      "stop_lon": 19.889106,
-      "stop_name": "Czerwone Maki P+R",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_11_23",
       "stop_lat": 50.020825,
       "stop_lon": 19.898122,
@@ -8612,7 +7420,7 @@
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_346_269029",
       "stop_lat": 50.024685,
       "stop_lon": 19.901995,
@@ -8620,7 +7428,7 @@
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_289_58929",
       "stop_lat": 50.02729,
       "stop_lon": 19.906125,
@@ -8628,7 +7436,7 @@
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_345_268829",
       "stop_lat": 50.030129,
       "stop_lon": 19.913131,
@@ -8636,7 +7444,7 @@
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_344_268729",
       "stop_lat": 50.031593,
       "stop_lon": 19.921162,
@@ -8644,7 +7452,7 @@
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_343_268629",
       "stop_lat": 50.030738,
       "stop_lon": 19.924874,
@@ -8652,87 +7460,63 @@
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
-      "stop_id": "stop_292_61219",
-      "stop_lat": 50.030504,
-      "stop_lon": 19.928538,
-      "stop_name": "Borsucza",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 0,
-      "stop_id": "stop_293_61319",
-      "stop_lat": 50.030494,
-      "stop_lon": 19.931874,
-      "stop_name": "Brożka (nż)",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 0,
-      "stop_id": "stop_314_92249",
-      "stop_lat": 50.029498,
-      "stop_lon": 19.935946,
-      "stop_name": "Łagiewniki",
-      "stop_num": "04"
-    },
-    {
-      "direction_id": 0,
-      "stop_id": "stop_314_92229",
-      "stop_lat": 50.030486,
-      "stop_lon": 19.937053,
-      "stop_name": "Łagiewniki",
+      "direction_id": 1,
+      "stop_id": "stop_285_58429",
+      "stop_lat": 50.034593,
+      "stop_lon": 19.925986,
+      "stop_name": "Kobierzyńska",
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
-      "stop_id": "stop_291_61129",
-      "stop_lat": 50.03295,
-      "stop_lon": 19.938389,
-      "stop_name": "Rzemieślnicza",
+      "direction_id": 1,
+      "stop_id": "stop_284_57729",
+      "stop_lat": 50.040825,
+      "stop_lon": 19.924547,
+      "stop_name": "Słomiana",
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
-      "stop_id": "stop_290_61029",
-      "stop_lat": 50.035927,
-      "stop_lon": 19.940363,
-      "stop_name": "Rondo Matecznego",
+      "direction_id": 1,
+      "stop_id": "stop_283_57629",
+      "stop_lat": 50.045048,
+      "stop_lon": 19.922048,
+      "stop_name": "Kapelanka",
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
-      "stop_id": "stop_280_57229",
-      "stop_lat": 50.041629,
-      "stop_lon": 19.943262,
-      "stop_name": "Smolki",
+      "direction_id": 1,
+      "stop_id": "stop_282_57529",
+      "stop_lat": 50.046744,
+      "stop_lon": 19.925484,
+      "stop_name": "Szwedzka",
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
-      "stop_id": "stop_279_57119",
-      "stop_lat": 50.043604,
-      "stop_lon": 19.946683,
-      "stop_name": "Korona",
-      "stop_num": "01"
-    },
-    {
-      "direction_id": 0,
-      "stop_id": "stop_225_36029",
-      "stop_lat": 50.048114,
-      "stop_lon": 19.943448,
-      "stop_name": "Plac Wolnica",
+      "direction_id": 1,
+      "stop_id": "stop_957_333829",
+      "stop_lat": 50.048605,
+      "stop_lon": 19.931155,
+      "stop_name": "Rondo Grunwaldzkie",
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
-      "stop_id": "stop_224_35949",
-      "stop_lat": 50.050842,
-      "stop_lon": 19.942415,
+      "direction_id": 1,
+      "stop_id": "stop_226_36129",
+      "stop_lat": 50.050546,
+      "stop_lon": 19.938251,
+      "stop_name": "Orzeszkowej",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_224_35919",
+      "stop_lat": 50.05148,
+      "stop_lon": 19.941337,
       "stop_name": "Stradom",
-      "stop_num": "04"
+      "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_221_32519",
       "stop_lat": 50.05449,
       "stop_lon": 19.93963,
@@ -8740,7 +7524,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_222_35739",
       "stop_lat": 50.059339,
       "stop_lon": 19.941821,
@@ -8748,7 +7532,7 @@
       "stop_num": "03"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_852_324239",
       "stop_lat": 50.064192,
       "stop_lon": 19.94499,
@@ -8756,7 +7540,7 @@
       "stop_num": "03"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_568_303219",
       "stop_lat": 50.066314,
       "stop_lon": 19.939721,
@@ -8764,7 +7548,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_188_7219",
       "stop_lat": 50.069678,
       "stop_lon": 19.937536,
@@ -8772,7 +7556,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_187_7119",
       "stop_lat": 50.07349,
       "stop_lon": 19.93663,
@@ -8780,7 +7564,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_186_7019",
       "stop_lat": 50.075988,
       "stop_lon": 19.940292,
@@ -8788,7 +7572,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_570_303619",
       "stop_lat": 50.080794,
       "stop_lon": 19.93763,
@@ -8796,7 +7580,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_183_6119",
       "stop_lat": 50.08373,
       "stop_lon": 19.93416,
@@ -8804,7 +7588,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_1486_372419",
       "stop_lat": 50.088958,
       "stop_lon": 19.932816,
@@ -8812,7 +7596,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_1491_372319",
       "stop_lat": 50.09416,
       "stop_lon": 19.92983,
@@ -8820,7 +7604,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_1489_127129",
       "stop_lat": 50.09485,
       "stop_lon": 19.9352,
@@ -8828,7 +7612,7 @@
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_1490_366229",
       "stop_lat": 50.09617,
       "stop_lon": 19.94202,
@@ -8836,7 +7620,7 @@
       "stop_num": "02"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_1488_3319",
       "stop_lat": 50.09583,
       "stop_lon": 19.94816,
@@ -8844,7 +7628,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_1493_373019",
       "stop_lat": 50.09505,
       "stop_lon": 19.95446,
@@ -8852,7 +7636,7 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_1492_372619",
       "stop_lat": 50.09801,
       "stop_lon": 19.9561,
@@ -8860,11 +7644,19 @@
       "stop_num": "01"
     },
     {
-      "direction_id": 0,
+      "direction_id": 1,
       "stop_id": "stop_1494_373119",
       "stop_lat": 50.1019,
       "stop_lon": 19.95743,
       "stop_name": "Papierni Prądnickich",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_1552_378519",
+      "stop_lat": 50.104864,
+      "stop_lon": 19.96247,
+      "stop_name": "Górka Narodowa P+R",
       "stop_num": "01"
     },
     {
@@ -8874,19 +7666,275 @@
       "stop_lon": 19.96247,
       "stop_name": "Górka Narodowa P+R",
       "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1494_373129",
+      "stop_lat": 50.10163,
+      "stop_lon": 19.9573,
+      "stop_name": "Papierni Prądnickich",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1492_372629",
+      "stop_lat": 50.09766,
+      "stop_lon": 19.95603,
+      "stop_name": "Kuźnicy Kołłątajowskiej",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1493_373029",
+      "stop_lat": 50.09514,
+      "stop_lon": 19.95394,
+      "stop_name": "Bociana",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1488_3329",
+      "stop_lat": 50.09599,
+      "stop_lon": 19.94751,
+      "stop_name": "Siewna Wiadukt",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1490_366219",
+      "stop_lat": 50.09598,
+      "stop_lon": 19.94142,
+      "stop_name": "Górnickiego",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1489_127119",
+      "stop_lat": 50.09499,
+      "stop_lon": 19.93486,
+      "stop_name": "Białoprądnicka",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1491_372329",
+      "stop_lat": 50.09379,
+      "stop_lon": 19.93005,
+      "stop_name": "Pachońskiego P+R",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1486_372429",
+      "stop_lat": 50.088752,
+      "stop_lon": 19.93274,
+      "stop_name": "Krowodrza Górka P+R",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_183_6129",
+      "stop_lat": 50.084645,
+      "stop_lon": 19.933583,
+      "stop_name": "Bratysławska",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_570_303629",
+      "stop_lat": 50.080625,
+      "stop_lon": 19.937974,
+      "stop_name": "Szpital Narutowicza",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_186_7039",
+      "stop_lat": 50.074994,
+      "stop_lon": 19.93968,
+      "stop_name": "Dworzec Towarowy",
+      "stop_num": "03"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_187_7129",
+      "stop_lat": 50.073508,
+      "stop_lon": 19.936452,
+      "stop_name": "Nowy Kleparz",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_188_7229",
+      "stop_lat": 50.069646,
+      "stop_lon": 19.937499,
+      "stop_name": "Pędzichów",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_568_303239",
+      "stop_lat": 50.06666,
+      "stop_lon": 19.93895,
+      "stop_name": "Stary Kleparz",
+      "stop_num": "03"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_852_324229",
+      "stop_lat": 50.064792,
+      "stop_lon": 19.944409,
+      "stop_name": "Teatr Słowackiego",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_222_35719",
+      "stop_lat": 50.059797,
+      "stop_lon": 19.942404,
+      "stop_name": "Poczta Główna",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1102_347029",
+      "stop_lat": 50.058486,
+      "stop_lon": 19.940838,
+      "stop_name": "św. Gertrudy",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_221_32529",
+      "stop_lat": 50.054324,
+      "stop_lon": 19.939295,
+      "stop_name": "Wawel",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_224_35929",
+      "stop_lat": 50.052086,
+      "stop_lon": 19.941166,
+      "stop_name": "Stradom",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_226_36119",
+      "stop_lat": 50.050631,
+      "stop_lon": 19.938671,
+      "stop_name": "Orzeszkowej",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_957_333819",
+      "stop_lat": 50.048567,
+      "stop_lon": 19.930917,
+      "stop_name": "Rondo Grunwaldzkie",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_282_57519",
+      "stop_lat": 50.046721,
+      "stop_lon": 19.925299,
+      "stop_name": "Szwedzka",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_283_57619",
+      "stop_lat": 50.044913,
+      "stop_lon": 19.922059,
+      "stop_name": "Kapelanka",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_284_57719",
+      "stop_lat": 50.041404,
+      "stop_lon": 19.9241,
+      "stop_name": "Słomiana",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_285_58419",
+      "stop_lat": 50.03444,
+      "stop_lon": 19.925931,
+      "stop_name": "Kobierzyńska",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_343_268619",
+      "stop_lat": 50.030792,
+      "stop_lon": 19.924804,
+      "stop_name": "Lipińskiego",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_344_268719",
+      "stop_lat": 50.031867,
+      "stop_lon": 19.920212,
+      "stop_name": "Grota-Roweckiego",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_345_268819",
+      "stop_lat": 50.029809,
+      "stop_lon": 19.912225,
+      "stop_name": "Norymberska",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_289_58919",
+      "stop_lat": 50.026932,
+      "stop_lon": 19.905181,
+      "stop_name": "Ruczaj",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_346_269019",
+      "stop_lat": 50.024044,
+      "stop_lon": 19.901485,
+      "stop_name": "Kampus UJ",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_11_22",
+      "stop_lat": 50.020377,
+      "stop_lon": 19.897505,
+      "stop_name": "Kampus UP JP II",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_572_303819",
+      "stop_lat": 50.017986,
+      "stop_lon": 19.889106,
+      "stop_name": "Czerwone Maki P+R",
+      "stop_num": "01"
     }
   ],
   "variants": [
     {
       "direction_id": 0,
       "trip_headsigns": [
-        "Górka Narodowa P+R"
+        "Czerwone Maki P+R"
       ]
     },
     {
       "direction_id": 1,
       "trip_headsigns": [
-        "Czerwone Maki P+R"
+        "Górka Narodowa P+R"
       ]
     }
   ]

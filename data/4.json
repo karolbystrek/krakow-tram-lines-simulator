@@ -1,22 +1,22 @@
 {
   "blocks": [
     {
-      "block_id": "block_574",
+      "block_id": "block_393",
       "category": "tram",
-      "end_time": "23:23:00",
+      "end_time": "23:40:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_1",
       "shift": "4-01",
-      "start_time": "06:03:00",
+      "start_time": "05:34:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_575",
+      "block_id": "block_394",
       "category": "tram",
-      "end_time": "21:38:00",
+      "end_time": "23:43:00",
       "is_current": false,
       "route_short_names": [
         "4"
@@ -27,20 +27,7 @@
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_576",
-      "category": "tram",
-      "end_time": "23:43:00",
-      "is_current": false,
-      "route_short_names": [
-        "4"
-      ],
-      "service_id": "service_1",
-      "shift": "4-03",
-      "start_time": "04:38:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_577",
+      "block_id": "block_395",
       "category": "tram",
       "end_time": "24:03:00",
       "is_current": false,
@@ -48,12 +35,25 @@
         "4"
       ],
       "service_id": "service_1",
-      "shift": "4-04",
-      "start_time": "06:50:00",
+      "shift": "4-03",
+      "start_time": "06:03:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_578",
+      "block_id": "block_396",
+      "category": "tram",
+      "end_time": "22:28:00",
+      "is_current": false,
+      "route_short_names": [
+        "4"
+      ],
+      "service_id": "service_1",
+      "shift": "4-04",
+      "start_time": "04:38:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_397",
       "category": "tram",
       "end_time": "24:35:00",
       "is_current": false,
@@ -62,50 +62,50 @@
       ],
       "service_id": "service_1",
       "shift": "4-05",
-      "start_time": "05:00:00",
+      "start_time": "05:01:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_579",
+      "block_id": "block_398",
       "category": "tram",
-      "end_time": "22:41:00",
+      "end_time": "22:58:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_1",
       "shift": "4-06",
-      "start_time": "04:57:00",
+      "start_time": "04:31:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_580",
+      "block_id": "block_399",
       "category": "tram",
-      "end_time": "20:39:00",
+      "end_time": "23:17:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_1",
       "shift": "4-07",
-      "start_time": "05:15:00",
+      "start_time": "04:56:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_581",
+      "block_id": "block_400",
       "category": "tram",
-      "end_time": "23:01:00",
+      "end_time": "21:16:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_1",
       "shift": "4-08",
-      "start_time": "05:30:00",
+      "start_time": "05:10:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_582",
+      "block_id": "block_401",
       "category": "tram",
       "end_time": "22:55:00",
       "is_current": false,
@@ -114,78 +114,78 @@
       ],
       "service_id": "service_1",
       "shift": "4-09",
-      "start_time": "04:01:00",
+      "start_time": "04:00:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_769",
+      "block_id": "block_599",
       "category": "tram",
-      "end_time": "22:33:00",
+      "end_time": "22:50:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_2",
       "shift": "4-01",
-      "start_time": "04:28:00",
+      "start_time": "04:27:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_770",
+      "block_id": "block_600",
       "category": "tram",
-      "end_time": "22:53:00",
+      "end_time": "23:10:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_2",
       "shift": "4-02",
-      "start_time": "04:48:00",
+      "start_time": "04:46:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_771",
+      "block_id": "block_601",
       "category": "tram",
-      "end_time": "23:13:00",
+      "end_time": "23:30:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_2",
       "shift": "4-03",
-      "start_time": "05:08:00",
+      "start_time": "04:50:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_772",
+      "block_id": "block_602",
       "category": "tram",
-      "end_time": "23:33:00",
+      "end_time": "23:34:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_2",
       "shift": "4-04",
-      "start_time": "05:28:00",
+      "start_time": "05:10:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_773",
+      "block_id": "block_603",
       "category": "tram",
-      "end_time": "23:52:00",
+      "end_time": "23:53:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_2",
       "shift": "4-05",
-      "start_time": "05:48:00",
+      "start_time": "05:30:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_774",
+      "block_id": "block_604",
       "category": "tram",
-      "end_time": "23:56:00",
+      "end_time": "23:52:00",
       "is_current": false,
       "route_short_names": [
         "4"
@@ -196,9 +196,9 @@
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_775",
+      "block_id": "block_605",
       "category": "tram",
-      "end_time": "24:30:00",
+      "end_time": "24:28:00",
       "is_current": false,
       "route_short_names": [
         "4"
@@ -209,176 +209,134 @@
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_903",
+      "block_id": "block_729",
       "category": "tram",
-      "end_time": "22:33:00",
-      "is_current": true,
+      "end_time": "22:50:00",
+      "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_3",
       "shift": "4-01",
-      "start_time": "09:08:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "HG917",
-          "timestamp": 1760887885.0
-        }
-      ]
+      "start_time": "08:50:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_904",
+      "block_id": "block_730",
       "category": "tram",
-      "end_time": "22:53:00",
-      "is_current": true,
+      "end_time": "23:10:00",
+      "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_3",
       "shift": "4-02",
-      "start_time": "04:46:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "HG924",
-          "timestamp": 1760887889.0
-        },
-        {
-          "kmk_id": "HG930",
-          "timestamp": 1760851913.0
-        }
-      ]
+      "start_time": "04:45:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_905",
+      "block_id": "block_731",
       "category": "tram",
-      "end_time": "23:13:00",
-      "is_current": true,
+      "end_time": "23:30:00",
+      "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_3",
       "shift": "4-03",
-      "start_time": "09:48:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "HG915",
-          "timestamp": 1760887889.0
-        }
-      ]
+      "start_time": "09:27:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_906",
+      "block_id": "block_732",
       "category": "tram",
-      "end_time": "23:33:00",
-      "is_current": true,
+      "end_time": "23:34:00",
+      "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_3",
       "shift": "4-04",
-      "start_time": "05:16:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "HG923",
-          "timestamp": 1760887884.0
-        }
-      ]
+      "start_time": "04:58:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_907",
+      "block_id": "block_733",
       "category": "tram",
-      "end_time": "23:52:00",
-      "is_current": true,
+      "end_time": "23:53:00",
+      "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_3",
       "shift": "4-05",
-      "start_time": "05:46:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "HG919",
-          "timestamp": 1760887870.0
-        }
-      ]
+      "start_time": "05:28:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_1",
+      "block_id": "block_734",
       "category": "tram",
-      "end_time": "23:56:00",
+      "end_time": "23:52:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_3",
       "shift": "4-06",
-      "start_time": "04:03:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RG901",
-          "timestamp": 1760887884.0
-        }
-      ]
+      "start_time": "04:04:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_2",
+      "block_id": "block_735",
       "category": "tram",
-      "end_time": "24:30:00",
-      "is_current": true,
+      "end_time": "24:28:00",
+      "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_3",
       "shift": "4-07",
       "start_time": "04:36:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_878",
+      "category": "tram",
+      "end_time": "23:40:00",
+      "is_current": true,
+      "route_short_names": [
+        "4"
+      ],
+      "service_id": "service_4",
+      "shift": "4-01",
+      "start_time": "05:34:00",
       "vehicles_on_block": [
         {
-          "kmk_id": "RG907",
-          "timestamp": 1760887885.0
+          "kmk_id": "HY869",
+          "timestamp": 1762525497.0
         }
       ]
     },
     {
-      "block_id": "block_143",
+      "block_id": "block_879",
       "category": "tram",
-      "end_time": "23:23:00",
-      "is_current": false,
-      "route_short_names": [
-        "4"
-      ],
-      "service_id": "service_4",
-      "shift": "4-01",
-      "start_time": "06:03:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_144",
-      "category": "tram",
-      "end_time": "21:38:00",
-      "is_current": false,
+      "end_time": "23:43:00",
+      "is_current": true,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_4",
       "shift": "4-02",
       "start_time": "04:11:00",
-      "vehicles_on_block": []
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY853",
+          "timestamp": 1762525497.0
+        }
+      ]
     },
     {
-      "block_id": "block_145",
-      "category": "tram",
-      "end_time": "23:43:00",
-      "is_current": false,
-      "route_short_names": [
-        "4"
-      ],
-      "service_id": "service_4",
-      "shift": "4-03",
-      "start_time": "04:38:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_146",
+      "block_id": "block_880",
       "category": "tram",
       "end_time": "24:03:00",
       "is_current": false,
@@ -386,92 +344,140 @@
         "4"
       ],
       "service_id": "service_4",
-      "shift": "4-04",
-      "start_time": "06:50:00",
-      "vehicles_on_block": []
+      "shift": "4-03",
+      "start_time": "06:03:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY734",
+          "timestamp": 1762525492.0
+        }
+      ]
     },
     {
-      "block_id": "block_147",
+      "block_id": "block_881",
+      "category": "tram",
+      "end_time": "22:28:00",
+      "is_current": true,
+      "route_short_names": [
+        "4"
+      ],
+      "service_id": "service_4",
+      "shift": "4-04",
+      "start_time": "04:38:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY732",
+          "timestamp": 1762525495.0
+        }
+      ]
+    },
+    {
+      "block_id": "block_882",
       "category": "tram",
       "end_time": "24:35:00",
-      "is_current": false,
+      "is_current": true,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_4",
       "shift": "4-05",
-      "start_time": "05:00:00",
-      "vehicles_on_block": []
+      "start_time": "05:01:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY886",
+          "timestamp": 1762525483.0
+        }
+      ]
     },
     {
-      "block_id": "block_148",
+      "block_id": "block_883",
       "category": "tram",
-      "end_time": "22:41:00",
-      "is_current": false,
+      "end_time": "22:58:00",
+      "is_current": true,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_4",
       "shift": "4-06",
-      "start_time": "04:57:00",
-      "vehicles_on_block": []
+      "start_time": "04:31:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY858",
+          "timestamp": 1762525487.0
+        }
+      ]
     },
     {
-      "block_id": "block_149",
+      "block_id": "block_884",
       "category": "tram",
-      "end_time": "20:39:00",
-      "is_current": false,
+      "end_time": "23:17:00",
+      "is_current": true,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_4",
       "shift": "4-07",
-      "start_time": "05:15:00",
-      "vehicles_on_block": []
+      "start_time": "04:56:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY728",
+          "timestamp": 1762525493.0
+        }
+      ]
     },
     {
-      "block_id": "block_150",
+      "block_id": "block_885",
       "category": "tram",
-      "end_time": "23:01:00",
+      "end_time": "21:16:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_4",
       "shift": "4-08",
-      "start_time": "05:30:00",
-      "vehicles_on_block": []
+      "start_time": "05:10:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HY874",
+          "timestamp": 1762525488.0
+        }
+      ]
     },
     {
-      "block_id": "block_151",
+      "block_id": "block_886",
       "category": "tram",
       "end_time": "22:55:00",
-      "is_current": false,
+      "is_current": true,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_4",
       "shift": "4-09",
-      "start_time": "04:01:00",
-      "vehicles_on_block": []
+      "start_time": "04:00:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RY824",
+          "timestamp": 1762525489.0
+        }
+      ]
     },
     {
-      "block_id": "block_374",
+      "block_id": "block_206",
       "category": "tram",
-      "end_time": "23:23:00",
+      "end_time": "23:40:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_5",
       "shift": "4-01",
-      "start_time": "06:03:00",
+      "start_time": "05:34:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_375",
+      "block_id": "block_207",
       "category": "tram",
-      "end_time": "21:38:00",
+      "end_time": "23:43:00",
       "is_current": false,
       "route_short_names": [
         "4"
@@ -482,20 +488,7 @@
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_376",
-      "category": "tram",
-      "end_time": "23:43:00",
-      "is_current": false,
-      "route_short_names": [
-        "4"
-      ],
-      "service_id": "service_5",
-      "shift": "4-03",
-      "start_time": "04:38:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_377",
+      "block_id": "block_208",
       "category": "tram",
       "end_time": "24:03:00",
       "is_current": false,
@@ -503,12 +496,25 @@
         "4"
       ],
       "service_id": "service_5",
-      "shift": "4-04",
-      "start_time": "06:50:00",
+      "shift": "4-03",
+      "start_time": "06:03:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_378",
+      "block_id": "block_209",
+      "category": "tram",
+      "end_time": "22:28:00",
+      "is_current": false,
+      "route_short_names": [
+        "4"
+      ],
+      "service_id": "service_5",
+      "shift": "4-04",
+      "start_time": "04:38:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_210",
       "category": "tram",
       "end_time": "24:35:00",
       "is_current": false,
@@ -517,50 +523,50 @@
       ],
       "service_id": "service_5",
       "shift": "4-05",
-      "start_time": "05:00:00",
+      "start_time": "05:01:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_379",
+      "block_id": "block_211",
       "category": "tram",
-      "end_time": "22:41:00",
+      "end_time": "22:58:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_5",
       "shift": "4-06",
-      "start_time": "04:57:00",
+      "start_time": "04:31:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_380",
+      "block_id": "block_212",
       "category": "tram",
-      "end_time": "20:39:00",
+      "end_time": "23:17:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_5",
       "shift": "4-07",
-      "start_time": "05:15:00",
+      "start_time": "04:56:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_381",
+      "block_id": "block_213",
       "category": "tram",
-      "end_time": "23:01:00",
+      "end_time": "21:16:00",
       "is_current": false,
       "route_short_names": [
         "4"
       ],
       "service_id": "service_5",
       "shift": "4-08",
-      "start_time": "05:30:00",
+      "start_time": "05:10:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_382",
+      "block_id": "block_214",
       "category": "tram",
       "end_time": "22:55:00",
       "is_current": false,
@@ -569,14 +575,15 @@
       ],
       "service_id": "service_5",
       "shift": "4-09",
-      "start_time": "04:01:00",
+      "start_time": "04:00:00",
       "vehicles_on_block": []
     }
   ],
   "carrier": "MPK S.A. w Krakowie",
   "directions": [
     "Bronowice Małe",
-    "PH"
+    "Wzgórza Krzesławickie",
+    "Kombinat"
   ],
   "services": [
     {
@@ -637,6 +644,138 @@
   ],
   "shapes": [
     [
+      [
+        20.065271,
+        50.094815
+      ],
+      [
+        20.061073,
+        50.092061
+      ],
+      [
+        20.061073,
+        50.092061
+      ],
+      [
+        20.059126,
+        50.089892
+      ],
+      [
+        20.059126,
+        50.089892
+      ],
+      [
+        20.0596,
+        50.0873
+      ],
+      [
+        20.0596,
+        50.0873
+      ],
+      [
+        20.064594,
+        50.087682
+      ],
+      [
+        20.064594,
+        50.087678
+      ],
+      [
+        20.064799,
+        50.087674
+      ],
+      [
+        20.064889,
+        50.087671
+      ],
+      [
+        20.064951,
+        50.087664
+      ],
+      [
+        20.065011,
+        50.087652
+      ],
+      [
+        20.06506,
+        50.087635
+      ],
+      [
+        20.065106,
+        50.087612
+      ],
+      [
+        20.065142,
+        50.087588
+      ],
+      [
+        20.065173,
+        50.08756
+      ],
+      [
+        20.065196,
+        50.087529
+      ],
+      [
+        20.065214,
+        50.087494
+      ],
+      [
+        20.065221,
+        50.087458
+      ],
+      [
+        20.065227,
+        50.08739
+      ],
+      [
+        20.065239,
+        50.087241
+      ],
+      [
+        20.065249,
+        50.087116
+      ],
+      [
+        20.065262,
+        50.086962
+      ],
+      [
+        20.065268,
+        50.086898
+      ],
+      [
+        20.065285,
+        50.086691
+      ],
+      [
+        20.065471,
+        50.08445
+      ],
+      [
+        20.065485,
+        50.084278
+      ],
+      [
+        20.065501,
+        50.084095
+      ],
+      [
+        20.065508,
+        50.084008
+      ],
+      [
+        20.065513,
+        50.08393
+      ],
+      [
+        20.065527,
+        50.083752
+      ],
+      [
+        20.065545,
+        50.083538
+      ],
       [
         20.065597,
         50.083539
@@ -5763,19 +5902,363 @@
       ],
       [
         20.065059,
+        50.079136
+      ],
+      [
+        20.065339,
+        50.079146
+      ],
+      [
+        20.065376,
+        50.079148
+      ],
+      [
+        20.065453,
+        50.079152
+      ],
+      [
+        20.06549,
+        50.079155
+      ],
+      [
+        20.065522,
+        50.079159
+      ],
+      [
+        20.065547,
+        50.079163
+      ],
+      [
+        20.065588,
+        50.079172
+      ],
+      [
+        20.065607,
+        50.079176
+      ],
+      [
+        20.065631,
+        50.079183
+      ],
+      [
+        20.065656,
+        50.079191
+      ],
+      [
+        20.065681,
+        50.079201
+      ],
+      [
+        20.065704,
+        50.079211
+      ],
+      [
+        20.065724,
+        50.079221
+      ],
+      [
+        20.065744,
+        50.079231
+      ],
+      [
+        20.065762,
+        50.079241
+      ],
+      [
+        20.065785,
+        50.079254
+      ],
+      [
+        20.065809,
+        50.079272
+      ],
+      [
+        20.06583,
+        50.079289
+      ],
+      [
+        20.065854,
+        50.079313
+      ],
+      [
+        20.065872,
+        50.079334
+      ],
+      [
+        20.06589,
+        50.079358
+      ],
+      [
+        20.065907,
+        50.079389
+      ],
+      [
+        20.065918,
+        50.079418
+      ],
+      [
+        20.065925,
+        50.079444
+      ],
+      [
+        20.065929,
+        50.079465
+      ],
+      [
+        20.06593,
+        50.079489
+      ],
+      [
+        20.065925,
+        50.079589
+      ],
+      [
+        20.06592,
+        50.079709
+      ],
+      [
+        20.065871,
+        50.080224
+      ]
+    ],
+    [
+      [
+        20.065801,
+        50.081085
+      ],
+      [
+        20.065595,
+        50.083563
+      ],
+      [
+        20.065594,
+        50.08358
+      ],
+      [
+        20.065598,
+        50.083528
+      ],
+      [
+        20.065595,
+        50.083563
+      ],
+      [
+        20.065579,
+        50.083753
+      ],
+      [
+        20.065563,
+        50.084014
+      ],
+      [
+        20.065528,
+        50.084361
+      ],
+      [
+        20.065332,
+        50.086734
+      ],
+      [
+        20.065276,
+        50.087395
+      ],
+      [
+        20.065262,
+        50.087514
+      ],
+      [
+        20.065241,
+        50.087562
+      ],
+      [
+        20.065228,
+        50.087586
+      ],
+      [
+        20.0652,
+        50.087609
+      ],
+      [
+        20.065147,
+        50.08765
+      ],
+      [
+        20.065109,
+        50.087667
+      ],
+      [
+        20.065072,
+        50.087685
+      ],
+      [
+        20.065037,
+        50.087698
+      ],
+      [
+        20.065001,
+        50.087704
+      ],
+      [
+        20.064925,
+        50.087711
+      ],
+      [
+        20.064831,
+        50.087714
+      ],
+      [
+        20.06411,
+        50.087724
+      ],
+      [
+        20.064093,
+        50.087688
+      ],
+      [
+        20.063764,
+        50.087694
+      ],
+      [
+        20.061778,
+        50.087729
+      ],
+      [
+        20.061568,
+        50.087731
+      ],
+      [
+        20.061297,
+        50.087717
+      ],
+      [
+        20.060988,
+        50.087685
+      ],
+      [
+        20.060749,
+        50.087649
+      ],
+      [
+        20.060541,
+        50.087609
+      ],
+      [
+        20.060384,
+        50.087573
+      ],
+      [
+        20.060364,
+        50.087568
+      ],
+      [
+        20.060278,
+        50.087544
+      ],
+      [
+        20.06019,
+        50.087519
+      ],
+      [
+        20.060115,
+        50.087495
+      ],
+      [
+        20.059852,
+        50.087408
+      ],
+      [
+        20.059834,
+        50.087402
+      ],
+      [
+        20.059754,
+        50.087374
+      ],
+      [
+        20.05973,
+        50.087365
+      ],
+      [
+        20.0597,
+        50.0874
+      ],
+      [
+        20.059244,
+        50.089985
+      ],
+      [
+        20.059244,
+        50.089985
+      ],
+      [
+        20.06117,
+        50.091968
+      ],
+      [
+        20.06117,
+        50.091968
+      ],
+      [
+        20.065271,
+        50.094815
+      ],
+      [
+        20.065271,
+        50.094815
+      ]
+    ],
+    [
+      [
+        20.065059,
         50.079135
       ],
       [
-        20.065554,
-        50.083538
-      ],
-      [
-        20.065554,
-        50.083538
+        20.065059,
+        50.079135
       ]
     ]
   ],
   "stops": [
+    {
+      "direction_id": 0,
+      "stop_id": "stop_258_44219",
+      "stop_lat": 50.094815,
+      "stop_lon": 20.065271,
+      "stop_name": "Wzgórza Krzesławickie",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_342_268529",
+      "stop_lat": 50.092061,
+      "stop_lon": 20.061073,
+      "stop_name": "Jarzębiny",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_257_43529",
+      "stop_lat": 50.089892,
+      "stop_lon": 20.059126,
+      "stop_name": "Darwina",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_1_1",
+      "stop_lat": 50.0873,
+      "stop_lon": 20.0596,
+      "stop_name": "Grodzki Urząd Pracy",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_272_46419",
+      "stop_lat": 50.087682,
+      "stop_lon": 20.064594,
+      "stop_name": "Elektromontaż (nż)",
+      "stop_num": "01"
+    },
     {
       "direction_id": 0,
       "stop_id": "stop_273_46519",
@@ -6218,10 +6701,50 @@
     },
     {
       "direction_id": 1,
-      "stop_id": "stop_273_46519",
-      "stop_lat": 50.083538,
-      "stop_lon": 20.065554,
+      "stop_id": "stop_273_46529",
+      "stop_lat": 50.08358,
+      "stop_lon": 20.0656,
       "stop_name": "Zajezdnia Nowa Huta",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_272_46429",
+      "stop_lat": 50.087727,
+      "stop_lon": 20.064095,
+      "stop_name": "Elektromontaż (nż)",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_1_2",
+      "stop_lat": 50.0874,
+      "stop_lon": 20.0597,
+      "stop_name": "Grodzki Urząd Pracy",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_257_43519",
+      "stop_lat": 50.089985,
+      "stop_lon": 20.059244,
+      "stop_name": "Darwina",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_342_268519",
+      "stop_lat": 50.091968,
+      "stop_lon": 20.06117,
+      "stop_name": "Jarzębiny",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_258_44219",
+      "stop_lat": 50.094815,
+      "stop_lon": 20.065271,
+      "stop_name": "Wzgórza Krzesławickie",
       "stop_num": "01"
     }
   ],
@@ -6235,7 +6758,8 @@
     {
       "direction_id": 1,
       "trip_headsigns": [
-        "PH"
+        "Wzgórza Krzesławickie",
+        "Kombinat"
       ]
     }
   ]

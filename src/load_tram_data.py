@@ -1,8 +1,6 @@
-import re
 import json
-
+import os
 from playwright.sync_api import sync_playwright
-
 
 TRAM_LINES_URL = "https://tomekzaw.pl/ttss/linie"
 API_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/routes/"
@@ -27,8 +25,8 @@ with sync_playwright() as pw:
             continue
 
         response = context.request.fetch(f"{API_URL}{line_number}")
-
         line_data = response.json()
 
-        with open(f"data/{line_number}.json", "w", encoding="utf-8") as f:
+        data_path = os.path.join(os.path.dirname(__file__), "..", "data", f"{line_number}.json")
+        with open(os.path.abspath(data_path), "w", encoding="utf-8") as f:
             json.dump(line_data, f, ensure_ascii=False, indent=2)

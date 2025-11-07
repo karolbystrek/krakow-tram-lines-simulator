@@ -1,98 +1,98 @@
 {
   "blocks": [
     {
-      "block_id": "block_583",
+      "block_id": "block_402",
       "category": "tram",
-      "end_time": "24:01:00",
+      "end_time": "22:47:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_1",
       "shift": "5-01",
-      "start_time": "03:59:00",
+      "start_time": "04:59:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_584",
+      "block_id": "block_403",
       "category": "tram",
-      "end_time": "23:39:00",
+      "end_time": "23:00:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_1",
       "shift": "5-02",
-      "start_time": "05:43:00",
+      "start_time": "05:19:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_585",
+      "block_id": "block_404",
       "category": "tram",
-      "end_time": "23:01:00",
+      "end_time": "21:50:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_1",
       "shift": "5-03",
-      "start_time": "04:24:00",
+      "start_time": "05:30:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_586",
+      "block_id": "block_405",
       "category": "tram",
-      "end_time": "23:24:00",
+      "end_time": "23:22:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_1",
       "shift": "5-04",
-      "start_time": "04:27:00",
+      "start_time": "04:18:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_587",
+      "block_id": "block_406",
       "category": "tram",
-      "end_time": "21:40:00",
+      "end_time": "23:46:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_1",
       "shift": "5-05",
-      "start_time": "04:41:00",
+      "start_time": "05:55:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_588",
+      "block_id": "block_407",
       "category": "tram",
-      "end_time": "23:45:00",
+      "end_time": "20:48:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_1",
       "shift": "5-06",
-      "start_time": "05:05:00",
+      "start_time": "04:35:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_589",
+      "block_id": "block_408",
       "category": "tram",
-      "end_time": "22:16:00",
+      "end_time": "23:46:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_1",
       "shift": "5-07",
-      "start_time": "04:18:00",
+      "start_time": "05:15:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_776",
+      "block_id": "block_606",
       "category": "tram",
       "end_time": "23:36:00",
       "is_current": false,
@@ -101,341 +101,332 @@
       ],
       "service_id": "service_2",
       "shift": "5-01",
-      "start_time": "04:00:00",
+      "start_time": "04:16:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_777",
+      "block_id": "block_607",
       "category": "tram",
-      "end_time": "24:20:00",
+      "end_time": "24:24:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_2",
       "shift": "5-02",
-      "start_time": "04:29:00",
+      "start_time": "04:35:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_778",
+      "block_id": "block_608",
       "category": "tram",
-      "end_time": "23:42:00",
+      "end_time": "22:56:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_2",
       "shift": "5-03",
-      "start_time": "04:53:00",
+      "start_time": "04:27:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_779",
+      "block_id": "block_609",
       "category": "tram",
-      "end_time": "22:48:00",
+      "end_time": "23:17:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_2",
       "shift": "5-04",
-      "start_time": "05:16:00",
+      "start_time": "04:48:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_780",
+      "block_id": "block_610",
       "category": "tram",
-      "end_time": "23:22:00",
+      "end_time": "23:39:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_2",
       "shift": "5-05",
-      "start_time": "04:36:00",
+      "start_time": "05:08:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_3",
+      "block_id": "block_736",
       "category": "tram",
       "end_time": "23:36:00",
-      "is_current": true,
+      "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_3",
       "shift": "5-01",
-      "start_time": "07:32:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RF327",
-          "timestamp": 1760887882.0
-        }
-      ]
+      "start_time": "07:24:00",
+      "vehicles_on_block": []
     },
     {
-      "block_id": "block_4",
+      "block_id": "block_737",
       "category": "tram",
-      "end_time": "24:20:00",
+      "end_time": "24:24:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_3",
       "shift": "5-02",
-      "start_time": "04:32:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RF326",
-          "timestamp": 1760887885.0
-        }
-      ]
-    },
-    {
-      "block_id": "block_5",
-      "category": "tram",
-      "end_time": "23:42:00",
-      "is_current": true,
-      "route_short_names": [
-        "5"
-      ],
-      "service_id": "service_3",
-      "shift": "5-03",
-      "start_time": "05:05:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RF302",
-          "timestamp": 1760887871.0
-        }
-      ]
-    },
-    {
-      "block_id": "block_6",
-      "category": "tram",
-      "end_time": "22:48:00",
-      "is_current": true,
-      "route_short_names": [
-        "5"
-      ],
-      "service_id": "service_3",
-      "shift": "5-04",
-      "start_time": "08:21:00",
-      "vehicles_on_block": [
-        {
-          "kmk_id": "RF301",
-          "timestamp": 1760887886.0
-        },
-        {
-          "kmk_id": "RF320",
-          "timestamp": 1760866112.0
-        }
-      ]
-    },
-    {
-      "block_id": "block_7",
-      "category": "tram",
-      "end_time": "23:22:00",
-      "is_current": true,
-      "route_short_names": [
-        "5"
-      ],
-      "service_id": "service_3",
-      "shift": "5-05",
       "start_time": "04:34:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_738",
+      "category": "tram",
+      "end_time": "22:56:00",
+      "is_current": false,
+      "route_short_names": [
+        "5"
+      ],
+      "service_id": "service_3",
+      "shift": "5-03",
+      "start_time": "04:46:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_739",
+      "category": "tram",
+      "end_time": "23:17:00",
+      "is_current": false,
+      "route_short_names": [
+        "5"
+      ],
+      "service_id": "service_3",
+      "shift": "5-04",
+      "start_time": "07:56:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_740",
+      "category": "tram",
+      "end_time": "23:39:00",
+      "is_current": false,
+      "route_short_names": [
+        "5"
+      ],
+      "service_id": "service_3",
+      "shift": "5-05",
+      "start_time": "05:18:00",
+      "vehicles_on_block": []
+    },
+    {
+      "block_id": "block_887",
+      "category": "tram",
+      "end_time": "22:47:00",
+      "is_current": true,
+      "route_short_names": [
+        "5"
+      ],
+      "service_id": "service_4",
+      "shift": "5-01",
+      "start_time": "04:59:00",
       "vehicles_on_block": [
         {
-          "kmk_id": "RF321",
-          "timestamp": 1760887884.0
+          "kmk_id": "HK456",
+          "timestamp": 1762525495.0
         }
       ]
     },
     {
-      "block_id": "block_152",
+      "block_id": "block_888",
       "category": "tram",
-      "end_time": "24:01:00",
-      "is_current": false,
-      "route_short_names": [
-        "5"
-      ],
-      "service_id": "service_4",
-      "shift": "5-01",
-      "start_time": "03:59:00",
-      "vehicles_on_block": []
-    },
-    {
-      "block_id": "block_153",
-      "category": "tram",
-      "end_time": "23:39:00",
-      "is_current": false,
+      "end_time": "23:00:00",
+      "is_current": true,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_4",
       "shift": "5-02",
-      "start_time": "05:43:00",
-      "vehicles_on_block": []
+      "start_time": "05:19:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HK451",
+          "timestamp": 1762525489.0
+        }
+      ]
     },
     {
-      "block_id": "block_154",
+      "block_id": "block_889",
       "category": "tram",
-      "end_time": "23:01:00",
-      "is_current": false,
+      "end_time": "21:50:00",
+      "is_current": true,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_4",
       "shift": "5-03",
-      "start_time": "04:24:00",
-      "vehicles_on_block": []
+      "start_time": "05:30:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "HK455",
+          "timestamp": 1762525492.0
+        }
+      ]
     },
     {
-      "block_id": "block_155",
+      "block_id": "block_890",
       "category": "tram",
-      "end_time": "23:24:00",
+      "end_time": "23:22:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_4",
       "shift": "5-04",
-      "start_time": "04:27:00",
+      "start_time": "04:18:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_156",
+      "block_id": "block_891",
       "category": "tram",
-      "end_time": "21:40:00",
-      "is_current": false,
+      "end_time": "23:46:00",
+      "is_current": true,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_4",
       "shift": "5-05",
-      "start_time": "04:41:00",
+      "start_time": "05:55:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_157",
+      "block_id": "block_892",
       "category": "tram",
-      "end_time": "23:45:00",
-      "is_current": false,
+      "end_time": "20:48:00",
+      "is_current": true,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_4",
       "shift": "5-06",
-      "start_time": "05:05:00",
+      "start_time": "04:35:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_158",
+      "block_id": "block_893",
       "category": "tram",
-      "end_time": "22:16:00",
+      "end_time": "23:46:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_4",
       "shift": "5-07",
-      "start_time": "04:18:00",
-      "vehicles_on_block": []
+      "start_time": "05:15:00",
+      "vehicles_on_block": [
+        {
+          "kmk_id": "RF313",
+          "timestamp": 1762525493.0
+        }
+      ]
     },
     {
-      "block_id": "block_383",
+      "block_id": "block_215",
       "category": "tram",
-      "end_time": "24:01:00",
+      "end_time": "22:47:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_5",
       "shift": "5-01",
-      "start_time": "03:59:00",
+      "start_time": "04:59:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_384",
+      "block_id": "block_216",
       "category": "tram",
-      "end_time": "23:39:00",
+      "end_time": "23:00:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_5",
       "shift": "5-02",
-      "start_time": "05:43:00",
+      "start_time": "05:19:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_385",
+      "block_id": "block_217",
       "category": "tram",
-      "end_time": "23:01:00",
+      "end_time": "21:50:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_5",
       "shift": "5-03",
-      "start_time": "04:24:00",
+      "start_time": "05:30:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_386",
+      "block_id": "block_218",
       "category": "tram",
-      "end_time": "23:24:00",
+      "end_time": "23:22:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_5",
       "shift": "5-04",
-      "start_time": "04:27:00",
+      "start_time": "04:18:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_387",
+      "block_id": "block_219",
       "category": "tram",
-      "end_time": "21:40:00",
+      "end_time": "23:46:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_5",
       "shift": "5-05",
-      "start_time": "04:41:00",
+      "start_time": "05:55:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_388",
+      "block_id": "block_220",
       "category": "tram",
-      "end_time": "23:45:00",
+      "end_time": "20:48:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_5",
       "shift": "5-06",
-      "start_time": "05:05:00",
+      "start_time": "04:35:00",
       "vehicles_on_block": []
     },
     {
-      "block_id": "block_389",
+      "block_id": "block_221",
       "category": "tram",
-      "end_time": "22:16:00",
+      "end_time": "23:46:00",
       "is_current": false,
       "route_short_names": [
         "5"
       ],
       "service_id": "service_5",
       "shift": "5-07",
-      "start_time": "04:18:00",
+      "start_time": "05:15:00",
       "vehicles_on_block": []
     }
   ],
   "carrier": "MPK S.A. w Krakowie",
   "directions": [
-    "Rondo Hipokratesa",
+    "Wzgórza Krzesławickie",
     "Krowodrza Górka P+R"
   ],
   "services": [
@@ -498,308 +489,268 @@
   "shapes": [
     [
       [
-        20.021371,
-        50.090092
+        20.065271,
+        50.094815
       ],
       [
-        20.021307,
-        50.08994
+        20.061073,
+        50.092061
       ],
       [
-        20.021075,
-        50.089379
+        20.061073,
+        50.092061
       ],
       [
-        20.020425,
-        50.087825
+        20.059126,
+        50.089892
       ],
       [
-        20.019493,
-        50.085592
+        20.059126,
+        50.089892
       ],
       [
-        20.019457,
-        50.085508
+        20.04756,
+        50.086978
       ],
       [
-        20.019386,
-        50.085331
+        20.047561,
+        50.086974
       ],
       [
-        20.019353,
-        50.085258
+        20.047487,
+        50.086967
       ],
       [
-        20.019346,
-        50.085242
+        20.047227,
+        50.086942
       ],
       [
-        20.019336,
-        50.085212
+        20.047133,
+        50.086932
       ],
       [
-        20.019328,
-        50.085183
+        20.046914,
+        50.08691
       ],
       [
-        20.019324,
-        50.085159
+        20.046538,
+        50.086874
       ],
       [
-        20.019322,
-        50.085136
+        20.04383,
+        50.086608
       ],
       [
-        20.019323,
-        50.085118
+        20.042691,
+        50.086492
       ],
       [
-        20.019326,
-        50.085093
+        20.042185,
+        50.086441
       ],
       [
-        20.019331,
-        50.085068
+        20.042068,
+        50.08643
       ],
       [
-        20.019338,
-        50.085048
+        20.041967,
+        50.086419
       ],
       [
-        20.01935,
-        50.085021
+        20.041863,
+        50.086404
       ],
       [
-        20.019365,
-        50.084997
+        20.041755,
+        50.086385
       ],
       [
-        20.019382,
-        50.084972
+        20.041669,
+        50.086369
       ],
       [
-        20.019405,
-        50.084945
+        20.041568,
+        50.086349
       ],
       [
-        20.019428,
-        50.084923
+        20.041434,
+        50.086317
       ],
       [
-        20.019451,
-        50.084903
+        20.041224,
+        50.086263
       ],
       [
-        20.019479,
-        50.084883
+        20.040712,
+        50.086131
       ],
       [
-        20.019508,
-        50.084866
+        20.039754,
+        50.085884
       ],
       [
-        20.019539,
-        50.084849
+        20.03966,
+        50.085858
       ],
       [
-        20.019574,
-        50.084832
+        20.039561,
+        50.085828
       ],
       [
-        20.019614,
-        50.084816
+        20.039467,
+        50.085798
       ],
       [
-        20.019649,
-        50.084804
+        20.03938,
+        50.085768
       ],
       [
-        20.019659,
-        50.084801
+        20.039293,
+        50.085737
       ],
       [
-        20.020231,
-        50.084609
+        20.039196,
+        50.085699
       ],
       [
-        20.020382,
-        50.084556
+        20.039095,
+        50.085657
       ],
       [
-        20.020624,
-        50.084464
+        20.039005,
+        50.085617
       ],
       [
-        20.020693,
-        50.084436
+        20.038914,
+        50.085576
       ],
       [
-        20.020693,
-        50.084436
+        20.038522,
+        50.085391
       ],
       [
-        20.020758,
-        50.08441
+        20.03852,
+        50.08539
       ],
       [
-        20.020904,
-        50.084347
+        20.03852,
+        50.08539
       ],
       [
-        20.021007,
-        50.084299
+        20.038344,
+        50.085303
       ],
       [
-        20.021105,
-        50.084251
+        20.038145,
+        50.085205
       ],
       [
-        20.021208,
-        50.084199
+        20.037869,
+        50.085059
       ],
       [
-        20.021326,
-        50.084135
+        20.032944,
+        50.082406
       ],
       [
-        20.021427,
-        50.084079
+        20.032698,
+        50.082272
       ],
       [
-        20.021486,
-        50.084044
+        20.032698,
+        50.082272
       ],
       [
-        20.021585,
-        50.083983
+        20.032661,
+        50.082251
       ],
       [
-        20.021688,
-        50.083917
+        20.03245,
+        50.082138
       ],
       [
-        20.021795,
-        50.083845
+        20.032267,
+        50.08204
       ],
       [
-        20.021883,
-        50.08378
+        20.031995,
+        50.081894
       ],
       [
-        20.021982,
-        50.083707
+        20.031042,
+        50.081379
       ],
       [
-        20.022644,
-        50.083199
+        20.029188,
+        50.080381
       ],
       [
-        20.022713,
-        50.083146
+        20.029099,
+        50.080337
       ],
       [
-        20.023574,
-        50.082485
+        20.029036,
+        50.080309
       ],
       [
-        20.023642,
-        50.082436
+        20.028973,
+        50.080284
       ],
       [
-        20.024681,
-        50.081642
+        20.028914,
+        50.080263
       ],
       [
-        20.026774,
-        50.08004
+        20.02877,
+        50.080213
       ],
       [
-        20.026941,
-        50.079911
+        20.028028,
+        50.079984
       ],
       [
-        20.027034,
-        50.07984
+        20.027962,
+        50.079961
       ],
       [
-        20.027058,
-        50.079818
+        20.027888,
+        50.079929
       ],
       [
-        20.027077,
+        20.027805,
+        50.079889
+      ],
+      [
+        20.027708,
+        50.079838
+      ],
+      [
+        20.027662,
+        50.079814
+      ],
+      [
+        20.027627,
         50.079796
       ],
       [
-        20.027092,
-        50.079776
+        20.027499,
+        50.079727
       ],
       [
-        20.027104,
-        50.079754
+        20.027353,
+        50.079648
       ],
       [
-        20.027112,
-        50.079733
+        20.027315,
+        50.079627
       ],
       [
-        20.027118,
-        50.079715
+        20.027132,
+        50.079528
       ],
       [
-        20.027123,
-        50.079692
-      ],
-      [
-        20.027124,
-        50.079674
-      ],
-      [
-        20.027125,
-        50.079654
-      ],
-      [
-        20.027122,
-        50.079634
-      ],
-      [
-        20.02712,
-        50.079615
-      ],
-      [
-        20.027114,
-        50.079596
-      ],
-      [
-        20.027106,
-        50.079576
-      ],
-      [
-        20.027094,
-        50.079553
-      ],
-      [
-        20.027079,
-        50.079533
-      ],
-      [
-        20.027064,
-        50.079515
-      ],
-      [
-        20.027049,
-        50.079499
-      ],
-      [
-        20.027036,
-        50.079488
-      ],
-      [
-        20.02702,
-        50.079475
-      ],
-      [
-        20.027,
-        50.079461
+        20.027042,
+        50.079479
       ],
       [
         20.02696,
@@ -4016,204 +3967,276 @@
         50.079422
       ],
       [
-        20.027053,
-        50.079448
+        20.027058,
+        50.079446
       ],
       [
-        20.027073,
-        50.079464
+        20.027218,
+        50.079531
       ],
       [
-        20.027086,
-        50.079476
+        20.027348,
+        50.079601
       ],
       [
-        20.027098,
-        50.079488
+        20.027387,
+        50.079622
       ],
       [
-        20.027116,
-        50.079509
+        20.027508,
+        50.079687
       ],
       [
-        20.027132,
-        50.079528
-      ],
-      [
-        20.027143,
-        50.079545
-      ],
-      [
-        20.027153,
-        50.079564
-      ],
-      [
-        20.027161,
-        50.079581
-      ],
-      [
-        20.027167,
-        50.079598
-      ],
-      [
-        20.027172,
-        50.079616
-      ],
-      [
-        20.027176,
-        50.079634
-      ],
-      [
-        20.027178,
-        50.079652
-      ],
-      [
-        20.027179,
-        50.079671
-      ],
-      [
-        20.027177,
-        50.079688
-      ],
-      [
-        20.027174,
-        50.079704
-      ],
-      [
-        20.027168,
-        50.079722
-      ],
-      [
-        20.02716,
-        50.079745
-      ],
-      [
-        20.027155,
-        50.079756
-      ],
-      [
-        20.027149,
-        50.079769
-      ],
-      [
-        20.027141,
+        20.027685,
         50.079782
       ],
       [
-        20.027131,
-        50.079797
+        20.027739,
+        50.079812
       ],
       [
-        20.027117,
-        50.079817
+        20.02782,
+        50.079854
       ],
       [
-        20.027098,
-        50.079838
+        20.027915,
+        50.079901
       ],
       [
-        20.027071,
-        50.079864
+        20.027976,
+        50.079927
       ],
       [
-        20.026984,
-        50.079932
+        20.028051,
+        50.079954
       ],
       [
-        20.026812,
-        50.080062
+        20.028406,
+        50.080066
       ],
       [
-        20.026555,
-        50.080253
+        20.028406,
+        50.080066
       ],
       [
-        20.026555,
-        50.080253
+        20.028415,
+        50.080069
       ],
       [
-        20.026542,
-        50.080262
+        20.028795,
+        50.080184
       ],
       [
-        20.02472,
-        50.081664
+        20.028942,
+        50.080232
       ],
       [
-        20.023681,
-        50.082459
+        20.029001,
+        50.080255
       ],
       [
-        20.023617,
-        50.082508
+        20.029066,
+        50.08028
       ],
       [
-        20.022752,
-        50.083168
+        20.029132,
+        50.080309
       ],
       [
-        20.022686,
-        50.08322
+        20.029222,
+        50.080354
       ],
       [
-        20.022022,
-        50.083727
+        20.031076,
+        50.081353
       ],
       [
-        20.021832,
-        50.083867
+        20.03203,
+        50.081867
       ],
       [
-        20.021676,
-        50.083971
+        20.03203,
+        50.081867
       ],
       [
-        20.021561,
-        50.084043
+        20.03203,
+        50.081868
       ],
       [
-        20.021438,
-        50.084117
+        20.0323,
+        50.082013
       ],
       [
-        20.021309,
-        50.084188
+        20.032486,
+        50.082112
       ],
       [
-        20.021224,
-        50.084233
+        20.032692,
+        50.082225
       ],
       [
-        20.021136,
-        50.084277
+        20.037679,
+        50.084913
       ],
       [
-        20.021032,
-        50.084328
+        20.037709,
+        50.084929
       ],
       [
-        20.020917,
-        50.08438
+        20.037709,
+        50.084929
       ],
       [
-        20.020783,
-        50.084439
+        20.037902,
+        50.085031
       ],
       [
-        20.020677,
-        50.084483
+        20.038172,
+        50.085176
       ],
       [
-        20.020671,
-        50.084477
+        20.038376,
+        50.085275
       ],
       [
-        20.021355,
-        50.090094
+        20.038626,
+        50.085397
       ],
       [
-        20.021355,
-        50.090094
+        20.038943,
+        50.085546
+      ],
+      [
+        20.039052,
+        50.085597
+      ],
+      [
+        20.039128,
+        50.08563
+      ],
+      [
+        20.0392,
+        50.085659
+      ],
+      [
+        20.0393,
+        50.085698
+      ],
+      [
+        20.039406,
+        50.085737
+      ],
+      [
+        20.039503,
+        50.08577
+      ],
+      [
+        20.039604,
+        50.085802
+      ],
+      [
+        20.039691,
+        50.085828
+      ],
+      [
+        20.039799,
+        50.085857
+      ],
+      [
+        20.04124,
+        50.086231
+      ],
+      [
+        20.041449,
+        50.086285
+      ],
+      [
+        20.041527,
+        50.086302
+      ],
+      [
+        20.04161,
+        50.086321
+      ],
+      [
+        20.041703,
+        50.086339
+      ],
+      [
+        20.041782,
+        50.086354
+      ],
+      [
+        20.041853,
+        50.086367
+      ],
+      [
+        20.04193,
+        50.086379
+      ],
+      [
+        20.042,
+        50.086388
+      ],
+      [
+        20.042082,
+        50.086396
+      ],
+      [
+        20.042463,
+        50.086436
+      ],
+      [
+        20.043839,
+        50.086572
+      ],
+      [
+        20.046546,
+        50.086838
+      ],
+      [
+        20.046922,
+        50.086876
+      ],
+      [
+        20.047146,
+        50.086897
+      ],
+      [
+        20.047235,
+        50.086907
+      ],
+      [
+        20.047606,
+        50.086943
+      ],
+      [
+        20.047608,
+        50.086937
+      ],
+      [
+        20.059244,
+        50.089985
+      ],
+      [
+        20.059244,
+        50.089985
+      ],
+      [
+        20.06117,
+        50.091968
+      ],
+      [
+        20.06117,
+        50.091968
+      ],
+      [
+        20.065271,
+        50.094815
+      ],
+      [
+        20.065271,
+        50.094815
       ]
     ]
   ],
@@ -4356,43 +4379,107 @@
     },
     {
       "direction_id": 1,
-      "stop_id": "stop_354_274519",
-      "stop_lat": 50.080257,
-      "stop_lon": 20.026561,
+      "stop_id": "stop_354_274539",
+      "stop_lat": 50.080062,
+      "stop_lon": 20.028408,
       "stop_name": "Rondo Kocmyrzowskie im. Ks. Gorzelanego",
+      "stop_num": "03"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_252_42029",
+      "stop_lat": 50.081863,
+      "stop_lon": 20.032035,
+      "stop_name": "Teatr Ludowy",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_571_303729",
+      "stop_lat": 50.08492,
+      "stop_lon": 20.03772,
+      "stop_name": "Cienista",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_330_254329",
+      "stop_lat": 50.086937,
+      "stop_lon": 20.047608,
+      "stop_name": "Wańkowicza",
+      "stop_num": "02"
+    },
+    {
+      "direction_id": 1,
+      "stop_id": "stop_257_43519",
+      "stop_lat": 50.089985,
+      "stop_lon": 20.059244,
+      "stop_name": "Darwina",
       "stop_num": "01"
     },
     {
       "direction_id": 1,
-      "stop_id": "stop_243_39219",
-      "stop_lat": 50.084477,
-      "stop_lon": 20.020671,
-      "stop_name": "DH Wanda",
+      "stop_id": "stop_342_268519",
+      "stop_lat": 50.091968,
+      "stop_lon": 20.06117,
+      "stop_name": "Jarzębiny",
       "stop_num": "01"
     },
     {
       "direction_id": 1,
-      "stop_id": "stop_329_253929",
-      "stop_lat": 50.090094,
-      "stop_lon": 20.021355,
-      "stop_name": "Rondo Hipokratesa",
+      "stop_id": "stop_258_44219",
+      "stop_lat": 50.094815,
+      "stop_lon": 20.065271,
+      "stop_name": "Wzgórza Krzesławickie",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_258_44219",
+      "stop_lat": 50.094815,
+      "stop_lon": 20.065271,
+      "stop_name": "Wzgórza Krzesławickie",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_342_268529",
+      "stop_lat": 50.092061,
+      "stop_lon": 20.061073,
+      "stop_name": "Jarzębiny",
       "stop_num": "02"
     },
     {
       "direction_id": 0,
-      "stop_id": "stop_329_253929",
-      "stop_lat": 50.090094,
-      "stop_lon": 20.021355,
-      "stop_name": "Rondo Hipokratesa",
+      "stop_id": "stop_257_43529",
+      "stop_lat": 50.089892,
+      "stop_lon": 20.059126,
+      "stop_name": "Darwina",
       "stop_num": "02"
     },
     {
       "direction_id": 0,
-      "stop_id": "stop_243_39229",
-      "stop_lat": 50.084432,
-      "stop_lon": 20.020689,
-      "stop_name": "DH Wanda",
-      "stop_num": "02"
+      "stop_id": "stop_330_254319",
+      "stop_lat": 50.086978,
+      "stop_lon": 20.04756,
+      "stop_name": "Wańkowicza",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_571_303719",
+      "stop_lat": 50.08539,
+      "stop_lon": 20.03852,
+      "stop_name": "Cienista",
+      "stop_num": "01"
+    },
+    {
+      "direction_id": 0,
+      "stop_id": "stop_252_42019",
+      "stop_lat": 50.082264,
+      "stop_lon": 20.032708,
+      "stop_name": "Teatr Ludowy",
+      "stop_num": "01"
     },
     {
       "direction_id": 0,
@@ -4541,7 +4628,7 @@
     {
       "direction_id": 1,
       "trip_headsigns": [
-        "Rondo Hipokratesa"
+        "Wzgórza Krzesławickie"
       ]
     }
   ]
