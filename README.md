@@ -8,36 +8,45 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Prerequisites
 
-This project requires Python 3.8+ and the following libraries:
+Python 3.8 or higher is required.
 
-* Playwright (for data scraping)
-* Folium (for map visualization)
+## Installation
 
-You can install all required dependencies by running:
+1. **Create and activate a virtual environment**
 
-```bash
-pip install playwright folium
-```
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
 
-After installing Playwright, you must also install the browser binaries it needs to operate:
+2. **Install dependencies**
 
-```bash
-playwright install chromium
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Install Playwright browser binaries**
+
+   ```bash
+   playwright install chromium
+   ```
 
 ## Data Loading
 
-The application relies on local data files. The data loading script is located in the `src` directory. To fetch the necessary data, run the following command from the root directory of your project:
+The application relies on local data files. The data loading script is located in the `src` directory. To fetch the
+necessary data, run the following command from the root directory of your project:
 
 ```bash
-python src/load_tram_data.py
+python src/fetch_tram_data.py
 ```
 
-This script will scrape the required tram line information and save it as individual JSON files in the `data/` directory.
+This script will scrape the required tram line information and save it as individual JSON files in the `data/`
+directory.
 
 ## Running the Visualization
 
-To view a map of all the tram stops, run the visualizer module. Make sure you have already loaded the data as described above.
+To view an interactive map of the complete tram network (routes and stops), run the visualizer module. Make sure you
+have already loaded the data as described above.
 
 From the root directory of your project, run:
 
@@ -45,4 +54,10 @@ From the root directory of your project, run:
 python -m src.visualizer
 ```
 
-This will generate a file named `krakow_stops_map.html` in the root directory and automatically open it in your default web browser.
+This will generate a file named `krakow_tram_network_map.html` in the root directory. Open this file in your web
+browser to view the map. The map includes:
+
+* **Tram Routes**: Colored polylines showing the paths of all tram lines
+* **Tram Stops**: Interactive markers for each stop with detailed information
+* **Layer Control**: Toggle visibility of routes and stops independently
+* **Interactive Features**: Zoom, pan, fullscreen, and location controls

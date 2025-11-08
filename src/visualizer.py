@@ -1,74 +1,126 @@
-import os
-import json
+from pathlib import Path
+from typing import Dict
+
 import folium
-import webbrowser
-from .models import Stop
-from folium.plugins import MiniMap, Fullscreen, LocateControl
+from folium.plugins import Fullscreen
+
+from src.data_loader import load_tram_lines, load_tram_stops, get_bounding_box
+from src.models import TramLine, Stop
+
+KRAKOW_BOUNDS = [[49.97, 19.80], [50.13, 20.20]]
+TRAM_LINE_COLOR = "#4DA6FF"
+TRAM_STOP_COLOR = "#1E6BB8"
+TRAM_STOP_FILL_COLOR = "#DBEDFF"
 
 
-def load_stops_from_json(data_directory: str) -> dict:
-    unique_stops = {}
+def add_tram_shapes_to_map(
+    map_object: folium.Map,
+    tram_lines: Dict[str, TramLine],
+    show_by_default: bool = True,
+) -> None:
+    for line_number, tram_line in sorted(
+        tram_lines.items(), key=lambda x: int(x[0]) if x[0].isdigit() else 999
+    ):
+        line_layer = folium.FeatureGroup(
+            name=f"Line {line_number}", show=show_by_default
+        )
 
-    for filename in os.listdir(data_directory):
-        if filename.endswith(".json"):
-            filepath = os.path.join(data_directory, filename)
-            try:
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    data = json.load(f)
+        for shape in tram_line.shapes:
+            if shape.coordinates:
+                folium.PolyLine(
+                    locations=shape.coordinates,
+                    color=TRAM_LINE_COLOR,
+                    weight=3,
+                    opacity=0.7,
+                    tooltip=f"Tram Line {line_number}",
+                ).add_to(line_layer)
 
-                for stop_data in data.get('stops', []):
-                    stop_id = stop_data['stop_id']
-                    if stop_id not in unique_stops:
-                        unique_stops[stop_id] = Stop(
-                            id=stop_id,
-                            name=stop_data['stop_name'],
-                            lat=stop_data['stop_lat'],
-                            lon=stop_data['stop_lon']
-                        )
-            except Exception as e:
-                print(f"Error processing {filename}: {e}")
-
-    return unique_stops
-
-
-def create_stop_map(stops: dict, output_filename="krakow_stops_map.html"):
-    krakow_center = [50.0614, 19.9366]
-    m = folium.Map(location=krakow_center, zoom_start=12, tiles="CartoDB positron")
-
-    stop_layer = folium.FeatureGroup(name="Tram Stops", show=True).add_to(m)
+        line_layer.add_to(map_object)
 
 
-    for stop_id, stop in stops.items():
+def add_tram_stops_to_map(
+    map_object: folium.Map, stops: Dict[str, Stop], show_by_default: bool = True
+) -> None:
+    stops_layer = folium.FeatureGroup(name="Tram Stops", show=show_by_default)
+
+    for stop in stops.values():
         folium.CircleMarker(
             location=[stop.lat, stop.lon],
-            radius=4,
-            color='#0078A8',
-            weight=1,
+            radius=6,
+            color=TRAM_STOP_COLOR,
+            weight=2,
             fill=True,
-            fill_color='#0078A8',
-            fill_opacity=0.7,
-            popup=f"<b>{stop.name}</b><br>(ID: {stop.id})"
-        ).add_to(stop_layer)
+            fill_color=TRAM_STOP_FILL_COLOR,
+            fill_opacity=0.9,
+            popup=folium.Popup(
+                f"<b>{stop.name}</b><br>Code: {stop.kod_busman}<br>ID: {stop.id}",
+                max_width=300,
+            ),
+            tooltip=stop.name,
+        ).add_to(stops_layer)
 
-    folium.LayerControl().add_to(m)
-    MiniMap(toggle_display=True).add_to(m)
+    stops_layer.add_to(map_object)
+
+
+def create_tram_network_map(
+    tram_lines: Dict[str, TramLine],
+    output_filename: str = "krakow_tram_network_map.html",
+) -> None:
+    min_lat, max_lat, min_lon, max_lon = get_bounding_box(tram_lines)
+    center_lat = (min_lat + max_lat) / 2
+    center_lon = (min_lon + max_lon) / 2
+
+    m = folium.Map(
+        location=[center_lat, center_lon],
+        zoom_start=12,
+        tiles=None,
+        max_bounds=True,
+        min_lat=KRAKOW_BOUNDS[0][0],
+        max_lat=KRAKOW_BOUNDS[1][0],
+        min_lon=KRAKOW_BOUNDS[0][1],
+        max_lon=KRAKOW_BOUNDS[1][1],
+    )
+
+    folium.TileLayer(
+        tiles="CartoDB positron", name="CartoDB Positron (Light)", attr="CartoDB"
+    ).add_to(m)
+    folium.TileLayer(
+        tiles="OpenStreetMap", name="OpenStreetMap (Terrain)", attr="OpenStreetMap"
+    ).add_to(m)
+    folium.TileLayer(
+        tiles="CartoDB Voyager", name="Voyager (Transit)", attr="CartoDB"
+    ).add_to(m)
+
+    add_tram_shapes_to_map(m, tram_lines, show_by_default=True)
+    add_tram_stops_to_map(m, load_tram_stops(), show_by_default=True)
+
+    folium.LayerControl(collapsed=False).add_to(m)
     Fullscreen(position="topright").add_to(m)
-    LocateControl().add_to(m)
 
-    output_path = os.path.abspath(output_filename)
-    m.save(output_path)
-
-    print(f"Successfully generated map: '{output_path}'")
-    webbrowser.open(f"file://{output_path}")
+    m.save(str(Path(output_filename).resolve()))
 
 
-if __name__ == '__main__':
-    project_root = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(project_root, '..', 'data')
+def main() -> None:
+    try:
+        tram_lines = load_tram_lines()
 
-    all_stops = load_stops_from_json(data_dir)
+        if not tram_lines:
+            print("No tram lines found. Please check the data directory.")
+            return
 
-    if all_stops:
-        create_stop_map(all_stops)
-    else:
-        print("No stop data could be loaded. Please run 'load_tram_data.py' first.")
+        print(f"Successfully loaded {len(tram_lines)} tram lines")
+        create_tram_network_map(tram_lines)
+        print(f"Map saved to 'krakow_tram_network_map.html'")
+
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        print(
+            "Please ensure the required GeoJSON files are present in the data directory."
+        )
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        raise
+
+
+if __name__ == "__main__":
+    main()
