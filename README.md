@@ -32,7 +32,7 @@ Interactive visualization and simulation of Krakow's tram network with passenger
    python -m src.visualizer
    ```
 
-   Creates `krakow_tram_network_map.html` with an interactive map featuring:
+   Generates `krakow_tram_network_map.html` in the project root with an interactive map featuring:
 
    - All tram routes with layered controls
    - Tram stops with detailed information
