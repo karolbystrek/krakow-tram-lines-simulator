@@ -1,8 +1,8 @@
 import json
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 
-from src.models import Stop, Shape, TramLine
-from src.fetch_tram_data import TRAM_SHAPES_DATA_DIR, TRAM_STOPS_DATA_DIR
+from src.models import Stop, Shape, TramLine, Trip, Tram
+from src.fetch_tram_data import TRAM_SHAPES_DATA_DIR, TRAM_STOPS_DATA_DIR, TRAM_LINES_DATA_DIR
 
 GEOJSON_SHAPES_PATH = TRAM_SHAPES_DATA_DIR / "krakow_tram_lines.geojson"
 GEOJSON_STOPS_PATH = TRAM_STOPS_DATA_DIR / "krakow_tram_stops.geojson"
@@ -65,6 +65,52 @@ def load_tram_lines() -> Dict[str, TramLine]:
     print(f"Loaded {len(tram_lines)} tram lines from GeoJSON")
     return tram_lines
 
+
+def load_trams() -> List[Tram]:
+    trams: List[Tram] = []
+    tram_lines = load_tram_lines()
+
+    if not TRAM_LINES_DATA_DIR.exists():
+        print(f"Warning: Tram lines data dir not found at {TRAM_LINES_DATA_DIR}")
+        return trams
+
+    for fp in sorted(TRAM_LINES_DATA_DIR.glob("*.json")):
+        try:
+            with open(fp, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            line_number = fp.stem
+        except Exception as e:
+            print(f"Failed to load {fp.name}: {e}")
+            continue
+
+
+        tram_line = tram_lines.get(line_number)
+        if not tram_line:
+            print(f"Warning: No tram line data found for line {line_number}")
+            continue
+
+        for block in data.get("blocks", []):
+            block_id = block.get("block_id", "")
+            route_names = block.get("route_short_names") or []
+            direction = route_names[0] if route_names else ""
+            vehicles = block.get("vehicles_on_block", []) or []
+
+            for v in vehicles:
+                kmk = v.get("kmk_id")
+                if not kmk:
+                    continue
+                trip = Trip(trip_id=block_id, direction=direction)
+                tram = Tram(
+                    tram_id=kmk,
+                    line=tram_line,
+                    current_trip=trip,
+                    position=None,
+                    status="ACTIVE"
+                )
+                trams.append(tram)
+
+    print(f"Loaded {len(trams)} Tram objects from {TRAM_LINES_DATA_DIR}")
+    return trams
 
 def get_bounding_box(
     tram_lines: Dict[str, TramLine],

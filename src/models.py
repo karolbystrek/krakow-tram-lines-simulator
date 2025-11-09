@@ -1,3 +1,4 @@
+import math
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional
 
@@ -40,6 +41,7 @@ class Trip:
 @dataclass
 class Tram:
     tram_id: str
+    line: TramLine
     current_trip: Optional[Trip] = None
     position: Optional[Tuple[float, float]] = None
     status: str = "DEPOT"

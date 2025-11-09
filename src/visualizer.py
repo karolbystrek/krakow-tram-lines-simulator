@@ -1,11 +1,14 @@
+import json
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
+import random
 
 import folium
 from folium.plugins import Fullscreen
 
-from src.data_loader import load_tram_lines, load_tram_stops, get_bounding_box
-from src.models import TramLine, Stop
+from src.data_loader import load_tram_lines, load_tram_stops, get_bounding_box, load_trams
+from src.models import TramLine, Stop, Tram
 
 KRAKOW_BOUNDS = [[49.97, 19.80], [50.13, 20.20]]
 TRAM_LINE_COLOR = "#4DA6FF"
@@ -62,6 +65,84 @@ def add_tram_stops_to_map(
     stops_layer.add_to(map_object)
 
 
+def add_trams_to_map(
+        map_object: folium.Map,
+        tram_lines: Dict[str, TramLine],
+        trams: List[Tram] = None,
+        max_trams: int = 60,
+) -> None:
+    if trams is None:
+        trams = []
+    trams_to_show = trams[:max_trams]
+
+    for i, tram in enumerate(trams_to_show):
+        print(
+            f"\n[DEBUG] Tram {i + 1}/{len(trams_to_show)}: ID={tram.tram_id}, Linia={getattr(tram.line, 'line_number', 'BRAK')}")
+
+        line_number = getattr(tram.line, "line_number", None)
+        if line_number is None:
+            continue
+
+        line = tram_lines.get(line_number)
+        if not line:
+            continue
+
+        if not line.shapes:
+            continue
+
+        coordinates = []
+        for j, shape in enumerate(line.shapes):
+            if not shape.coordinates:
+                continue
+            coordinates.extend(shape.coordinates)
+
+        if not coordinates:
+            continue
+
+        start_index = random.randint(0, len(coordinates) - 1)
+        coordinates_to_animate = coordinates[start_index:] + coordinates[:start_index]
+
+        tram_marker = folium.Marker(
+            location=coordinates_to_animate[0],
+            icon=folium.Icon(color="red", icon="train", prefix="fa"),
+            tooltip=f"Tram {tram.tram_id} - Line {line_number}",
+        )
+        tram_marker.add_to(map_object)
+
+        duration = len(coordinates_to_animate) * 200
+
+        path_js = json.dumps(coordinates_to_animate)
+        js_code = f"""
+        <script>
+        setTimeout(function() {{
+            var marker = {tram_marker.get_name()};
+            var path = {path_js};
+            var duration = {duration}; 
+            var startTime = performance.now();
+
+            function interpolate(lat1, lon1, lat2, lon2, t) {{
+                return [lat1 + (lat2 - lat1) * t, lon1 + (lon2 - lon1) * t];
+            }}
+
+            function animate(time) {{
+                var elapsed = time - startTime;
+                var progress = Math.min(elapsed / duration, 1);
+                var segmentIndex = Math.floor(progress * (path.length - 1));
+                var segmentProgress = (progress * (path.length - 1)) - segmentIndex;
+                var start = path[segmentIndex];
+                var end = path[Math.min(segmentIndex + 1, path.length - 1)];
+                var pos = interpolate(start[0], start[1], end[0], end[1], segmentProgress);
+                marker.setLatLng(pos);
+                if (progress < 1) requestAnimationFrame(animate);
+            }}
+
+            requestAnimationFrame(animate);
+        }}, 500); 
+        </script>
+        """
+        map_object.get_root().html.add_child(folium.Element(js_code))
+
+
 def create_tram_network_map(
     tram_lines: Dict[str, TramLine],
     output_filename: str = "krakow_tram_network_map.html",
@@ -93,7 +174,7 @@ def create_tram_network_map(
 
     add_tram_shapes_to_map(m, tram_lines, show_by_default=True)
     add_tram_stops_to_map(m, load_tram_stops(), show_by_default=True)
-
+    add_trams_to_map(m, tram_lines, trams=load_trams())
     folium.LayerControl(collapsed=False).add_to(m)
     Fullscreen(position="topright").add_to(m)
 
