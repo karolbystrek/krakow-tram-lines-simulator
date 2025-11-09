@@ -6,12 +6,13 @@ from playwright.sync_api import sync_playwright, Page, BrowserContext
 
 TRAM_LINES_URL = "https://tomekzaw.pl/ttss/linie"
 API_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/routes/"
+BLOCKS_API_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/blocks/tram"
 TRAM_SHAPES_GEOJSON_URL = "https://services-eu1.arcgis.com/svTzSt3AvH7sK6q9/arcgis/rest/services/Linie_KMK/FeatureServer/replicafilescache/Linie_KMK_7975846146257302888.geojson"
-TRAM_STOPS_GEOJSON_URL = "https://stg-arcgisazureprodeu1.az.arcgis.com/replicafiles/Przystanki_Komunikacji_Miejskiej_w_Krakowie_9179925c1f654d789051175027f99624.geojson?sv=2025-05-05&st=2025-11-08T13%3A43%3A12Z&se=2025-11-08T14%3A48%3A12Z&sr=c&sp=r&sig=jtbUJK0KMyTjKeu8RiFnsK91HFDDnmfCKq3HWPD%2FBUM%3D"
+TRAM_STOPS_GEOJSON_URL = "https://services-eu1.arcgis.com/svTzSt3AvH7sK6q9/arcgis/rest/services/Przystanki_Komunikacji_Miejskiej_w_Krakowie/FeatureServer/replicafiles/Przystanki_Komunikacji_Miejskiej_w_Krakowie_a0e9215fd033414eb9f5f0d6d3ae21ab.geojson"
 DATA_DIR = Path(__file__).parent / "data"
-TRAM_LINES_DATA_DIR = DATA_DIR / "tram-lines"
-TRAM_SHAPES_DATA_DIR = DATA_DIR / "tram-line-shapes"
-TRAM_STOPS_DATA_DIR = DATA_DIR / "tram-stops"
+TRAM_LINES_DATA_DIR = DATA_DIR / "lines"
+TRAM_SHAPES_DATA_DIR = DATA_DIR / "line-shapes"
+TRAM_STOPS_DATA_DIR = DATA_DIR / "stops"
 
 
 def _get_tram_line_numbers(page: Page) -> List[str]:
@@ -41,7 +42,6 @@ def fetch_tram_shapes_geojson(context: BrowserContext) -> None:
     _save_data_to_json(
         context.request.fetch(TRAM_SHAPES_GEOJSON_URL).json(), output_file
     )
-    print(f"Saved tram line shapes to: {output_file}")
 
 
 def fetch_tram_stops_geojson(context: BrowserContext) -> None:
@@ -49,7 +49,6 @@ def fetch_tram_stops_geojson(context: BrowserContext) -> None:
     _save_data_to_json(
         context.request.fetch(TRAM_STOPS_GEOJSON_URL).json(), output_file
     )
-    print(f"Saved tram stops to: {output_file}")
 
 
 def fetch_tram_data():
@@ -60,12 +59,32 @@ def fetch_tram_data():
 
         try:
             line_numbers = _get_tram_line_numbers(page)
+            # Fetch line data, save to JSON files, and fetch block info
             for line_number in line_numbers:
+                # Create directory for this line
+                line_dir = TRAM_LINES_DATA_DIR / line_number
+
+                # Fetch and save line data
                 line_data = _fetch_line_api_data(context, line_number)
-                _save_data_to_json(
-                    line_data, TRAM_LINES_DATA_DIR / f"{line_number}.json"
-                )
-                print(f"Saved line {line_number} data")
+                _save_data_to_json(line_data, line_dir / f"{line_number}.json")
+
+                # Parse blocks and fetch stop times for this line
+                blocks = line_data.get("blocks", [])
+
+                for block in blocks:
+                    service_id = block["service_id"]
+                    block_id = block["block_id"]
+
+                    try:
+                        url = f"{BLOCKS_API_URL}/{service_id}/{block_id}/stop_times"
+                        stop_times_data = context.request.fetch(url).json()
+
+                        # Save block stop times data in /{service_id}/ subdirectory
+                        block_dir = line_dir / service_id
+                        block_file = block_dir / f"{block_id}.json"
+                        _save_data_to_json(stop_times_data, block_file)
+                    except Exception as e:
+                        print(f"Failed to fetch stop times for {block_id}: {e}")
 
             fetch_tram_shapes_geojson(context)
             fetch_tram_stops_geojson(context)

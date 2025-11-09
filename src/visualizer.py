@@ -7,7 +7,12 @@ import random
 import folium
 from folium.plugins import Fullscreen
 
-from src.data_loader import load_tram_lines, load_tram_stops, get_bounding_box, load_trams
+from src.data_loader import (
+    load_tram_lines,
+    load_tram_stops,
+    get_bounding_box,
+    load_trams,
+)
 from src.models import TramLine, Stop, Tram
 
 KRAKOW_BOUNDS = [[49.97, 19.80], [50.13, 20.20]]
@@ -66,19 +71,16 @@ def add_tram_stops_to_map(
 
 
 def add_trams_to_map(
-        map_object: folium.Map,
-        tram_lines: Dict[str, TramLine],
-        trams: List[Tram] = None,
-        max_trams: int = 60,
+    map_object: folium.Map,
+    tram_lines: Dict[str, TramLine],
+    trams: List[Tram],
+    max_trams: int = 60,
 ) -> None:
     if trams is None:
         trams = []
     trams_to_show = trams[:max_trams]
 
-    for i, tram in enumerate(trams_to_show):
-        print(
-            f"\n[DEBUG] Tram {i + 1}/{len(trams_to_show)}: ID={tram.tram_id}, Linia={getattr(tram.line, 'line_number', 'BRAK')}")
-
+    for tram in trams_to_show:
         line_number = getattr(tram.line, "line_number", None)
         if line_number is None:
             continue
@@ -117,7 +119,7 @@ def add_trams_to_map(
         setTimeout(function() {{
             var marker = {tram_marker.get_name()};
             var path = {path_js};
-            var duration = {duration}; 
+            var duration = {duration};
             var startTime = performance.now();
 
             function interpolate(lat1, lon1, lat2, lon2, t) {{
@@ -137,7 +139,7 @@ def add_trams_to_map(
             }}
 
             requestAnimationFrame(animate);
-        }}, 500); 
+        }}, 500);
         </script>
         """
         map_object.get_root().html.add_child(folium.Element(js_code))

@@ -2,7 +2,11 @@ import json
 from typing import Dict, Tuple, List
 
 from src.models import Stop, Shape, TramLine, Trip, Tram
-from src.fetch_tram_data import TRAM_SHAPES_DATA_DIR, TRAM_STOPS_DATA_DIR, TRAM_LINES_DATA_DIR
+from src.fetch_tram_data import (
+    TRAM_SHAPES_DATA_DIR,
+    TRAM_STOPS_DATA_DIR,
+    TRAM_LINES_DATA_DIR,
+)
 
 GEOJSON_SHAPES_PATH = TRAM_SHAPES_DATA_DIR / "krakow_tram_lines.geojson"
 GEOJSON_STOPS_PATH = TRAM_STOPS_DATA_DIR / "krakow_tram_stops.geojson"
@@ -74,15 +78,21 @@ def load_trams() -> List[Tram]:
         print(f"Warning: Tram lines data dir not found at {TRAM_LINES_DATA_DIR}")
         return trams
 
-    for fp in sorted(TRAM_LINES_DATA_DIR.glob("*.json")):
-        try:
-            with open(fp, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            line_number = fp.stem
-        except Exception as e:
-            print(f"Failed to load {fp.name}: {e}")
+    for line_dir in sorted(TRAM_LINES_DATA_DIR.iterdir()):
+        if not line_dir.is_dir():
             continue
 
+        line_number = line_dir.name
+        line_info_path = line_dir / f"{line_number}.json"
+        if not line_info_path.exists():
+            continue
+
+        try:
+            with open(line_info_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+        except Exception as e:
+            print(f"Failed to load {line_info_path}: {e}")
+            continue
 
         tram_line = tram_lines.get(line_number)
         if not tram_line:
@@ -105,12 +115,13 @@ def load_trams() -> List[Tram]:
                     line=tram_line,
                     current_trip=trip,
                     position=None,
-                    status="ACTIVE"
+                    status="ACTIVE",
                 )
                 trams.append(tram)
 
     print(f"Loaded {len(trams)} Tram objects from {TRAM_LINES_DATA_DIR}")
     return trams
+
 
 def get_bounding_box(
     tram_lines: Dict[str, TramLine],
