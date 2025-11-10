@@ -1,8 +1,6 @@
 import json
-from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List
-import random
+from typing import Dict, List, Optional, Tuple
 
 import folium
 from folium.plugins import Fullscreen
@@ -10,10 +8,10 @@ from folium.plugins import Fullscreen
 from src.data_loader import (
     load_tram_lines,
     load_tram_stops,
+    load_tram_blocks,
     get_bounding_box,
-    load_trams,
 )
-from src.models import TramLine, Stop, Tram
+from src.models import TramLine, Stop, TramBlock
 
 KRAKOW_BOUNDS = [[49.97, 19.80], [50.13, 20.20]]
 TRAM_LINE_COLOR = "#4DA6FF"
@@ -21,7 +19,7 @@ TRAM_STOP_COLOR = "#1E6BB8"
 TRAM_STOP_FILL_COLOR = "#DBEDFF"
 
 
-def add_tram_shapes_to_map(
+def add_tram_lines_to_map(
     map_object: folium.Map,
     tram_lines: Dict[str, TramLine],
     show_by_default: bool = True,
@@ -70,84 +68,262 @@ def add_tram_stops_to_map(
     stops_layer.add_to(map_object)
 
 
-def add_trams_to_map(
+def interpolate_position(
+    start_pos: Tuple[float, float],
+    end_pos: Tuple[float, float],
+    start_time_minutes: int,
+    end_time_minutes: int,
+    current_time_minutes: int,
+) -> Tuple[float, float]:
+    """Linear interpolation between two positions based on time."""
+    if end_time_minutes == start_time_minutes:
+        return start_pos
+
+    progress = (current_time_minutes - start_time_minutes) / (
+        end_time_minutes - start_time_minutes
+    )
+    progress = max(0.0, min(1.0, progress))
+
+    lat = start_pos[0] + (end_pos[0] - start_pos[0]) * progress
+    lon = start_pos[1] + (end_pos[1] - start_pos[1]) * progress
+
+    return lat, lon
+
+
+def get_tram_position_at_time(
+    block: TramBlock, time_minutes: int
+) -> Optional[Tuple[float, float]]:
+    """Calculate tram position at a specific time in minutes since midnight."""
+    status = block.get_status_at_time(time_minutes)
+
+    if status == "IN_DEPOT":
+        return None
+
+    active_trip = block.get_active_trip(time_minutes)
+
+    if not active_trip:
+        # Tram waiting at terminus - show at last stop of previous trip
+        last_trip = None
+        for trip in block.trips:
+            if trip.get_end_time_minutes() <= time_minutes:
+                last_trip = trip
+        if last_trip and last_trip.stop_times:
+            last_stop = last_trip.stop_times[-1]
+            return last_stop.stop_lat, last_stop.stop_lon
+        return None
+
+    # Get current segment (between which two stops)
+    segment = active_trip.get_current_segment(time_minutes)
+
+    if not segment:
+        return None
+
+    prev_stop, next_stop = segment
+
+    # Interpolate position between the two stops
+    position = interpolate_position(
+        start_pos=(prev_stop.stop_lat, prev_stop.stop_lon),
+        end_pos=(next_stop.stop_lat, next_stop.stop_lon),
+        start_time_minutes=prev_stop.to_minutes(),
+        end_time_minutes=next_stop.to_minutes(),
+        current_time_minutes=time_minutes,
+    )
+
+    return position
+
+
+def add_animated_trams_to_map(
     map_object: folium.Map,
-    tram_lines: Dict[str, TramLine],
-    trams: List[Tram],
-    max_trams: int = 60,
+    blocks_by_line: Dict[str, List[TramBlock]],
+    start_time_minutes: int = 3 * 60,  # 03:00
+    end_time_minutes: int = 24 * 60,  # 24:00
+    update_interval_ms: int = 1000,  # 1 second = 1 minute
 ) -> None:
-    if trams is None:
-        trams = []
-    trams_to_show = trams[:max_trams]
+    """Add trams with schedule-based animation to the map."""
+    # Collect all tram data for JavaScript
+    tram_data = []
+    marker_names = []
 
-    for tram in trams_to_show:
-        line_number = getattr(tram.line, "line_number", None)
-        if line_number is None:
-            continue
+    for line_number, blocks in blocks_by_line.items():
+        for block in blocks:
+            # Calculate all positions for this tram throughout the day
+            positions = []
+            for time_min in range(start_time_minutes, end_time_minutes + 1):
+                pos = get_tram_position_at_time(block, time_min)
+                if pos:
+                    positions.append({"time": time_min, "lat": pos[0], "lon": pos[1]})
 
-        line = tram_lines.get(line_number)
-        if not line:
-            continue
+            if positions:
+                # Create folium marker for this tram
+                tram_marker = folium.Marker(
+                    location=[positions[0]["lat"], positions[0]["lon"]],
+                    icon=folium.Icon(color="red", icon="train", prefix="fa"),
+                    tooltip=f"Line {line_number} - {block.block_id}",
+                )
+                tram_marker.add_to(map_object)
 
-        if not line.shapes:
-            continue
+                marker_names.append(tram_marker.get_name())
 
-        coordinates = []
-        for j, shape in enumerate(line.shapes):
-            if not shape.coordinates:
-                continue
-            coordinates.extend(shape.coordinates)
+                tram_data.append(
+                    {
+                        "id": block.block_id,
+                        "line": line_number,
+                        "positions": positions,
+                        "marker_name": tram_marker.get_name(),
+                    }
+                )
 
-        if not coordinates:
-            continue
+    if not tram_data:
+        print("No tram data to animate")
+        return
 
-        start_index = random.randint(0, len(coordinates) - 1)
-        coordinates_to_animate = coordinates[start_index:] + coordinates[:start_index]
+    # Generate JavaScript for animation
+    tram_data_json = json.dumps(tram_data)
 
-        tram_marker = folium.Marker(
-            location=coordinates_to_animate[0],
-            icon=folium.Icon(color="red", icon="train", prefix="fa"),
-            tooltip=f"Tram {tram.tram_id} - Line {line_number}",
-        )
-        tram_marker.add_to(map_object)
+    js_code = f"""
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {{
+        console.log('DOM loaded, initializing tram animation...');
 
-        duration = len(coordinates_to_animate) * 200
+        var tramData = {tram_data_json};
+        console.log('Loaded ' + tramData.length + ' trams');
 
-        path_js = json.dumps(coordinates_to_animate)
-        js_code = f"""
-        <script>
+        var tramMarkers = {{}};
+        var currentTime = {start_time_minutes};
+        var endTime = {end_time_minutes};
+        var updateInterval = {update_interval_ms};
+        var isRunning = true;
+        var animationTimeout = null;
+
+        // Wait for map to be ready
         setTimeout(function() {{
-            var marker = {tram_marker.get_name()};
-            var path = {path_js};
-            var duration = {duration};
-            var startTime = performance.now();
+            console.log('Linking tram markers...');
 
-            function interpolate(lat1, lon1, lat2, lon2, t) {{
-                return [lat1 + (lat2 - lat1) * t, lon1 + (lon2 - lon1) * t];
+            // Link existing folium markers to tram data
+            tramData.forEach(function(tram) {{
+                var marker = window[tram.marker_name];
+                if (marker) {{
+                    marker.setOpacity(0);  // Hide initially
+                    tramMarkers[tram.id] = {{marker: marker, data: tram}};
+                }}
+            }});
+
+            console.log('Linked ' + Object.keys(tramMarkers).length + ' markers');
+
+            // Function to find position at specific time
+            function getPositionAtTime(positions, time) {{
+                for (var i = 0; i < positions.length; i++) {{
+                    if (positions[i].time === time) {{
+                        return positions[i];
+                    }}
+                }}
+                return null;
             }}
 
-            function animate(time) {{
-                var elapsed = time - startTime;
-                var progress = Math.min(elapsed / duration, 1);
-                var segmentIndex = Math.floor(progress * (path.length - 1));
-                var segmentProgress = (progress * (path.length - 1)) - segmentIndex;
-                var start = path[segmentIndex];
-                var end = path[Math.min(segmentIndex + 1, path.length - 1)];
-                var pos = interpolate(start[0], start[1], end[0], end[1], segmentProgress);
-                marker.setLatLng(pos);
-                if (progress < 1) requestAnimationFrame(animate);
+            // Animation update function
+            function updateTrams() {{
+                var hours = Math.floor(currentTime / 60);
+                var minutes = currentTime % 60;
+                var timeStr = String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+
+                // Update time display
+                var timeDisplay = document.getElementById('simulation-time');
+                if (timeDisplay) {{
+                    timeDisplay.textContent = 'Time: ' + timeStr;
+                }}
+
+                // Update each tram position
+                var visibleCount = 0;
+                Object.keys(tramMarkers).forEach(function(tramId) {{
+                    var tram = tramMarkers[tramId];
+                    var pos = getPositionAtTime(tram.data.positions, currentTime);
+
+                    if (pos) {{
+                        tram.marker.setLatLng([pos.lat, pos.lon]);
+                        tram.marker.setOpacity(1);
+                        visibleCount++;
+                    }} else {{
+                        tram.marker.setOpacity(0);  // Hide when in depot
+                    }}
+                }});
+
+                currentTime++;
+                if (currentTime <= endTime && isRunning) {{
+                    animationTimeout = setTimeout(updateTrams, updateInterval);
+                }} else if (currentTime > endTime) {{
+                    console.log('Animation complete!');
+                }}
             }}
 
-            requestAnimationFrame(animate);
-        }}, 500);
-        </script>
-        """
-        map_object.get_root().html.add_child(folium.Element(js_code))
+            // Toggle play/pause
+            window.toggleAnimation = function() {{
+                isRunning = !isRunning;
+                var btn = document.getElementById('play-pause-btn');
+                if (isRunning) {{
+                    btn.textContent = 'Pause';
+                    updateTrams();
+                }} else {{
+                    btn.textContent = 'Play';
+                    if (animationTimeout) {{
+                        clearTimeout(animationTimeout);
+                    }}
+                }}
+            }};
+
+            // Start animation
+            console.log('Starting animation from time ' + currentTime + ' to ' + endTime);
+            updateTrams();
+        }}, 1000);
+    }});
+    </script>
+    """
+
+    map_object.get_root().html.add_child(folium.Element(js_code))
+
+    # Add time display element with play/pause button
+    time_display_html = """
+    <div style="
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1000;
+        background: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        font-family: Arial, sans-serif;
+    ">
+        <div id="simulation-time" style="
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        ">
+            Time: 03:00
+        </div>
+        <button id="play-pause-btn" onclick="toggleAnimation()" style="
+            width: 100%;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        ">
+            Pause
+        </button>
+    </div>
+    """
+    map_object.get_root().html.add_child(folium.Element(time_display_html))
 
 
 def create_tram_network_map(
     tram_lines: Dict[str, TramLine],
+    tram_stops: Dict[str, Stop],
+    blocks_by_line: Dict[str, List[TramBlock]],
     output_filename: str = "krakow_tram_network_map.html",
+    animate_trams: bool = True,
 ) -> None:
     min_lat, max_lat, min_lon, max_lon = get_bounding_box(tram_lines)
     center_lat = (min_lat + max_lat) / 2
@@ -174,9 +350,12 @@ def create_tram_network_map(
         tiles="CartoDB Voyager", name="Voyager (Transit)", attr="CartoDB"
     ).add_to(m)
 
-    add_tram_shapes_to_map(m, tram_lines, show_by_default=True)
-    add_tram_stops_to_map(m, load_tram_stops(), show_by_default=True)
-    add_trams_to_map(m, tram_lines, trams=load_trams())
+    add_tram_lines_to_map(m, tram_lines, show_by_default=True)
+    add_tram_stops_to_map(m, tram_stops, show_by_default=True)
+
+    if animate_trams and blocks_by_line:
+        add_animated_trams_to_map(m, blocks_by_line)
+
     folium.LayerControl(collapsed=False).add_to(m)
     Fullscreen(position="topright").add_to(m)
 
@@ -186,13 +365,20 @@ def create_tram_network_map(
 def main() -> None:
     try:
         tram_lines = load_tram_lines()
+        tram_stops = load_tram_stops()
+        blocks_by_line = load_tram_blocks(service="service_1")
 
-        if not tram_lines:
+        if not tram_lines or not tram_stops or not blocks_by_line:
             print("No tram lines found. Please check the data directory.")
             return
 
         print(f"Successfully loaded {len(tram_lines)} tram lines")
-        create_tram_network_map(tram_lines)
+        print(f"Successfully loaded {len(tram_stops)} tram stops")
+        print(f"Successfully loaded blocks for {len(blocks_by_line)} lines")
+
+        create_tram_network_map(
+            tram_lines, tram_stops, blocks_by_line, animate_trams=True
+        )
         print(f"Map saved to 'krakow_tram_network_map.html'")
 
     except FileNotFoundError as e:

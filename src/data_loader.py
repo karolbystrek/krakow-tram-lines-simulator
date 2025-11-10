@@ -1,7 +1,8 @@
 import json
 from typing import Dict, Tuple, List
+from datetime import time
 
-from src.models import Stop, Shape, TramLine, Trip, Tram
+from src.models import Stop, Shape, TramLine, Trip, StopTime, TramBlock
 from src.fetch_tram_data import (
     TRAM_SHAPES_DATA_DIR,
     TRAM_STOPS_DATA_DIR,
@@ -56,7 +57,6 @@ def load_tram_stops() -> Dict[str, Stop]:
             kod_busman=kod_busman,
         )
 
-    print(f"Loaded {len(stops_dict)} tram stops from GeoJSON")
     return stops_dict
 
 
@@ -66,61 +66,7 @@ def load_tram_lines() -> Dict[str, TramLine]:
         line_number: TramLine(line_number=line_number, stops={}, shapes=shapes)
         for line_number, shapes in geojson_shapes.items()
     }
-    print(f"Loaded {len(tram_lines)} tram lines from GeoJSON")
     return tram_lines
-
-
-def load_trams() -> List[Tram]:
-    trams: List[Tram] = []
-    tram_lines = load_tram_lines()
-
-    if not TRAM_LINES_DATA_DIR.exists():
-        print(f"Warning: Tram lines data dir not found at {TRAM_LINES_DATA_DIR}")
-        return trams
-
-    for line_dir in sorted(TRAM_LINES_DATA_DIR.iterdir()):
-        if not line_dir.is_dir():
-            continue
-
-        line_number = line_dir.name
-        line_info_path = line_dir / f"{line_number}.json"
-        if not line_info_path.exists():
-            continue
-
-        try:
-            with open(line_info_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-        except Exception as e:
-            print(f"Failed to load {line_info_path}: {e}")
-            continue
-
-        tram_line = tram_lines.get(line_number)
-        if not tram_line:
-            print(f"Warning: No tram line data found for line {line_number}")
-            continue
-
-        for block in data.get("blocks", []):
-            block_id = block.get("block_id", "")
-            route_names = block.get("route_short_names") or []
-            direction = route_names[0] if route_names else ""
-            vehicles = block.get("vehicles_on_block", []) or []
-
-            for v in vehicles:
-                kmk = v.get("kmk_id")
-                if not kmk:
-                    continue
-                trip = Trip(trip_id=block_id, direction=direction)
-                tram = Tram(
-                    tram_id=kmk,
-                    line=tram_line,
-                    current_trip=trip,
-                    position=None,
-                    status="ACTIVE",
-                )
-                trams.append(tram)
-
-    print(f"Loaded {len(trams)} Tram objects from {TRAM_LINES_DATA_DIR}")
-    return trams
 
 
 def get_bounding_box(
@@ -140,3 +86,125 @@ def get_bounding_box(
 
     lats, lons = zip(*all_coords)
     return (min(lats), max(lats), min(lons), max(lons))
+
+
+def parse_time_string(time_str: str) -> time:
+    """Parse time string in format HH:MM:SS to time object"""
+    parts = time_str.split(":")
+    hour = int(parts[0])
+    minute = int(parts[1])
+    second = int(parts[2])
+
+    # Handle times >= 24:00:00 (next day)
+    if hour >= 24:
+        hour = hour % 24
+
+    return time(hour, minute, second)
+
+
+def load_tram_blocks(service: str = "service_1") -> Dict[str, List[TramBlock]]:
+    """Load and process tram schedule data for all lines and blocks in a service."""
+    if not TRAM_LINES_DATA_DIR.exists():
+        print(f"Warning: Lines data directory not found at {TRAM_LINES_DATA_DIR}")
+        return {}
+
+    blocks_by_line: Dict[str, List[TramBlock]] = {}
+
+    # Scan all line directories
+    for line_dir in TRAM_LINES_DATA_DIR.iterdir():
+        if not line_dir.is_dir():
+            continue
+
+        line_number = line_dir.name
+        service_dir = line_dir / service
+
+        if not service_dir.exists():
+            continue
+
+        # Get all block files for this line
+        block_files = sorted(service_dir.glob("block_*.json"))
+        if not block_files:
+            continue
+
+        line_blocks = []
+
+        for block_path in block_files:
+            try:
+                with open(block_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+            except Exception as e:
+                print(f"Error loading block file {block_path}: {e}")
+                continue
+
+            block_id = block_path.stem  # e.g., "block_298"
+
+            tram_block = TramBlock(
+                block_id=block_id,
+                line_number=line_number,
+                service_type=service,
+                trips=[],
+            )
+
+            # Parse stop_times and organize by trip
+            stop_times_by_trip: Dict[str, List[StopTime]] = {}
+
+            for stop_time_data in data.get("stop_times", []):
+                trip_id = stop_time_data.get("trip_id")
+                if not trip_id:
+                    continue
+
+                stop_time = StopTime(
+                    stop_name=stop_time_data.get("stop_name", ""),
+                    stop_lat=stop_time_data.get("stop_lat", 0.0),
+                    stop_lon=stop_time_data.get("stop_lon", 0.0),
+                    stop_num=stop_time_data.get("stop_num", ""),
+                    departure_time=parse_time_string(
+                        stop_time_data.get("departure_time", "00:00:00")
+                    ),
+                    departure_time_str=stop_time_data.get("departure_time", "00:00:00"),
+                    stop_sequence=stop_time_data.get("stop_sequence", 0),
+                    trip_id=trip_id,
+                    trip_num=stop_time_data.get("trip_num", 0),
+                )
+
+                if trip_id not in stop_times_by_trip:
+                    stop_times_by_trip[trip_id] = []
+                stop_times_by_trip[trip_id].append(stop_time)
+
+            # Sort stop times within each trip by stop_sequence
+            for trip_id in stop_times_by_trip:
+                stop_times_by_trip[trip_id].sort(key=lambda st: st.stop_sequence)
+
+            # Parse trips
+            for trip_data in data.get("trips", []):
+                trip_id = trip_data.get("trip_id")
+                if not trip_id:
+                    continue
+
+                # Parse shape coordinates
+                shape_coords = []
+                for coord in trip_data.get("shape", []):
+                    lat = coord.get("latitude", 0.0)
+                    lon = coord.get("longitude", 0.0)
+                    shape_coords.append((lat, lon))
+
+                # Create Trip object
+                trip = Trip(
+                    trip_id=trip_id,
+                    trip_num=trip_data.get("trip_num", 0),
+                    route_short_name=trip_data.get("route_short_name", ""),
+                    trip_headsign=trip_data.get("trip_headsign", ""),
+                    shape=shape_coords,
+                    stop_times=stop_times_by_trip.get(trip_id, []),
+                )
+
+                tram_block.trips.append(trip)
+
+            # Sort trips by trip_num
+            tram_block.trips.sort(key=lambda t: t.trip_num)
+            line_blocks.append(tram_block)
+
+        blocks_by_line[line_number] = line_blocks
+
+    print(f"\nTotal: Loaded blocks for {len(blocks_by_line)} lines")
+    return blocks_by_line
