@@ -39,5 +39,5 @@ wheels/
 .DS_Store
 Thumbs.db
 
-# Generated files
-*.html
+# Data
+**/data/

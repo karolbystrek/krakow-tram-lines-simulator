@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kraków Tram Simulator</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- <link rel="stylesheet" href="/static/tram-marker.css"> -->
+</head>
+
+<body>
+    <div id="map"></div>
+    
+    <div id="simulation-controls" class="control-panel">
+        <div id="simulation-time" class="time-display">Time: --:--</div>
+        <button id="btn-pause" class="btn btn-secondary">
+            <i class="fas fa-pause"></i> Pause
+        </button>
+        <button id="btn-restart" class="btn btn-secondary">
+            <i class="fas fa-redo"></i> Restart
+        </button>
+    </div>
+
+    <div id="settings-panel" class="control-panel">
+        <button id="settings-toggle" class="settings-toggle-btn" aria-label="Toggle settings">
+            <i class="fas fa-cog" style="font-size: 20px;"></i>
+        </button>
+        <div id="settings-content" class="settings-content">
+            <h3 class="settings-title">Map Settings</h3>
+            <div class="settings-item">
+                <label class="toggle-label">
+                    <span class="toggle-text">Toggle Tram Stops</span>
+                    <input type="checkbox" id="toggle-stops" class="toggle-input" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <script src="/static/app.js?v=3"></script>
+</body>
+
+</html>
