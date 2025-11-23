@@ -97,8 +97,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 # Send the current simulation state to the client
                 await websocket.send_json(payload)
 
-                # Send updates every second (matching the simulation step)
-                await asyncio.sleep(1)
+                # Send updates every 0.1 second (matching the simulation step)
+                await asyncio.sleep(0.1)
         except Exception as e:
             print(f"Error in send_updates: {e}")
 

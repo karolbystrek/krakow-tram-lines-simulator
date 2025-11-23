@@ -293,11 +293,97 @@ function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers) {
   });
 }
 
+// Tram Marker with interpolation
+class TramMarker {
+  constructor(id, data, map) {
+    this.id = id;
+    this.map = map;
+    this.data = data;
+    
+    // Create Leaflet marker
+    this.marker = L.marker([data.lat, data.lon], {
+      icon: L.AwesomeMarkers.icon({
+        icon: 'train',
+        prefix: 'fa',
+        markerColor: 'red',
+        iconColor: 'white'
+      })
+    });
+
+    this.marker.bindTooltip(`Line ${data.line} - ${id}`, {
+      direction: 'top',
+      offset: [0, -35]
+    });
+
+    this.marker.addTo(map);
+
+    // Interpolation state
+    this.currentLat = data.lat;
+    this.currentLon = data.lon;
+    this.targetLat = data.lat;
+    this.targetLon = data.lon;
+    this.lastUpdate = performance.now();
+    this.animationDuration = 1000; // Default fallback duration
+    this.animating = false;
+  }
+
+  updateTarget(data) {
+    const now = performance.now();
+    // Calculate time since last update to adjust animation duration dynamically
+    // This makes it modular: if server sends every 100ms, duration becomes ~100ms.
+    // If server sends every 1s, duration becomes ~1s.
+    const timeDelta = now - this.lastUpdate;
+    
+    // Smooth out jitter by averaging or clamping? 
+    // For simplicity, just use the delta, but clamp it to reasonable bounds to avoid jumps on pauses
+    if (timeDelta > 0 && timeDelta < 5000) {
+        this.animationDuration = timeDelta;
+    }
+    
+    this.lastUpdate = now;
+    this.startLat = this.currentLat;
+    this.startLon = this.currentLon;
+    this.targetLat = data.lat;
+    this.targetLon = data.lon;
+    this.startTime = now;
+    
+    if (!this.animating) {
+      this.animate();
+    }
+  }
+
+  animate() {
+    this.animating = true;
+    
+    requestAnimationFrame((timestamp) => {
+      const now = performance.now();
+      const elapsed = now - this.startTime;
+      const progress = Math.min(elapsed / this.animationDuration, 1.0);
+
+      // Linear interpolation
+      this.currentLat = this.startLat + (this.targetLat - this.startLat) * progress;
+      this.currentLon = this.startLon + (this.targetLon - this.startLon) * progress;
+
+      this.marker.setLatLng([this.currentLat, this.currentLon]);
+
+      if (progress < 1.0) {
+        this.animate();
+      } else {
+        this.animating = false;
+      }
+    });
+  }
+
+  remove() {
+    this.map.removeLayer(this.marker);
+  }
+}
+
 // Simulation Controller
 class SimulationController {
   constructor(map) {
     this.map = map;
-    this.markers = {}; // tramId -> { marker, data }
+    this.trams = {}; // tramId -> TramMarker instance
     this.ws = null;
     this.timeDisplay = null;
     
@@ -345,15 +431,21 @@ class SimulationController {
     const restartBtn = document.getElementById('btn-restart');
 
     if (pauseBtn) {
-      pauseBtn.addEventListener('click', () => {
-        const isPaused = pauseBtn.textContent.includes('Resume');
+      const newPauseBtn = pauseBtn.cloneNode(true);
+      pauseBtn.parentNode.replaceChild(newPauseBtn, pauseBtn);
+      
+      newPauseBtn.addEventListener('click', () => {
+        const isPaused = newPauseBtn.textContent.includes('Resume');
         const command = isPaused ? 'resume' : 'pause';
         this.sendCommand(command);
       });
     }
 
     if (restartBtn) {
-      restartBtn.addEventListener('click', () => {
+      const newRestartBtn = restartBtn.cloneNode(true);
+      restartBtn.parentNode.replaceChild(newRestartBtn, restartBtn);
+
+      newRestartBtn.addEventListener('click', () => {
         this.sendCommand('restart');
       });
     }
@@ -390,42 +482,26 @@ class SimulationController {
     }
   }
 
-  updateTrams(trams) {
+  updateTrams(tramsData) {
     const currentTramIds = new Set();
 
-    trams.forEach(tram => {
-      currentTramIds.add(tram.id);
+    tramsData.forEach(tramData => {
+      currentTramIds.add(tramData.id);
       
-      if (this.markers[tram.id]) {
-        // Update existing marker
-        const marker = this.markers[tram.id].marker;
-        marker.setLatLng([tram.lat, tram.lon]);
+      if (this.trams[tramData.id]) {
+        // Update existing tram target
+        this.trams[tramData.id].updateTarget(tramData);
       } else {
-        // Create new marker
-        const marker = L.marker([tram.lat, tram.lon], {
-          icon: L.AwesomeMarkers.icon({
-            icon: 'train',
-            prefix: 'fa',
-            markerColor: 'red',
-            iconColor: 'white'
-          })
-        });
-        
-        marker.bindTooltip(`Line ${tram.line} - ${tram.id}`, {
-          direction: 'top',
-          offset: [0, -35]
-        });
-        
-        marker.addTo(this.map);
-        this.markers[tram.id] = { marker, data: tram };
+        // Create new tram
+        this.trams[tramData.id] = new TramMarker(tramData.id, tramData, this.map);
       }
     });
 
     // Remove markers for trams that are no longer active
-    Object.keys(this.markers).forEach(tramId => {
+    Object.keys(this.trams).forEach(tramId => {
       if (!currentTramIds.has(tramId)) {
-        this.map.removeLayer(this.markers[tramId].marker);
-        delete this.markers[tramId];
+        this.trams[tramId].remove();
+        delete this.trams[tramId];
       }
     });
   }

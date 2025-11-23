@@ -36,6 +36,9 @@ class SimulationEngine:
             
             for block in self.blocks:
                 for trip in block.trips:
+                    # Initialize shape indices for path interpolation
+                    trip.initialize_shape_indices()
+                    
                     start = trip.get_start_time_minutes()
                     end = trip.get_end_time_minutes()
                     
@@ -84,11 +87,11 @@ class SimulationEngine:
         """Main simulation loop."""
         print("Simulation loop started.")
         while self.running:
-            # 1 second real time = 1 minute simulation time
-            await asyncio.sleep(1)
+            # 0.1 second real time = 0.1 minute simulation time
+            await asyncio.sleep(0.1)
             
             if not self.paused:
-                self.current_time_minutes += 1
+                self.current_time_minutes += 0.1
                 
                 # Stop if we go past the end time
                 if self.current_time_minutes > self.end_time_minutes:
@@ -115,59 +118,85 @@ class SimulationEngine:
 
     def get_status(self) -> Dict[str, Any]:
         """Get current simulation status."""
-        hours = self.current_time_minutes // 60
-        minutes = self.current_time_minutes % 60
+        hours = int(self.current_time_minutes // 60)
+        minutes = int(self.current_time_minutes % 60)
+        seconds = int((self.current_time_minutes * 60) % 60)
         return {
-            "time_str": f"{hours:02d}:{minutes:02d}",
+            "time_str": f"{hours:02d}:{minutes:02d}:{seconds:02d}",
             "time_minutes": self.current_time_minutes,
             "running": self.running,
             "paused": self.paused
         }
 
-    def _interpolate_position(
+    def _interpolate_position_on_shape(
         self,
-        start_pos: Tuple[float, float],
-        end_pos: Tuple[float, float],
-        start_time_minutes: int,
-        end_time_minutes: int,
-        current_time_minutes: int,
+        trip: Trip,
+        start_dist: float,
+        end_dist: float,
+        fraction: float
     ) -> Tuple[float, float]:
-        """Linearly interpolate position between two stops."""
-        if end_time_minutes == start_time_minutes:
-            return start_pos
+        """Interpolate position along the shape path."""
+        target_dist = start_dist + (end_dist - start_dist) * fraction
+        
+        # Find the segment in trip.shape that contains target_dist
+        # trip._shape_distances is monotonic
+        
+        # Binary search or linear search? Linear is fine for now as shapes aren't huge
+        # and we can optimize later if needed.
+        
+        distances = trip._shape_distances
+        if not distances:
+            return trip.shape[0]
 
-        fraction = (current_time_minutes - start_time_minutes) / (
-            end_time_minutes - start_time_minutes
-        )
-        # Ensure fraction is within [0, 1] range
-        fraction = max(0.0, min(1.0, fraction))
-        
-        lat = start_pos[0] + (end_pos[0] - start_pos[0]) * fraction
-        lon = start_pos[1] + (end_pos[1] - start_pos[1]) * fraction
-        
-        return lat, lon
+        for i in range(len(distances) - 1):
+            d1 = distances[i]
+            d2 = distances[i+1]
+            
+            if d1 <= target_dist <= d2:
+                # Found the segment
+                segment_len = d2 - d1
+                if segment_len == 0:
+                    return trip.shape[i]
+                
+                segment_fraction = (target_dist - d1) / segment_len
+                lat1, lon1 = trip.shape[i]
+                lat2, lon2 = trip.shape[i+1]
+                
+                lat = lat1 + (lat2 - lat1) * segment_fraction
+                lon = lon1 + (lon2 - lon1) * segment_fraction
+                return lat, lon
+                
+        # Fallback if out of bounds (shouldn't happen with correct logic)
+        return trip.shape[-1]
 
     def _get_tram_position_at_time(
-        self, block: TramBlock, time_minutes: int
+        self, block: TramBlock, time_minutes: float
     ) -> Optional[Tuple[float, float]]:
         """Calculate tram position at a specific time in minutes since midnight."""
-        
-        status = block.get_status_at_time(time_minutes)
-
-        if status == "IN_DEPOT":
-            return None
 
         active_trip = block.get_active_trip(time_minutes)
 
         if not active_trip:
             # Tram waiting at terminus - show at last stop of previous trip
-            last_trip = None
-            for trip in block.trips:
-                if trip.get_end_time_minutes() <= time_minutes:
-                    last_trip = trip
-            if last_trip and last_trip.stop_times:
-                last_stop = last_trip.stop_times[-1]
-                return last_stop.stop_lat, last_stop.stop_lon
+            # Or check if it's in depot
+            # For simplicity, let's just check if it's between trips
+            if block.trips:
+                first_start = block.trips[0].get_start_time_minutes()
+                last_end = block.trips[-1].get_end_time_minutes()
+
+                if first_start <= time_minutes <= last_end:
+                     # Find the previous trip
+                    last_trip = None
+                    for trip in block.trips:
+                        if trip.get_end_time_minutes() <= time_minutes:
+                            last_trip = trip
+                        else:
+                            break
+                    
+                    if last_trip and last_trip.stop_times:
+                        last_stop = last_trip.stop_times[-1]
+                        return last_stop.stop_lat, last_stop.stop_lon
+            
             return None
 
         # Get current segment (between which two stops)
@@ -181,14 +210,27 @@ class SimulationEngine:
             return None
 
         prev_stop, next_stop = segment
+        
+        start_time = prev_stop.to_minutes()
+        end_time = next_stop.to_minutes()
+        
+        if end_time == start_time:
+            return prev_stop.stop_lat, prev_stop.stop_lon
 
-        # Interpolate position between the two stops
-        position = self._interpolate_position(
-            start_pos=(prev_stop.stop_lat, prev_stop.stop_lon),
-            end_pos=(next_stop.stop_lat, next_stop.stop_lon),
-            start_time_minutes=prev_stop.to_minutes(),
-            end_time_minutes=next_stop.to_minutes(),
-            current_time_minutes=time_minutes,
-        )
+        fraction = (time_minutes - start_time) / (end_time - start_time)
+        fraction = max(0.0, min(1.0, fraction))
 
-        return position
+        # Use shape-based interpolation if available
+        if active_trip._shape_distances:
+             return self._interpolate_position_on_shape(
+                 active_trip,
+                 prev_stop.shape_dist_traveled,
+                 next_stop.shape_dist_traveled,
+                 fraction
+             )
+
+        # Fallback to linear interpolation between stops
+        lat = prev_stop.stop_lat + (next_stop.stop_lat - prev_stop.stop_lat) * fraction
+        lon = prev_stop.stop_lon + (next_stop.stop_lon - prev_stop.stop_lon) * fraction
+        
+        return lat, lon
