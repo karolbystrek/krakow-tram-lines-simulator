@@ -10,8 +10,9 @@ class SimulationEngine:
         self.blocks: List[TramBlock] = []
         self.running = False
         self.paused = False
-        self.start_time_minutes = 3 * 60  # Start at 03:00
-        self.current_time_minutes = self.start_time_minutes
+        self.start_time_minutes = 0
+        self.end_time_minutes = 24 * 60
+        self.current_time_minutes = 0
         self.task = None # Keep task for potential cancellation if needed later
 
     async def start(self):
@@ -28,6 +29,26 @@ class SimulationEngine:
             for line_blocks in blocks_by_line_dict.values():
                 self.blocks.extend(line_blocks)
             print(f"Total: Loaded {len(self.blocks)} blocks for {len(blocks_by_line_dict)} lines")
+            
+            # Calculate start and end times
+            min_time = 24 * 60
+            max_time = 0
+            
+            for block in self.blocks:
+                for trip in block.trips:
+                    start = trip.get_start_time_minutes()
+                    end = trip.get_end_time_minutes()
+                    
+                    if start < min_time:
+                        min_time = start
+                    if end > max_time:
+                        max_time = end
+            
+            self.start_time_minutes = min_time
+            self.end_time_minutes = max_time
+            self.current_time_minutes = self.start_time_minutes
+            
+            print(f"Simulation range: {self.start_time_minutes // 60:02d}:{self.start_time_minutes % 60:02d} - {self.end_time_minutes // 60:02d}:{self.end_time_minutes % 60:02d}")
             
         print("Simulation started.")
         self.task = asyncio.create_task(self._loop())
@@ -69,9 +90,11 @@ class SimulationEngine:
             if not self.paused:
                 self.current_time_minutes += 1
                 
-                # Reset if we go past 24 hours (optional, but good for long runs)
-                if self.current_time_minutes >= 24 * 60:
-                    self.current_time_minutes = 0
+                # Stop if we go past the end time
+                if self.current_time_minutes > self.end_time_minutes:
+                    print("Simulation finished (end time reached).")
+                    self.running = False
+                    break
             
             # print(f"Simulation time: {self.current_time_minutes // 60:02d}:{self.current_time_minutes % 60:02d}")
 

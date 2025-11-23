@@ -47,6 +47,7 @@ class StopTime:
     stop_lat: float
     stop_lon: float
     stop_num: str
+    departure_time_minutes: int  # Minutes since midnight (can be > 24*60)
     departure_time: time  # Parsed time object for easy comparison
     departure_time_str: str  # Original string format (HH:MM:SS)
     stop_sequence: int
@@ -55,7 +56,7 @@ class StopTime:
 
     def to_minutes(self) -> int:
         """Convert departure time to minutes since midnight"""
-        return self.departure_time.hour * 60 + self.departure_time.minute
+        return self.departure_time_minutes
 
 
 @dataclass

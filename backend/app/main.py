@@ -41,11 +41,17 @@ async def shutdown_event():
 @app.get("/")
 async def get_index():
     """Serves the main index.html file."""
-    return FileResponse(FRONTEND_DIR / "index.html")
+    return FileResponse(FRONTEND_DIR / "public" / "index.html")
+
+
+@app.get("/favicon.ico")
+async def get_favicon():
+    """Serves the favicon."""
+    return FileResponse(FRONTEND_DIR / "public" / "favicon.ico")
 
 
 # Mount the static directory to serve app.js and style.css
-app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+app.mount("/static", StaticFiles(directory=FRONTEND_DIR / "src"), name="static")
 
 
 # 2. API endpoints to serve static data (one-time load)

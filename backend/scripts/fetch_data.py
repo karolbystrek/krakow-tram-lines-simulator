@@ -9,7 +9,7 @@ API_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/routes/"
 BLOCKS_API_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/blocks/tram"
 TRAM_SHAPES_GEOJSON_URL = "https://services-eu1.arcgis.com/svTzSt3AvH7sK6q9/arcgis/rest/services/Linie_KMK/FeatureServer/replicafilescache/Linie_KMK_7975846146257302888.geojson"
 TRAM_STOPS_GEOJSON_URL = "https://services-eu1.arcgis.com/svTzSt3AvH7sK6q9/arcgis/rest/services/Przystanki_Komunikacji_Miejskiej_w_Krakowie/FeatureServer/replicafiles/Przystanki_Komunikacji_Miejskiej_w_Krakowie_60cdc5d0067a429f956afdf3d160db51.geojson"
-DATA_DIR = Path(__file__).parent / "data"
+DATA_DIR = Path(__file__).resolve().parent.parent / "app" / "data"
 TRAM_LINES_DATA_DIR = DATA_DIR / "lines"
 TRAM_SHAPES_DATA_DIR = DATA_DIR / "line-shapes"
 TRAM_STOPS_DATA_DIR = DATA_DIR / "stops"
@@ -42,6 +42,7 @@ def fetch_tram_shapes_geojson(context: BrowserContext) -> None:
     _save_data_to_json(
         context.request.fetch(TRAM_SHAPES_GEOJSON_URL).json(), output_file
     )
+    print(f"Fetched tram route shapes geojson")
 
 
 def fetch_tram_stops_geojson(context: BrowserContext) -> None:
@@ -49,6 +50,7 @@ def fetch_tram_stops_geojson(context: BrowserContext) -> None:
     _save_data_to_json(
         context.request.fetch(TRAM_STOPS_GEOJSON_URL).json(), output_file
     )
+    print(f"Fetched tram stops geojson")
 
 
 def fetch_tram_data():
@@ -67,6 +69,7 @@ def fetch_tram_data():
                 # Fetch and save line data
                 line_data = _fetch_line_api_data(context, line_number)
                 _save_data_to_json(line_data, line_dir / f"{line_number}.json")
+                print(f"Fetched line data for {line_number}")
 
                 # Parse blocks and fetch stop times for this line
                 blocks = line_data.get("blocks", [])
@@ -83,6 +86,7 @@ def fetch_tram_data():
                         block_dir = line_dir / service_id
                         block_file = block_dir / f"{block_id}.json"
                         _save_data_to_json(stop_times_data, block_file)
+                        print(f"Fetched stop times for {block_id}")
                     except Exception as e:
                         print(f"Failed to fetch stop times for {block_id}: {e}")
 

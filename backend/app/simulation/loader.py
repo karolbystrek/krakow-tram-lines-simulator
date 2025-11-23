@@ -99,6 +99,16 @@ def parse_time_string(time_str: str) -> time:
     return time(hour, minute, second)
 
 
+def parse_time_to_minutes(time_str: str) -> int:
+    """Parse time string in format HH:MM:SS to minutes since midnight"""
+    parts = time_str.split(":")
+    hour = int(parts[0])
+    minute = int(parts[1])
+    # second = int(parts[2]) # We don't need seconds for minute precision
+    
+    return hour * 60 + minute
+
+
 def load_tram_blocks(service: str = "service_1") -> Dict[str, List[TramBlock]]:
     """Load and process tram schedule data for all lines and blocks in a service."""
     if not TRAM_LINES_DATA_DIR.exists():
@@ -158,6 +168,9 @@ def load_tram_blocks(service: str = "service_1") -> Dict[str, List[TramBlock]]:
                     departure_time=parse_time_string(
                         stop_time_data.get("departure_time", "00:00:00")
                     ),
+                    departure_time_minutes=parse_time_to_minutes(
+                        stop_time_data.get("departure_time", "00:00:00")
+                    ),
                     departure_time_str=stop_time_data.get("departure_time", "00:00:00"),
                     stop_sequence=stop_time_data.get("stop_sequence", 0),
                     trip_id=trip_id,
@@ -203,5 +216,4 @@ def load_tram_blocks(service: str = "service_1") -> Dict[str, List[TramBlock]]:
 
         blocks_by_line[line_number] = line_blocks
 
-    print(f"\nTotal: Loaded blocks for {len(blocks_by_line)} lines")
     return blocks_by_line
