@@ -85,6 +85,40 @@ def get_bounding_box(
     return (min(lats), max(lats), min(lons), max(lons))
 
 
+def get_service_for_weekday(weekday: int) -> str:
+    """
+    Map weekday index to service_id.
+    
+    Args:
+        weekday: Integer 0-6 (Monday=0, Sunday=6)
+    
+    Returns:
+        service_id string (service_1 to service_5)
+    
+    Service mapping:
+    - service_1: Monday, Tuesday, Wednesday
+    - service_5: Thursday
+    - service_4: Friday
+    - service_2: Saturday
+    - service_3: Sunday
+    """
+    # Monday=0, Tuesday=1, Wednesday=2 -> service_1
+    if weekday in [0, 1, 2]:
+        return "service_1"
+    # Thursday=3 -> service_5
+    elif weekday == 3:
+        return "service_5"
+    # Friday=4 -> service_4
+    elif weekday == 4:
+        return "service_4"
+    # Saturday=5 -> service_2
+    elif weekday == 5:
+        return "service_2"
+    # Sunday=6 -> service_3
+    else:
+        return "service_3"
+
+
 def parse_time_string(time_str: str) -> time:
     """Parse time string in format HH:MM:SS to time object"""
     parts = time_str.split(":")

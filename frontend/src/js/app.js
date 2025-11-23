@@ -103,6 +103,35 @@ function sortLineNumbers(a, b) {
   return a.localeCompare(b);
 }
 
+// Get current weekday in Poland
+function getPolandWeekday() {
+  const date = new Date();
+  const options = { timeZone: 'Europe/Warsaw', weekday: 'long' };
+  const dayName = new Intl.DateTimeFormat('en-US', options).format(date);
+  return dayName;
+}
+
+// Get default service ID based on Poland weekday
+function getDefaultService() {
+  const day = getPolandWeekday();
+  switch (day) {
+    case 'Monday':
+    case 'Tuesday':
+    case 'Wednesday':
+      return 'service_1';
+    case 'Thursday':
+      return 'service_5';
+    case 'Friday':
+      return 'service_4';
+    case 'Saturday':
+      return 'service_2';
+    case 'Sunday':
+      return 'service_3';
+    default:
+      return 'service_1';
+  }
+}
+
 // Load and display tram stops
 async function loadTramStops(stopsLayer, map) {
   try {
@@ -452,7 +481,12 @@ class SimulationController {
     this.ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        this.handleUpdate(data);
+        if (data.type === 'service_changed') {
+            console.log('Service changed to:', data.service_id);
+            // Optional: Show a notification or just let the time update handle it
+        } else {
+            this.handleUpdate(data);
+        }
       } catch (e) {
         console.error('Error parsing WebSocket message:', e);
       }
@@ -491,12 +525,34 @@ class SimulationController {
         this.sendCommand('restart');
       });
     }
+
+    // Service Selector
+    const serviceSelector = document.getElementById('service-selector');
+    if (serviceSelector) {
+        // Set default value based on Poland time
+        const defaultService = getDefaultService();
+        serviceSelector.value = defaultService;
+        
+        serviceSelector.addEventListener('change', (e) => {
+            const serviceId = e.target.value;
+            console.log(`Changing service to ${serviceId}`);
+            this.sendCommand('change_service', { service_id: serviceId });
+            
+            // Show loading state
+            if (this.timeDisplay) {
+                this.timeDisplay.textContent = 'Loading...';
+            }
+            
+            // Clear existing trams immediately to avoid confusion
+            this.updateTrams([]);
+        });
+    }
   }
 
-  sendCommand(command) {
+  sendCommand(command, data = {}) {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      console.log('Sending command:', command);
-      this.ws.send(JSON.stringify({ command }));
+      console.log('Sending command:', command, data);
+      this.ws.send(JSON.stringify({ command, ...data }));
     } else {
       console.warn('WebSocket not connected, cannot send command:', command);
     }
@@ -505,7 +561,7 @@ class SimulationController {
   handleUpdate(data) {
     // Update time
     if (data.time) {
-      this.timeDisplay.textContent = `Time: ${data.time.time_str}`;
+      this.timeDisplay.textContent = `${data.time.time_str}`;
       
       // Update button text based on status
       const pauseBtn = document.getElementById('btn-pause');

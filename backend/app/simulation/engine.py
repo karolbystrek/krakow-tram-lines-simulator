@@ -5,8 +5,8 @@ from .models import TramBlock, Trip, StopTime
 from .loader import load_tram_blocks
 
 class SimulationEngine:
-    def __init__(self):
-        print("Initializing simulation engine...")
+    def __init__(self, service_id: str = "service_1"):
+        print(f"Initializing simulation engine with service: {service_id}")
         self.blocks: List[TramBlock] = []
         self.running = False
         self.paused = False
@@ -14,6 +14,7 @@ class SimulationEngine:
         self.end_time_minutes = 24 * 60
         self.current_time_minutes = 0
         self.task = None # Keep task for potential cancellation if needed later
+        self.service_id = service_id
 
     async def start(self):
         """Start the simulation loop."""
@@ -25,7 +26,8 @@ class SimulationEngine:
         # Load blocks if not already loaded (optional check)
         if not self.blocks:
             # The original loader returns Dict[str, List[TramBlock]], need to flatten it
-            blocks_by_line_dict = load_tram_blocks()
+            print(f"Loading tram blocks for service: {self.service_id}")
+            blocks_by_line_dict = load_tram_blocks(service=self.service_id)
             for line_blocks in blocks_by_line_dict.values():
                 self.blocks.extend(line_blocks)
             print(f"Total: Loaded {len(self.blocks)} blocks for {len(blocks_by_line_dict)} lines")
@@ -55,6 +57,20 @@ class SimulationEngine:
             
         print("Simulation started.")
         self.task = asyncio.create_task(self._loop())
+
+    async def reload_service(self, service_id: str):
+        """Reload the simulation with a new service ID."""
+        print(f"Reloading simulation with service: {service_id}")
+        
+        # Stop current simulation
+        await self.stop()
+        
+        # Clear existing data
+        self.blocks = []
+        self.service_id = service_id
+        
+        # Restart simulation (this will reload blocks with new service_id)
+        await self.start()
 
     async def stop(self):
         """Stop the simulation."""

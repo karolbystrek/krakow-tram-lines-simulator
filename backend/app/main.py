@@ -5,8 +5,9 @@ from fastapi.responses import FileResponse, JSONResponse
 from pathlib import Path
 from typing import Dict, List
 
+from datetime import datetime
 from .simulation.engine import SimulationEngine
-from .simulation.loader import load_tram_stops, load_shapes_from_geojson
+from .simulation.loader import load_tram_stops, load_shapes_from_geojson, get_service_for_weekday
 from .simulation.models import Stop, Shape
 from .simulation.geojson_utils import stops_to_geojson, shapes_to_geojson
 
@@ -17,7 +18,12 @@ FRONTEND_DIR = APP_DIR.parent.parent / "frontend"
 app = FastAPI()
 
 # Global simulation engine instance
-simulation_engine = SimulationEngine()
+# Determine default service based on current weekday
+current_weekday = datetime.now().weekday()
+default_service_id = get_service_for_weekday(current_weekday)
+print(f"Current weekday index: {current_weekday}, Default service: {default_service_id}")
+
+simulation_engine = SimulationEngine(service_id=default_service_id)
 
 # Load static data once at startup
 @app.on_event("startup")
@@ -91,7 +97,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 payload = {
                     "time": status,
                     "trams": trams,
-                    "status": "paused" if simulation_engine.paused else "running"
+                    "status": "paused" if simulation_engine.paused else "running",
+                    "service_id": simulation_engine.service_id
                 }
                 
                 # Send the current simulation state to the client
@@ -115,6 +122,12 @@ async def websocket_endpoint(websocket: WebSocket):
                     simulation_engine.resume()
                 elif command == "restart":
                     simulation_engine.restart()
+                elif command == "change_service":
+                    service_id = data.get("service_id")
+                    if service_id:
+                        await simulation_engine.reload_service(service_id)
+                        # Send confirmation or let the next update reflect the change
+                        await websocket.send_json({"type": "service_changed", "service_id": service_id})
         except WebSocketDisconnect:
             print("Client disconnected (receive_commands).")
         except Exception as e:
