@@ -186,7 +186,7 @@ function createLineToggleHTML(lineNumber, id) {
 }
 
 // Initialize settings panel
-function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers) {
+function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers, simulation) {
   const toggle = document.getElementById('settings-toggle');
   const content = document.getElementById('settings-content');
   const stopsCheckbox = document.getElementById('toggle-stops');
@@ -250,10 +250,12 @@ function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers) {
         if (!map.hasLayer(lineLayer)) {
           lineLayer.addTo(map);
         }
+        simulation.setLineVisibility(lineNumber, true);
       } else {
         if (map.hasLayer(lineLayer)) {
           map.removeLayer(lineLayer);
         }
+        simulation.setLineVisibility(lineNumber, false);
       }
     });
   });
@@ -271,10 +273,12 @@ function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers) {
         if (!map.hasLayer(lineLayer)) {
           lineLayer.addTo(map);
         }
+        simulation.setLineVisibility(lineNumber, true);
       } else {
         if (map.hasLayer(lineLayer)) {
           map.removeLayer(lineLayer);
         }
+        simulation.setLineVisibility(lineNumber, false);
       }
 
       // Update master toggle state
@@ -377,6 +381,18 @@ class TramMarker {
   remove() {
     this.map.removeLayer(this.marker);
   }
+
+  hide() {
+    if (this.map.hasLayer(this.marker)) {
+      this.map.removeLayer(this.marker);
+    }
+  }
+
+  show() {
+    if (!this.map.hasLayer(this.marker)) {
+      this.marker.addTo(this.map);
+    }
+  }
 }
 
 // Simulation Controller
@@ -386,6 +402,7 @@ class SimulationController {
     this.trams = {}; // tramId -> TramMarker instance
     this.ws = null;
     this.timeDisplay = null;
+    this.hiddenLines = new Set(); // Track which lines are currently hidden
     
     this.timeDisplay = document.getElementById('simulation-time');
     if (!this.timeDisplay) {
@@ -393,6 +410,31 @@ class SimulationController {
     } else {
         this.timeDisplay.textContent = 'Connecting...';
     }
+  }
+
+  // Set line visibility
+  setLineVisibility(lineNumber, isVisible) {
+    if (isVisible) {
+      this.hiddenLines.delete(lineNumber);
+    } else {
+      this.hiddenLines.add(lineNumber);
+    }
+    
+    // Update existing tram markers for this line
+    Object.values(this.trams).forEach(tram => {
+      if (tram.data.line === lineNumber) {
+        if (isVisible) {
+          tram.show();
+        } else {
+          tram.hide();
+        }
+      }
+    });
+  }
+
+  // Check if a line is visible
+  isLineVisible(lineNumber) {
+    return !this.hiddenLines.has(lineNumber);
   }
 
   connect() {
@@ -492,8 +534,14 @@ class SimulationController {
         // Update existing tram target
         this.trams[tramData.id].updateTarget(tramData);
       } else {
-        // Create new tram
-        this.trams[tramData.id] = new TramMarker(tramData.id, tramData, this.map);
+        // Create new tram and apply line visibility
+        const tram = new TramMarker(tramData.id, tramData, this.map);
+        this.trams[tramData.id] = tram;
+        
+        // Hide if the line is currently hidden
+        if (!this.isLineVisible(tramData.line)) {
+          tram.hide();
+        }
       }
     });
 
@@ -535,7 +583,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize settings panel with line layers
     console.log('Initializing settings panel...');
-    initializeSettingsPanel(map, stopsLayer, routesResult.lineLayers, routesResult.lineNumbers);
+    initializeSettingsPanel(map, stopsLayer, routesResult.lineLayers, routesResult.lineNumbers, simulation);
     console.log('Settings panel initialized');
 
   } catch (error) {
