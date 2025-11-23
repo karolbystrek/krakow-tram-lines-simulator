@@ -295,3 +295,55 @@ body {
 .leaflet-interactive {
     outline: none !important;
 }
+
+/* Slider Styles */
+.slider-container {
+    width: 100%;
+    margin: 10px 0;
+    padding: 0 5px;
+}
+
+.time-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #e0e0e0;
+    outline: none;
+    transition: background 0.2s;
+}
+
+.time-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #1E6BB8;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.2s;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.time-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    background: #155a9c;
+}
+
+.time-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #1E6BB8;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.2s;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.time-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    background: #155a9c;
+}

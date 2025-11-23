@@ -128,6 +128,10 @@ async def websocket_endpoint(websocket: WebSocket):
                         await simulation_engine.reload_service(service_id)
                         # Send confirmation or let the next update reflect the change
                         await websocket.send_json({"type": "service_changed", "service_id": service_id})
+                elif command == "set_time":
+                    time_minutes = data.get("time")
+                    if time_minutes is not None:
+                        simulation_engine.set_time(float(time_minutes))
         except WebSocketDisconnect:
             print("Client disconnected (receive_commands).")
         except Exception as e:

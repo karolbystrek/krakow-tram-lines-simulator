@@ -15,6 +15,42 @@ class SimulationEngine:
         self.current_time_minutes = 0
         self.task = None # Keep task for potential cancellation if needed later
         self.service_id = service_id
+        
+        # Cache for all services
+        self.cached_services: Dict[str, List[TramBlock]] = {}
+        self.service_bounds: Dict[str, Tuple[int, int]] = {}
+        
+        # Preload all services
+        services = ["service_1", "service_2", "service_3", "service_4", "service_5"]
+        print("Preloading all services...")
+        
+        for svc in services:
+            print(f"Loading {svc}...")
+            blocks_by_line = load_tram_blocks(service=svc)
+            all_blocks = []
+            for line_blocks in blocks_by_line.values():
+                all_blocks.extend(line_blocks)
+            
+            self.cached_services[svc] = all_blocks
+            
+            # Calculate bounds for this service
+            min_time = 24 * 60
+            max_time = 0
+            
+            for block in all_blocks:
+                for trip in block.trips:
+                    trip.initialize_shape_indices()
+                    start = trip.get_start_time_minutes()
+                    end = trip.get_end_time_minutes()
+                    if start < min_time: min_time = start
+                    if end > max_time: max_time = end
+            
+            if not all_blocks:
+                min_time = 0
+                max_time = 24 * 60
+                
+            self.service_bounds[svc] = (min_time, max_time)
+            print(f"Loaded {svc}: {len(all_blocks)} blocks, range {min_time}-{max_time}")
 
     async def start(self):
         """Start the simulation loop."""
@@ -23,37 +59,19 @@ class SimulationEngine:
         
         self.running = True
         self.paused = False
-        # Load blocks if not already loaded (optional check)
+        
+        # Load blocks from cache if not already loaded
         if not self.blocks:
-            # The original loader returns Dict[str, List[TramBlock]], need to flatten it
-            print(f"Loading tram blocks for service: {self.service_id}")
-            blocks_by_line_dict = load_tram_blocks(service=self.service_id)
-            for line_blocks in blocks_by_line_dict.values():
-                self.blocks.extend(line_blocks)
-            print(f"Total: Loaded {len(self.blocks)} blocks for {len(blocks_by_line_dict)} lines")
-            
-            # Calculate start and end times
-            min_time = 24 * 60
-            max_time = 0
-            
-            for block in self.blocks:
-                for trip in block.trips:
-                    # Initialize shape indices for path interpolation
-                    trip.initialize_shape_indices()
-                    
-                    start = trip.get_start_time_minutes()
-                    end = trip.get_end_time_minutes()
-                    
-                    if start < min_time:
-                        min_time = start
-                    if end > max_time:
-                        max_time = end
-            
-            self.start_time_minutes = min_time
-            self.end_time_minutes = max_time
-            self.current_time_minutes = self.start_time_minutes
-            
-            print(f"Simulation range: {self.start_time_minutes // 60:02d}:{self.start_time_minutes % 60:02d} - {self.end_time_minutes // 60:02d}:{self.end_time_minutes % 60:02d}")
+            print(f"Starting simulation with service: {self.service_id}")
+            if self.service_id in self.cached_services:
+                self.blocks = self.cached_services[self.service_id]
+                self.start_time_minutes, self.end_time_minutes = self.service_bounds[self.service_id]
+                self.current_time_minutes = self.start_time_minutes
+                
+                print(f"Simulation range: {self.start_time_minutes // 60:02d}:{self.start_time_minutes % 60:02d} - {self.end_time_minutes // 60:02d}:{self.end_time_minutes % 60:02d}")
+            else:
+                print(f"Error: Service {self.service_id} not found in cache!")
+                self.blocks = []
             
         print("Simulation started.")
         self.task = asyncio.create_task(self._loop())
@@ -69,7 +87,7 @@ class SimulationEngine:
         self.blocks = []
         self.service_id = service_id
         
-        # Restart simulation (this will reload blocks with new service_id)
+        # Restart simulation (start() will pick up new service from cache)
         await self.start()
 
     async def stop(self):
@@ -132,6 +150,13 @@ class SimulationEngine:
                 })
         return trams
 
+    def set_time(self, time_minutes: float):
+        """Set the simulation time manually."""
+        # Clamp time to valid range
+        time_minutes = max(self.start_time_minutes, min(time_minutes, self.end_time_minutes))
+        self.current_time_minutes = time_minutes
+        print(f"Simulation time manually set to: {int(self.current_time_minutes // 60):02d}:{int(self.current_time_minutes % 60):02d}")
+
     def get_status(self) -> Dict[str, Any]:
         """Get current simulation status."""
         hours = int(self.current_time_minutes // 60)
@@ -140,6 +165,8 @@ class SimulationEngine:
         return {
             "time_str": f"{hours:02d}:{minutes:02d}:{seconds:02d}",
             "time_minutes": self.current_time_minutes,
+            "start_time_minutes": self.start_time_minutes,
+            "end_time_minutes": self.end_time_minutes,
             "running": self.running,
             "paused": self.paused
         }

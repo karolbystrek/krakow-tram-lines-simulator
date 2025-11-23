@@ -424,6 +424,19 @@ class TramMarker {
   }
 }
 
+// Debounce utility
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 // Simulation Controller
 class SimulationController {
   constructor(map) {
@@ -431,14 +444,51 @@ class SimulationController {
     this.trams = {}; // tramId -> TramMarker instance
     this.ws = null;
     this.timeDisplay = null;
+    this.timeSlider = null;
+    this.isDraggingSlider = false;
     this.hiddenLines = new Set(); // Track which lines are currently hidden
     
     this.timeDisplay = document.getElementById('simulation-time');
+    this.timeSlider = document.getElementById('time-slider');
+    
     if (!this.timeDisplay) {
         console.error('Time display element not found!');
     } else {
         this.timeDisplay.textContent = 'Connecting...';
     }
+
+    if (this.timeSlider) {
+        this.initializeSlider();
+    }
+  }
+
+  initializeSlider() {
+      const debouncedSetTime = debounce((time) => {
+          this.sendCommand('set_time', { time: time });
+      }, 100); // 100ms debounce
+
+      this.timeSlider.addEventListener('input', (e) => {
+          this.isDraggingSlider = true;
+          const time = parseFloat(e.target.value);
+          
+          // Update time display immediately for better UX
+          const hours = Math.floor(time / 60);
+          const minutes = Math.floor(time % 60);
+          this.timeDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:00`;
+          
+          debouncedSetTime(time);
+      });
+
+      this.timeSlider.addEventListener('change', (e) => {
+          this.isDraggingSlider = false;
+          // Ensure final value is sent
+          this.sendCommand('set_time', { time: parseFloat(e.target.value) });
+      });
+      
+      // Handle mouse up/leave to clear dragging state just in case
+      this.timeSlider.addEventListener('mouseup', () => { this.isDraggingSlider = false; });
+      this.timeSlider.addEventListener('mouseleave', () => { this.isDraggingSlider = false; });
+      this.timeSlider.addEventListener('touchend', () => { this.isDraggingSlider = false; });
   }
 
   // Set line visibility
@@ -562,6 +612,19 @@ class SimulationController {
     // Update time
     if (data.time) {
       this.timeDisplay.textContent = `${data.time.time_str}`;
+      
+      // Update slider if it exists and user is not dragging it
+      if (this.timeSlider) {
+          // Update range if changed (e.g. on service reload)
+          if (data.time.start_time_minutes !== undefined && data.time.end_time_minutes !== undefined) {
+              if (this.timeSlider.min != data.time.start_time_minutes) this.timeSlider.min = data.time.start_time_minutes;
+              if (this.timeSlider.max != data.time.end_time_minutes) this.timeSlider.max = data.time.end_time_minutes;
+          }
+          
+          if (!this.isDraggingSlider) {
+              this.timeSlider.value = data.time.time_minutes;
+          }
+      }
       
       // Update button text based on status
       const pauseBtn = document.getElementById('btn-pause');
