@@ -1,54 +1,87 @@
-# Krakow Tram Lines Simulator
+# Kraków Tram Lines Simulator
 
-Interactive visualization and simulation of Krakow's tram network with passenger prediction capabilities.
+A real-time simulation and visualization of the Kraków tram network. This application fetches real-time data and schedule information to simulate tram movements on an interactive map.
 
-## Requirements
+## 🚀 Features
 
-- Python 3.8+
-- Playwright (for web scraping)
+- **Real-time Simulation**: Visualizes tram movements based on actual schedule data.
+- **Interactive Map**: Built with Leaflet.js, showing tram lines, stops, and live tram positions.
+- **Simulation Controls**: Pause, resume, restart, and adjust the time scale (speed) of the simulation.
+- **Live Data**: Fetches the latest tram lines, stops, and schedules from official sources.
 
-## Setup
+## 🛠️ Prerequisites
 
-1. **Create virtual environment and install dependencies**
+- **Python 3.8+**
+- **pip** (Python package installer)
 
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate  # Windows: .venv\Scripts\activate
-   pip install -r requirements.txt
-   playwright install chromium
-   ```
+## ⚙️ Installation
 
-2. **Fetch tram network data**
+1.  **Clone the repository**
+    ```bash
+    git clone git@github.com:karolbystrek/krakow-tram-lines-simulator.git
+    cd krakow-tram-lines-simulator
+    ```
 
-   ```bash
-   python src/fetch_tram_data.py
-   ```
+2.  **Create and activate a virtual environment**
+    ```bash
+    python3 -m venv .venv
+    
+    # macOS/Linux
+    source .venv/bin/activate
+    
+    # Windows
+    .venv\Scripts\activate
+    ```
 
-   Downloads tram lines, stops, and route shapes from official Krakow data sources.
+3.  **Install dependencies**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-3. **Generate visualization**
+4.  **Install Playwright browser** (required for data fetching)
+    ```bash
+    python -m playwright install chromium
+    ```
 
-   ```bash
-   python -m src.visualizer
-   ```
+## 🏃 Usage
 
-   Generates `krakow_tram_network_map.html` in the project root with an interactive map featuring:
+### 1. Fetch Tram Data
+Before starting the simulation, you must fetch the latest network data (lines, stops, schedules). Run the following script:
 
-   - All tram routes with layered controls
-   - Tram stops with detailed information
-   - Multiple map styles (Light, Terrain, Transit)
-   - Full-screen viewing and zoom controls
-
-## Project Structure
-
-```text
-src/
-├── fetch_tram_data.py    # Data scraping and downloading
-├── data_loader.py        # GeoJSON data parsing
-├── models.py             # Data models (Stop, Shape, TramLine)
-└── visualizer.py         # Interactive map generation
+```bash
+python backend/scripts/fetch_data.py
 ```
+*This will download the necessary JSON and GeoJSON files into `backend/app/data/`.*
 
-## Usage
+### 2. Start the Application
+Run the backend server:
 
-Open `krakow_tram_network_map.html` in your browser to explore the tram network. Use the layer control to toggle individual lines and stops.
+```bash
+python backend/run.py
+```
+*Alternatively, you can use uvicorn directly: `uvicorn backend.app.main:app --reload`*
+
+### 3. Open the Simulator
+Open your web browser and navigate to:
+
+**[http://localhost:8000](http://localhost:8000)**
+
+## 📂 Project Structure
+
+The project is organized into a clear frontend-backend architecture:
+
+```
+krakow-tram-lines-simulator/
+├── backend/                # Python FastAPI backend
+│   ├── app/                # Application logic
+│   │   ├── main.py         # API and WebSocket server
+│   │   └── simulation/     # Simulation engine and models
+│   ├── scripts/            # Utility scripts
+│   │   └── fetch_data.py   # Data fetching script
+│   └── run.py              # Entry point to run the server
+├── frontend/               # Web frontend
+│   ├── public/             # Static assets (HTML)
+│   └── src/                # Source code (JS, CSS)
+├── requirements.txt        # Python dependencies
+└── README.md               # Project documentation
+```

@@ -1,0 +1,52 @@
+.custom-div-icon {
+    margin-left: -15px;
+    margin-top: -42px;
+    width: 30px;
+    height: 42px;
+    text-align: center;
+}
+
+.marker-pin {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 50% 0;
+    background: #c30b82; /* Fallback */
+    background: #d9534f; /* Bootstrap danger red, similar to Folium red */
+    position: absolute;
+    transform: rotate(-45deg);
+    left: 50%;
+    top: 50%;
+    margin: -15px 0 0 -15px;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+}
+
+/* The circle inside the pin */
+.marker-pin::after {
+    content: '';
+    width: 24px;
+    height: 24px;
+    margin: 3px 0 0 3px;
+    background: #fff;
+    position: absolute;
+    border-radius: 50%;
+}
+
+/* The icon */
+.custom-div-icon i {
+    position: absolute;
+    top: 22%;
+    left: 0;
+    width: 100%;
+    font-size: 14px;
+    color: #333;
+    z-index: 10;
+    text-align: center;
+    line-height: 30px; /* Vertically center in the pin head */
+}
+
+/* Adjust icon position to be centered in the white circle */
+.custom-div-icon i.fa-train {
+    margin-top: -6px; /* Fine tuning for the train icon */
+    color: #d9534f; /* Match the pin color for the icon, or keep black/dark gray */
+    color: #333;
+}

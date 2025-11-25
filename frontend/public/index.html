@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kraków Tram Simulator</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/tram-marker.css">
+</head>
+
+<body>
+    <div id="map"></div>
+    
+    <div id="simulation-controls" class="control-panel">
+        <select id="service-selector" class="service-selector">
+            <option value="service_1">Mon-Tue-Wed</option>
+            <option value="service_5">Thursday</option>
+            <option value="service_4">Friday</option>
+            <option value="service_2">Saturday</option>
+            <option value="service_3">Sunday</option>
+        </select>
+        <div id="simulation-time" class="time-display">Time: --:--</div>
+        <div class="slider-container">
+            <input type="range" id="time-slider" class="time-slider" min="0" max="1440" value="0" step="1">
+        </div>
+        <button id="btn-pause" class="btn btn-secondary">
+            <i class="fas fa-pause"></i> Pause
+        </button>
+        <button id="btn-restart" class="btn btn-secondary">
+            <i class="fas fa-redo"></i> Restart
+        </button>
+    </div>
+
+    <div id="settings-panel" class="control-panel">
+        <button id="settings-toggle" class="settings-toggle-btn" aria-label="Toggle settings">
+            <i class="fas fa-cog" style="font-size: 20px;"></i>
+        </button>
+        <div id="settings-content" class="settings-content">
+            <h3 class="settings-title">Map Settings</h3>
+            <div class="settings-item">
+                <label class="toggle-label">
+                    <span class="toggle-text">Toggle Tram Stops</span>
+                    <input type="checkbox" id="toggle-stops" class="toggle-input" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+
+</html>
