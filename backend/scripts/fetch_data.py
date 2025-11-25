@@ -47,10 +47,16 @@ def fetch_tram_shapes_geojson(context: BrowserContext) -> None:
 
 def fetch_tram_stops_geojson(context: BrowserContext) -> None:
     output_file = TRAM_STOPS_DATA_DIR / "krakow_tram_stops.geojson"
-    _save_data_to_json(
-        context.request.fetch(TRAM_STOPS_GEOJSON_URL).json(), output_file
-    )
-    print(f"Fetched tram stops geojson")
+    resp = context.request.fetch(TRAM_STOPS_GEOJSON_URL)
+    try:
+        data = resp.json()
+        _save_data_to_json(data, output_file)
+        print(f"Fetched tram stops geojson")
+    except Exception as e:
+        print("Failed to parse JSON:", e)
+        print("Raw body:", resp.text())
+        return
+
 
 
 def fetch_tram_data():

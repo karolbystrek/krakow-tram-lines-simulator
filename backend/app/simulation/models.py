@@ -211,3 +211,5 @@ class Tram:
     position: Optional[Tuple[float, float]] = None
     status: str = "DEPOT"
     occupancy: float = 0.0
+
+

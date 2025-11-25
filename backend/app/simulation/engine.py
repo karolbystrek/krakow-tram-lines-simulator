@@ -1,8 +1,13 @@
 import asyncio
 import time
 from typing import Any, Dict, List, Optional, Tuple
+
+import numpy
+
 from .models import TramBlock, Trip, StopTime
 from .loader import load_tram_blocks
+from .discrete_models.passenger_predictor import PassengerPredictor
+
 
 class SimulationEngine:
     def __init__(self, service_id: str = "service_1"):
@@ -15,7 +20,12 @@ class SimulationEngine:
         self.current_time_minutes = 0
         self.task = None # Keep task for potential cancellation if needed later
         self.service_id = service_id
-        
+
+        # Prediction setup
+        self.predictor = PassengerPredictor()
+        self.occupancy_task = None
+        self.occupancy_update_interval = 1.0
+
         # Cache for all services
         self.cached_services: Dict[str, List[TramBlock]] = {}
         self.service_bounds: Dict[str, Tuple[int, int]] = {}
@@ -56,6 +66,7 @@ class SimulationEngine:
         """Start the simulation loop."""
         if self.running:
             return
+
         
         self.running = True
         self.paused = False
@@ -75,6 +86,8 @@ class SimulationEngine:
             
         print("Simulation started.")
         self.task = asyncio.create_task(self._loop())
+        if not self.occupancy_task:
+            self.occupancy_task = asyncio.create_task(self._occupancy_loop())
 
     async def reload_service(self, service_id: str):
         """Reload the simulation with a new service ID."""
@@ -99,6 +112,15 @@ class SimulationEngine:
                 await self.task
             except asyncio.CancelledError:
                 pass
+
+        if self.occupancy_task:
+            self.occupancy_task.cancel()
+            try:
+                await self.occupancy_task
+            except asyncio.CancelledError:
+                pass
+            self.occupancy_task = None
+
         print("Simulation stopped.")
 
     def pause(self):
@@ -146,7 +168,8 @@ class SimulationEngine:
                     "id": block.block_id,
                     "line": block.line_number,
                     "lat": lat,
-                    "lon": lon
+                    "lon": lon,
+                    "occupancy": getattr(block, "_predicted_occupancy", 0.0)
                 })
         return trams
 
@@ -277,3 +300,18 @@ class SimulationEngine:
         lon = prev_stop.stop_lon + (next_stop.stop_lon - prev_stop.stop_lon) * fraction
         
         return lat, lon
+
+    async def _occupancy_loop(self):
+        print("Occupancy prediction loop started.")
+        while self.running:
+            await asyncio.sleep(self.occupancy_update_interval)
+            if self.paused:
+                continue
+            current = self.current_time_minutes
+            occ = self.predictor.predict_occupancy(current)
+            for block in self.blocks:
+                variance = numpy.floor(((numpy.random.random() * 2 - 1) * 10))
+                block._predicted_occupancy = occ + variance
+
+            # print(f"[OCC] t={current:.1f} → {occ:.3f}")
+
