@@ -5,3 +5,4 @@ simpy
 geojson
 pandas
 playwright
+httpx

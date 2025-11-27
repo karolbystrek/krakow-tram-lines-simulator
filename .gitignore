@@ -38,6 +38,3 @@ wheels/
 # OS
 .DS_Store
 Thumbs.db
-
-# Data
-**/data/
