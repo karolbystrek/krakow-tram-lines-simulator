@@ -32,28 +32,162 @@ def load_shapes_from_geojson() -> Dict[str, List[Shape]]:
     return shapes_by_line
 
 
-def load_tram_stops() -> Dict[str, Stop]:
+def get_tram_stop_coordinates_from_schedules() -> set:
+    """
+    Collect all unique stop coordinates from tram schedule data across all services.
+    This identifies which stops are actually used by trams.
+    
+    Since kod_busman format in geojson doesn't match the line-stop format in schedules,
+    we match stops by coordinates instead.
+    
+    Returns:
+        Set of tuples (lat, lon) representing stop coordinates used in tram schedules
+    """
+    tram_stop_coords = set()
+    
+    if not TRAM_LINES_DATA_DIR.exists():
+        return tram_stop_coords
+    
+    # Check all services
+    services = ["service_1", "service_2", "service_3", "service_4", "service_5"]
+    
+    for service in services:
+        # Scan all line directories
+        for line_dir in TRAM_LINES_DATA_DIR.iterdir():
+            if not line_dir.is_dir():
+                continue
+            
+            service_dir = line_dir / service
+            if not service_dir.exists():
+                continue
+            
+            # Get all block files for this line and service
+            block_files = sorted(service_dir.glob("block_*.json"))
+            
+            for block_path in block_files:
+                try:
+                    with open(block_path, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    
+                    # Extract coordinates from all stop_times
+                    for stop_time_data in data.get("stop_times", []):
+                        stop_lat = stop_time_data.get("stop_lat")
+                        stop_lon = stop_time_data.get("stop_lon")
+                        if stop_lat is not None and stop_lon is not None:
+                            # Round to 6 decimal places (~0.1 meter precision) to handle floating point differences
+                            lat_rounded = round(float(stop_lat), 6)
+                            lon_rounded = round(float(stop_lon), 6)
+                            tram_stop_coords.add((lat_rounded, lon_rounded))
+                except Exception as e:
+                    # Skip files that can't be read
+                    continue
+    
+    return tram_stop_coords
+
+
+def load_tram_stops(filter_by_tram_schedules: bool = True) -> Dict[str, Stop]:
+    """
+    Load tram stops from GeoJSON file.
+    
+    Args:
+        filter_by_tram_schedules: If True, only include stops that are used in tram schedules.
+                                  This filters out bus-only stops.
+    
+    Returns:
+        Dictionary mapping kod_busman to Stop objects
+    """
     if not GEOJSON_STOPS_PATH.exists():
         print(f"Warning: Tram stops GeoJSON file not found at {GEOJSON_STOPS_PATH}")
         return {}
+
+    # Get set of stop coordinates used in tram schedules if filtering is enabled
+    tram_stop_coords = set()
+    if filter_by_tram_schedules:
+        print("Collecting stop coordinates from tram schedules...")
+        tram_stop_coords = get_tram_stop_coordinates_from_schedules()
+        print(f"Found {len(tram_stop_coords)} unique stops used in tram schedules")
 
     with open(GEOJSON_STOPS_PATH, "r", encoding="utf-8") as f:
         geojson_data = json.load(f)
 
     stops_dict = {}
+    skipped_count = 0
+    filtered_count = 0
+    
     for feature in geojson_data.get("features", []):
         properties = feature.get("properties", {})
         coordinates = feature.get("geometry", {}).get("coordinates", [])
-        kod_busman = properties.get("kod_busman", "")
+        
+        # Handle kod_busman - it might be None, empty string, or missing
+        kod_busman = properties.get("kod_busman")
+        if kod_busman is None:
+            # Try to use OBJECTID as fallback identifier
+            objectid = properties.get("OBJECTID")
+            if objectid is not None:
+                kod_busman = f"OBJ_{objectid}"
+            else:
+                # Skip stops without any identifier
+                skipped_count += 1
+                continue
+        elif not isinstance(kod_busman, str) or not kod_busman.strip():
+            # If kod_busman is not a valid string, use OBJECTID as fallback
+            objectid = properties.get("OBJECTID")
+            if objectid is not None:
+                kod_busman = f"OBJ_{objectid}"
+            else:
+                skipped_count += 1
+                continue
+        
+        # Ensure kod_busman is a non-empty string
+        kod_busman = str(kod_busman).strip()
+        if not kod_busman:
+            skipped_count += 1
+            continue
+        
+        # Filter: Only include stops that are used in tram schedules
+        # Match by coordinates (within 0.001 degrees ~ 100 meters)
+        if filter_by_tram_schedules and tram_stop_coords:
+            geojson_lat = round(float(coordinates[1]), 6)
+            geojson_lon = round(float(coordinates[0]), 6)
+            
+            # Check if this stop's coordinates match any schedule stop coordinates
+            matched = False
+            for sched_lat, sched_lon in tram_stop_coords:
+                # Use a small threshold to account for coordinate precision differences
+                if abs(geojson_lat - sched_lat) < 0.0001 and abs(geojson_lon - sched_lon) < 0.0001:
+                    matched = True
+                    break
+            
+            if not matched:
+                filtered_count += 1
+                continue
+        
+        # Skip if we already have a stop with this kod_busman (avoid duplicates)
+        if kod_busman in stops_dict:
+            skipped_count += 1
+            continue
 
-        stops_dict[kod_busman] = Stop(
-            id=str(properties.get("OBJECTID", "")),
-            name=properties.get("Nazwa_przystanku_nr", ""),
-            lat=coordinates[1],
-            lon=coordinates[0],
-            kod_busman=kod_busman,
-        )
-
+        try:
+            stops_dict[kod_busman] = Stop(
+                id=str(properties.get("OBJECTID", "")),
+                name=properties.get("Nazwa_przystanku_nr", ""),
+                lat=coordinates[1],
+                lon=coordinates[0],
+                kod_busman=kod_busman,
+            )
+        except Exception as e:
+            # Skip stops that fail validation
+            print(f"Warning: Skipping stop with kod_busman={kod_busman}: {e}")
+            skipped_count += 1
+            continue
+    
+    if skipped_count > 0:
+        print(f"Warning: Skipped {skipped_count} stops due to missing or invalid kod_busman")
+    
+    if filter_by_tram_schedules and filtered_count > 0:
+        print(f"Filtered out {filtered_count} stops not used in tram schedules (bus-only stops)")
+    
+    print(f"Loaded {len(stops_dict)} valid tram stops")
     return stops_dict
 
 

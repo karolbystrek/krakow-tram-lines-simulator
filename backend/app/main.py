@@ -93,12 +93,41 @@ async def websocket_endpoint(websocket: WebSocket):
                 # Get current state from the engine
                 status = simulation_engine.get_status()
                 trams = simulation_engine.get_tram_positions()
+                stop_states_raw = simulation_engine.get_stop_states()
+                
+                # Map stop_states: prioritize kod_busman for frontend compatibility
+                # Create mapping from stop_num to kod_busman if possible
+                stop_states = {}
+                for stop_id, state_data in stop_states_raw.items():
+                    # If stop_id is already a kod_busman from loaded stops, use it
+                    if stop_id in app.state.tram_stops:
+                        stop_states[stop_id] = state_data
+                    else:
+                        # Try to find matching kod_busman by checking if stop_id matches any stop's kod_busman
+                        # or if we need to map stop_num to kod_busman
+                        # For now, include by stop_id as well for compatibility
+                        stop_states[stop_id] = state_data
+                        
+                        # Also try to find kod_busman match by searching stops
+                        for kod_busman, stop in app.state.tram_stops.items():
+                            if stop.kod_busman == stop_id or str(stop.id) == stop_id:
+                                stop_states[kod_busman] = state_data
+                                break
+                
+                # Calculate passenger totals
+                total_waiting = sum(s["waiting_count"] for s in stop_states.values())
+                total_on_trams = sum(t.get("occupancy", 0) for t in trams)
                 
                 payload = {
                     "time": status,
                     "trams": trams,
                     "status": "paused" if simulation_engine.paused else "running",
-                    "service_id": simulation_engine.service_id
+                    "service_id": simulation_engine.service_id,
+                    "passengers": {
+                        "total_waiting": total_waiting,
+                        "total_on_trams": total_on_trams
+                    },
+                    "stop_states": stop_states
                 }
                 
                 # Send the current simulation state to the client
