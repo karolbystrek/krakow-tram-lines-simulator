@@ -9,6 +9,7 @@ from .loader import load_tram_blocks, load_tram_stops
 from .passenger_model import StopState, TramState
 from .arrival_model import ArrivalRateModel
 from .passenger_handling import PassengerManager
+from .passenger_predictor import PassengerPredictor
 
 class SimulationEngine:
     def __init__(self, service_id: str = "service_1"):
@@ -24,8 +25,6 @@ class SimulationEngine:
 
         # Prediction setup
         self.predictor = PassengerPredictor()
-        self.occupancy_task = None
-        self.occupancy_update_interval = 1.0
 
         # Cache for all services
         self.cached_services: Dict[str, List[TramBlock]] = {}
@@ -103,8 +102,6 @@ class SimulationEngine:
             
         print("Simulation started.")
         self.task = asyncio.create_task(self._loop())
-        if not self.occupancy_task:
-            self.occupancy_task = asyncio.create_task(self._occupancy_loop())
 
     async def reload_service(self, service_id: str):
         """Reload the simulation with a new service ID."""
@@ -133,13 +130,6 @@ class SimulationEngine:
             except asyncio.CancelledError:
                 pass
 
-        if self.occupancy_task:
-            self.occupancy_task.cancel()
-            try:
-                await self.occupancy_task
-            except asyncio.CancelledError:
-                pass
-            self.occupancy_task = None
 
         print("Simulation stopped.")
 
@@ -387,8 +377,8 @@ class SimulationEngine:
                                 geojson_lat = round(float(geojson_stop.lat), 6)
                                 geojson_lon = round(float(geojson_stop.lon), 6)
                                 
-                                # Match within small threshold (0.0001 degrees ~ 10 meters)
-                                if abs(sched_lat - geojson_lat) < 0.0001 and abs(sched_lon - geojson_lon) < 0.0001:
+                                # Match within small threshold (0.001 degrees ~ 11 meters)
+                                if abs(sched_lat - geojson_lat) < 0.001 and abs(sched_lon - geojson_lon) < 0.001:
                                     self.stop_num_to_kod_busman[coord_key] = kod_busman
                                     break
         
@@ -472,6 +462,7 @@ class SimulationEngine:
                         stop_id = stop_time.stop_num
                         stop_state = StopState(stop_id=stop_id)
                         self.stop_states[stop_id] = stop_state
+                        print(f"DEBUG: Created new stop state for {stop_id} (fallback). Coordinates: {stop_time.stop_lat}, {stop_time.stop_lon}")
                     
                     # Get tram state (should already exist)
                     tram_state = self.tram_states.get(block.block_id)

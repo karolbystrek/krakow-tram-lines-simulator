@@ -19,7 +19,7 @@ class ArrivalRateModel:
         # Base arrival rate (passengers per minute) for average stop
         # Reduced from 0.5 to 0.2 to prevent excessive accumulation
         # During rush hour: 0.2 * 3.0 = 0.6 passengers/min = 36 passengers/hour per stop
-        self.base_arrival_rate = 0.2
+        self.base_arrival_rate = 4
         
         # Time-of-day multipliers
         self.rush_hour_multiplier = 4.0  # 7-9 AM, 4-6 PM (increased from 2.0)

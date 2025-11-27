@@ -154,7 +154,7 @@ def load_tram_stops(filter_by_tram_schedules: bool = True) -> Dict[str, Stop]:
             matched = False
             for sched_lat, sched_lon in tram_stop_coords:
                 # Use a small threshold to account for coordinate precision differences
-                if abs(geojson_lat - sched_lat) < 0.0001 and abs(geojson_lon - sched_lon) < 0.0001:
+                if abs(geojson_lat - sched_lat) < 0.001 and abs(geojson_lon - sched_lon) < 0.001:
                     matched = True
                     break
             

@@ -60,6 +60,7 @@ function createStopMarker(feature) {
 
   // Store stop ID for later updates
   marker.stopId = props.kod_busman || props.id || '';
+  marker.stopName = props.name || props.stop_name || 'Stop';
   marker.waitingCount = 0;
 
   const popupContent = `<b>${props.name || props.stop_name}</b><br>Code: ${props.kod_busman || ''}<br>ID: ${props.id || ''}<br><span id="stop-passengers-${marker.stopId}">Waiting: 0</span>`;
@@ -96,7 +97,7 @@ function updateStopMarker(marker, waitingCount) {
   });
   
   // Update tooltip
-  const stopName = marker.getTooltip() ? marker.getTooltip().getContent() : 'Stop';
+  const stopName = marker.stopName || 'Stop';
   marker.setTooltipContent(`${stopName}<br>Waiting: ${waitingCount}`);
   
   // Update popup if open
