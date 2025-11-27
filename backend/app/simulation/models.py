@@ -174,7 +174,7 @@ class TramBlock:
     service_type: str  # e.g., "service_1"
     trips: List[Trip] = field(default_factory=list)
 
-    def get_active_trip(self, time_minutes: int) -> Optional[Trip]:
+    def get_active_trip(self, time_minutes: float) -> Optional[Trip]:
         """
         Get the trip that is active at the given simulation time.
         Returns None if tram is waiting at terminus or in depot.
