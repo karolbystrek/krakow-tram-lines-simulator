@@ -343,7 +343,14 @@ class TramMarker {
       })
     });
 
-    this.marker.bindTooltip(`Line ${data.line} - ${id}`, {
+    // this.marker.bindTooltip(`Line ${data.line} - ${id}`, {
+    //   direction: 'top',
+    //   offset: [0, -35]
+    // });
+
+    this.data.occupancy = data.occupancy;
+    this.marker.bindTooltip(`<b>Line:</b> ${this.data.line} - ${id}<br>
+                             <b>Occupancy:</b> ${this.data.occupancy}`, {
       direction: 'top',
       offset: [0, -35]
     });
@@ -379,7 +386,13 @@ class TramMarker {
     this.targetLat = data.lat;
     this.targetLon = data.lon;
     this.startTime = now;
-    
+
+    this.data.occupancy = data.occupancy;
+            this.marker.setTooltipContent(`
+                <b>Line:</b> ${this.data.line} - ${this.id}<br>
+                <b>Occupancy:</b> ${this.data.occupancy}
+            `);
+
     if (!this.animating) {
       this.animate();
     }

@@ -1,6 +1,9 @@
 import asyncio
 import time
 from typing import Any, Dict, List, Optional, Tuple
+
+import numpy
+
 from .models import TramBlock, Trip, StopTime
 from .loader import load_tram_blocks, load_tram_stops
 from .passenger_model import StopState, TramState
@@ -18,7 +21,12 @@ class SimulationEngine:
         self.current_time_minutes = 0
         self.task = None # Keep task for potential cancellation if needed later
         self.service_id = service_id
-        
+
+        # Prediction setup
+        self.predictor = PassengerPredictor()
+        self.occupancy_task = None
+        self.occupancy_update_interval = 1.0
+
         # Cache for all services
         self.cached_services: Dict[str, List[TramBlock]] = {}
         self.service_bounds: Dict[str, Tuple[int, int]] = {}
@@ -69,6 +77,7 @@ class SimulationEngine:
         """Start the simulation loop."""
         if self.running:
             return
+
         
         self.running = True
         self.paused = False
@@ -94,6 +103,8 @@ class SimulationEngine:
             
         print("Simulation started.")
         self.task = asyncio.create_task(self._loop())
+        if not self.occupancy_task:
+            self.occupancy_task = asyncio.create_task(self._occupancy_loop())
 
     async def reload_service(self, service_id: str):
         """Reload the simulation with a new service ID."""
@@ -121,6 +132,15 @@ class SimulationEngine:
                 await self.task
             except asyncio.CancelledError:
                 pass
+
+        if self.occupancy_task:
+            self.occupancy_task.cancel()
+            try:
+                await self.occupancy_task
+            except asyncio.CancelledError:
+                pass
+            self.occupancy_task = None
+
         print("Simulation stopped.")
 
     def pause(self):
