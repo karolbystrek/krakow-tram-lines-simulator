@@ -58,11 +58,54 @@ function createStopMarker(feature) {
     fillOpacity: CONFIG.STOPS.FILL_OPACITY
   });
 
-  const popupContent = `<b>${props.name || props.stop_name}</b><br>Code: ${props.kod_busman || ''}<br>ID: ${props.id || ''}`;
+  // Store stop ID for later updates
+  marker.stopId = props.kod_busman || props.id || '';
+  marker.waitingCount = 0;
+
+  const popupContent = `<b>${props.name || props.stop_name}</b><br>Code: ${props.kod_busman || ''}<br>ID: ${props.id || ''}<br><span id="stop-passengers-${marker.stopId}">Waiting: 0</span>`;
   marker.bindPopup(popupContent, { maxWidth: 300 });
   marker.bindTooltip(props.name || props.stop_name);
 
   return marker;
+}
+
+// Update stop marker with passenger data
+function updateStopMarker(marker, waitingCount) {
+  if (!marker) return;
+  
+  marker.waitingCount = waitingCount;
+  
+  // Update color based on waiting passengers
+  let color = CONFIG.STOPS.COLOR;
+  let fillColor = CONFIG.STOPS.FILL_COLOR;
+  
+  if (waitingCount > 20) {
+    color = '#FF0000';  // Red for high passenger count
+    fillColor = '#FFCCCC';
+  } else if (waitingCount > 10) {
+    color = '#FF8800';  // Orange for medium-high
+    fillColor = '#FFE0CC';
+  } else if (waitingCount > 5) {
+    color = '#FFAA00';  // Yellow for medium
+    fillColor = '#FFF4CC';
+  }
+  
+  marker.setStyle({
+    color: color,
+    fillColor: fillColor
+  });
+  
+  // Update tooltip
+  const stopName = marker.getTooltip() ? marker.getTooltip().getContent() : 'Stop';
+  marker.setTooltipContent(`${stopName}<br>Waiting: ${waitingCount}`);
+  
+  // Update popup if open
+  if (marker.isPopupOpen()) {
+    const popupElement = document.getElementById(`stop-passengers-${marker.stopId}`);
+    if (popupElement) {
+      popupElement.textContent = `Waiting: ${waitingCount}`;
+    }
+  }
 }
 
 // Create route polyline
@@ -133,7 +176,7 @@ function getDefaultService() {
 }
 
 // Load and display tram stops
-async function loadTramStops(stopsLayer, map) {
+async function loadTramStops(stopsLayer, map, simulationController) {
   try {
     const response = await fetch('/api/stops');
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -144,11 +187,27 @@ async function loadTramStops(stopsLayer, map) {
     }
 
     data.features.forEach(feature => {
-      createStopMarker(feature).addTo(stopsLayer);
+      const marker = createStopMarker(feature);
+      marker.addTo(stopsLayer);
+      
+      // Store marker in simulation controller for updates
+      // Try multiple ID fields to ensure we can match with backend
+      const kod_busman = feature.properties.kod_busman || '';
+      const id = feature.properties.id || '';
+      const stopId = kod_busman || id;
+      
+      if (stopId && simulationController) {
+        simulationController.stopMarkers[stopId] = marker;
+        // Also store by both IDs if they differ
+        if (kod_busman && id && kod_busman !== id) {
+          simulationController.stopMarkers[id] = marker;
+        }
+      }
     });
 
     stopsLayer.addTo(map);
     console.log(`Loaded ${data.features.length} tram stops`);
+    console.log(`Stored ${Object.keys(simulationController?.stopMarkers || {}).length} stop markers for updates`);
 
     return true;
   } catch (error) {
@@ -333,12 +392,16 @@ class TramMarker {
     this.map = map;
     this.data = data;
     
+    // Get occupancy for color coding
+    const occupancy = data.occupancy_percent || 0;
+    const markerColor = this.getOccupancyColor(occupancy);
+    
     // Create Leaflet marker
     this.marker = L.marker([data.lat, data.lon], {
       icon: L.AwesomeMarkers.icon({
         icon: 'train',
         prefix: 'fa',
-        markerColor: 'red',
+        markerColor: markerColor,
         iconColor: 'white'
       })
     });
@@ -365,6 +428,34 @@ class TramMarker {
     this.lastUpdate = performance.now();
     this.animationDuration = 1000; // Default fallback duration
     this.animating = false;
+  }
+  
+  getOccupancyColor(occupancyPercent) {
+    // Color code by occupancy: green (empty) -> yellow (half) -> red (full)
+    if (occupancyPercent < 30) {
+      return 'green';  // Empty to low
+    } else if (occupancyPercent < 60) {
+      return 'blue';  // Low to medium
+    } else if (occupancyPercent < 80) {
+      return 'orange';  // Medium to high
+    } else {
+      return 'red';  // High to full
+    }
+  }
+  
+  updateTooltip(data) {
+    const occupancy = data.occupancy_percent || 0;
+    const occupancyText = data.occupancy !== undefined 
+      ? `${data.occupancy}/${data.max_capacity || 200} (${occupancy.toFixed(1)}%)`
+      : 'N/A';
+    
+    this.marker.bindTooltip(
+      `Line ${data.line} - ${this.id}<br>Occupancy: ${occupancyText}`,
+      {
+        direction: 'top',
+        offset: [0, -35]
+      }
+    );
   }
 
   updateTarget(data) {
@@ -455,6 +546,7 @@ class SimulationController {
   constructor(map) {
     this.map = map;
     this.trams = {}; // tramId -> TramMarker instance
+    this.stopMarkers = {}; // stopId -> marker instance
     this.ws = null;
     this.timeDisplay = null;
     this.timeSlider = null;
@@ -654,6 +746,33 @@ class SimulationController {
     if (data.trams) {
       this.updateTrams(data.trams);
     }
+    
+    // Update stop states with passenger data
+    if (data.stop_states) {
+      this.updateStopStates(data.stop_states);
+    }
+    
+    // Log passenger data for debugging (occasionally)
+    if (data.passengers && Math.random() < 0.01) {
+      console.log(`Passengers - Waiting: ${data.passengers.total_waiting}, On trams: ${data.passengers.total_on_trams}`);
+    }
+  }
+  
+  updateStopStates(stopStates) {
+    // Update each stop marker with waiting passenger count
+    let updatedCount = 0;
+    for (const [stopId, stopData] of Object.entries(stopStates)) {
+      const marker = this.stopMarkers[stopId];
+      if (marker) {
+        updateStopMarker(marker, stopData.waiting_count || 0);
+        updatedCount++;
+      }
+    }
+    // Log if we have stop states but no matching markers
+    if (Object.keys(stopStates).length > 0 && updatedCount === 0) {
+      console.warn(`Stop states received but no markers matched. Stop IDs in states: ${Object.keys(stopStates).slice(0, 5).join(', ')}...`);
+      console.warn(`Available marker IDs: ${Object.keys(this.stopMarkers).slice(0, 5).join(', ')}...`);
+    }
   }
 
   updateTrams(tramsData) {
@@ -709,9 +828,18 @@ window.addEventListener('DOMContentLoaded', async () => {
     console.log('Loading data...');
     const [routesResult, stopsLoaded] = await Promise.all([
       loadTramRoutes(map, overlayMaps),
-      loadTramStops(stopsLayer, map),
+      loadTramStops(stopsLayer, map, simulation),
     ]);
     console.log('Data loaded', { stopsLoaded, routesResult });
+    
+    // Ensure stops layer is visible (checkbox is checked by default)
+    if (stopsLoaded && !map.hasLayer(stopsLayer)) {
+      console.log('Adding stops layer to map (should be visible)');
+      stopsLayer.addTo(map);
+    }
+    
+    // Log stop markers for debugging
+    console.log(`Stop markers stored: ${Object.keys(simulation.stopMarkers).length}`);
 
     // Initialize settings panel with line layers
     console.log('Initializing settings panel...');
