@@ -14,7 +14,36 @@ const CONFIG = {
     COLOR: '#4DA6FF',
     WEIGHT: 3,
     OPACITY: 0.7
+  },
+  TRAMS: {
+    COLOR: 'green'
   }
+};
+const icons = {
+  green: L.AwesomeMarkers.icon({
+    icon: 'train',
+    prefix: 'fa',
+    markerColor: 'green',
+    iconColor: 'white'
+  }),
+  blue: L.AwesomeMarkers.icon({
+    icon: 'train',
+    prefix: 'fa',
+    markerColor: 'blue',
+    iconColor: 'white'
+  }),
+  orange: L.AwesomeMarkers.icon({
+    icon: 'train',
+    prefix: 'fa',
+    markerColor: 'orange',
+    iconColor: 'white'
+  }),
+  red: L.AwesomeMarkers.icon({
+    icon: 'train',
+    prefix: 'fa',
+    markerColor: 'red',
+    iconColor: 'white'
+  })
 };
 
 // Map initialization
@@ -430,19 +459,30 @@ class TramMarker {
     this.animationDuration = 1000; // Default fallback duration
     this.animating = false;
   }
-  
-  getOccupancyColor(occupancyPercent) {
+
+  getOccupancyColor(occupancyNumber) {
     // Color code by occupancy: green (empty) -> yellow (half) -> red (full)
-    if (occupancyPercent < 30) {
+    if (occupancyNumber < 30) {
       return 'green';  // Empty to low
-    } else if (occupancyPercent < 60) {
+    } else if (occupancyNumber < 60) {
       return 'blue';  // Low to medium
-    } else if (occupancyPercent < 80) {
+    } else if (occupancyNumber < 80) {
       return 'orange';  // Medium to high
     } else {
       return 'red';  // High to full
     }
   }
+  getOccupancyIcon(occupancyNumber) {
+  if (occupancyNumber < 30) {
+    return icons.green;   // Empty to low
+  } else if (occupancyNumber < 60) {
+    return icons.blue;    // Low to medium
+  } else if (occupancyNumber < 80) {
+    return icons.orange;  // Medium to high
+  } else {
+    return icons.red;     // High to full
+  }
+}
   
   updateTooltip(data) {
     const occupancy = data.occupancy_percent || 0;
@@ -484,6 +524,9 @@ class TramMarker {
                 <b>Line:</b> ${this.data.line} - ${this.id}<br>
                 <b>Occupancy:</b> ${this.data.occupancy}
             `);
+
+    // Create Leaflet marker
+    this.marker.setIcon(this.getOccupancyIcon(this.data.occupancy))
 
     if (!this.animating) {
       this.animate();
