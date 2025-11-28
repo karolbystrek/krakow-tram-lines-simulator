@@ -26,12 +26,6 @@ const icons = {
     markerColor: 'green',
     iconColor: 'white'
   }),
-  blue: L.AwesomeMarkers.icon({
-    icon: 'train',
-    prefix: 'fa',
-    markerColor: 'blue',
-    iconColor: 'white'
-  }),
   orange: L.AwesomeMarkers.icon({
     icon: 'train',
     prefix: 'fa',
@@ -42,6 +36,12 @@ const icons = {
     icon: 'train',
     prefix: 'fa',
     markerColor: 'red',
+    iconColor: 'white'
+  }),
+  darkred: L.AwesomeMarkers.icon({
+    icon: 'train',
+    prefix: 'fa',
+    markerColor: 'darkred',
     iconColor: 'white'
   })
 };
@@ -108,17 +108,6 @@ function updateStopMarker(marker, waitingCount) {
   // Update color based on waiting passengers
   let color = CONFIG.STOPS.COLOR;
   let fillColor = CONFIG.STOPS.FILL_COLOR;
-  
-  if (waitingCount > 20) {
-    color = '#FF0000';  // Red for high passenger count
-    fillColor = '#FFCCCC';
-  } else if (waitingCount > 10) {
-    color = '#FF8800';  // Orange for medium-high
-    fillColor = '#FFE0CC';
-  } else if (waitingCount > 5) {
-    color = '#FFAA00';  // Yellow for medium
-    fillColor = '#FFF4CC';
-  }
   
   marker.setStyle({
     color: color,
@@ -422,24 +411,17 @@ class TramMarker {
     this.map = map;
     this.data = data;
     
-    // Get occupancy for color coding
-    const occupancy = data.occupancy_percent || 0;
-    const markerColor = this.getOccupancyColor(occupancy);
+    // Update marker color if occupancy changed
+    const occupancy = data.occupancy || 0;
+    const occupancyIcon = this.getOccupancyIcon(occupancy);
     
     // Create Leaflet marker
-    this.marker = L.marker([data.lat, data.lon], {
-      icon: L.AwesomeMarkers.icon({
-        icon: 'train',
-        prefix: 'fa',
-        markerColor: markerColor,
-        iconColor: 'white'
-      })
-    });
+    this.marker = L.marker([data.lat, data.lon], occupancyIcon);
 
-    // this.marker.bindTooltip(`Line ${data.line} - ${id}`, {
-    //   direction: 'top',
-    //   offset: [0, -35]
-    // });
+    this.marker.bindTooltip(`Line ${data.line} - ${id}`, {
+      direction: 'top',
+      offset: [0, -35]
+    });
 
     this.data.occupancy = data.occupancy;
     this.marker.bindTooltip(`<b>Line:</b> ${this.data.line} - ${id}<br>
@@ -460,27 +442,15 @@ class TramMarker {
     this.animating = false;
   }
 
-  getOccupancyColor(occupancyNumber) {
-    // Color code by occupancy: green (empty) -> yellow (half) -> red (full)
-    if (occupancyNumber < 30) {
-      return 'green';  // Empty to low
-    } else if (occupancyNumber < 60) {
-      return 'blue';  // Low to medium
-    } else if (occupancyNumber < 80) {
-      return 'orange';  // Medium to high
-    } else {
-      return 'red';  // High to full
-    }
-  }
   getOccupancyIcon(occupancyNumber) {
-  if (occupancyNumber < 30) {
-    return icons.green;   // Empty to low
-  } else if (occupancyNumber < 60) {
-    return icons.blue;    // Low to medium
-  } else if (occupancyNumber < 80) {
-    return icons.orange;  // Medium to high
+  if (occupancyNumber < 50) {
+    return icons.green;
+  } else if (occupancyNumber < 100) {
+    return icons.orange;
+  } else if (occupancyNumber < 150) {
+    return icons.red;
   } else {
-    return icons.red;     // High to full
+    return icons.darkred;
   }
 }
   
