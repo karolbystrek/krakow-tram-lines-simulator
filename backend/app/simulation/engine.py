@@ -358,7 +358,7 @@ class SimulationEngine:
         
         # Create mapping from stop_num coordinates to kod_busman
         # This allows us to find the correct stop state when trams arrive
-        # Key: (lat, lon) rounded to 6 decimals, Value: kod_busman
+        # Key: (lat, lon) rounded to 6 decimals, Value: List[kod_busman] (can be multiple stops at same location)
         self.stop_num_to_kod_busman = {}
         
         # Build mapping by matching stop_num coordinates to geojson stop coordinates
@@ -371,16 +371,20 @@ class SimulationEngine:
                         sched_lon = round(float(stop_time.stop_lon), 6)
                         coord_key = (sched_lat, sched_lon)
                         
-                        # Find matching geojson stop by coordinates
+                        # Find ALL matching geojson stops by coordinates (multiple stops can share coordinates)
                         if coord_key not in self.stop_num_to_kod_busman:
+                            matching_stops = []
                             for kod_busman, geojson_stop in stops.items():
                                 geojson_lat = round(float(geojson_stop.lat), 6)
                                 geojson_lon = round(float(geojson_stop.lon), 6)
                                 
                                 # Match within small threshold (0.001 degrees ~ 11 meters)
                                 if abs(sched_lat - geojson_lat) < 0.001 and abs(sched_lon - geojson_lon) < 0.001:
-                                    self.stop_num_to_kod_busman[coord_key] = kod_busman
-                                    break
+                                    matching_stops.append(kod_busman)
+                            
+                            # Store list of matching stops (can be empty, single, or multiple)
+                            if matching_stops:
+                                self.stop_num_to_kod_busman[coord_key] = matching_stops
         
         # Initialize tram states for all blocks
         self.tram_states = {}
@@ -436,9 +440,9 @@ class SimulationEngine:
                 
                 # Process if within time window AND not processed in last 1 minute
                 if time_diff < 0.5 and (self.current_time_minutes - last_processed) > 1.0:
-                    # Find the correct stop state by matching coordinates
-                    # Passengers are waiting at stops keyed by kod_busman, not stop_num
-                    stop_state = None
+                    # Find ALL matching stop states by matching coordinates
+                    # Multiple stops can share the same coordinates, and we need to board passengers from ALL of them
+                    matching_stop_states = []
                     
                     if stop_time.stop_lat and stop_time.stop_lon:
                         # Round coordinates to match precision
@@ -446,22 +450,29 @@ class SimulationEngine:
                         sched_lon = round(float(stop_time.stop_lon), 6)
                         coord_key = (sched_lat, sched_lon)
                         
-                        # Find matching kod_busman from mapping
-                        kod_busman = self.stop_num_to_kod_busman.get(coord_key)
-                        if kod_busman:
-                            stop_state = self.stop_states.get(kod_busman)
+                        # Find ALL matching kod_busman values from mapping (can be multiple stops at same location)
+                        kod_busman_list = self.stop_num_to_kod_busman.get(coord_key)
+                        if kod_busman_list:
+                            # kod_busman_list is now a list, not a single value
+                            for kod_busman in kod_busman_list:
+                                stop_state = self.stop_states.get(kod_busman)
+                                if stop_state:
+                                    matching_stop_states.append(stop_state)
                     
                     # Fallback: try direct lookup by stop_num (for backwards compatibility)
-                    if not stop_state:
+                    if not matching_stop_states:
                         stop_id = stop_time.stop_num
                         stop_state = self.stop_states.get(stop_id)
+                        if stop_state:
+                            matching_stop_states.append(stop_state)
                     
                     # Create if somehow missing
-                    if not stop_state:
+                    if not matching_stop_states:
                         # Use stop_num as fallback
                         stop_id = stop_time.stop_num
                         stop_state = StopState(stop_id=stop_id)
                         self.stop_states[stop_id] = stop_state
+                        matching_stop_states.append(stop_state)
                         print(f"DEBUG: Created new stop state for {stop_id} (fallback). Coordinates: {stop_time.stop_lat}, {stop_time.stop_lon}")
                     
                     # Get tram state (should already exist)
@@ -471,10 +482,28 @@ class SimulationEngine:
                         self.tram_states[block.block_id] = tram_state
                     
                     # Handle boarding/alighting
-                    boarded, alighted = self.passenger_manager.handle_tram_at_stop(
-                        block, stop_time, self.current_time_minutes,
-                        stop_state, tram_state
-                    )
+                    # Alighting happens once (based on stop_num), but boarding happens from ALL matching stops
+                    total_boarded = 0
+                    total_alighted = 0
+                    
+                    # Process first stop with alighting + boarding
+                    if matching_stop_states:
+                        boarded, alighted = self.passenger_manager.handle_tram_at_stop(
+                            block, stop_time, self.current_time_minutes,
+                            matching_stop_states[0], tram_state,
+                            skip_alighting=False
+                        )
+                        total_boarded += boarded
+                        total_alighted = alighted
+                    
+                    # Board passengers from remaining matching stops (skip alighting - already done)
+                    for stop_state in matching_stop_states[1:]:
+                        boarded, _ = self.passenger_manager.handle_tram_at_stop(
+                            block, stop_time, self.current_time_minutes,
+                            stop_state, tram_state,
+                            skip_alighting=True
+                        )
+                        total_boarded += boarded
                     
                     # Mark this stop as processed
                     self.processed_stops[stop_key] = self.current_time_minutes

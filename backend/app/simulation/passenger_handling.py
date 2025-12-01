@@ -21,10 +21,14 @@ class PassengerManager:
         stop_time: StopTime,
         current_time_minutes: float,
         stop_state: StopState,
-        tram_state: TramState
+        tram_state: TramState,
+        skip_alighting: bool = False
     ) -> Tuple[int, int]:
         """
         Handle passenger boarding and alighting at a stop
+        
+        Args:
+            skip_alighting: If True, skip alighting step (useful when multiple stops share coordinates)
         
         Returns: (passengers_boarded, passengers_alighted)
         
@@ -35,27 +39,28 @@ class PassengerManager:
         passengers_alighted = 0
         passengers_boarded = 0
         
-        # Step 1: Alighting
-        # Find passengers whose destination is this stop
-        # Only alight passengers whose destination exactly matches this stop's stop_num
-        passengers_to_alight = [
-            p for p in tram_state.passengers 
-            if p.status == "ON_TRAM" and p.destination_stop_id == stop_time.stop_num
-        ]
-        
-        for passenger in passengers_to_alight:
-            passenger.status = "ALIGHTED"
-            passenger.alighting_time_minutes = current_time_minutes
-            passenger.current_tram_id = None
-            passengers_alighted += 1
-        
-        # Remove alighted passengers from tram
-        # Keep only passengers that are still ON_TRAM
-        tram_state.passengers = [
-            p for p in tram_state.passengers 
-            if p.status == "ON_TRAM"
-        ]
-        tram_state.update_occupancy()
+        # Step 1: Alighting (skip if requested - used when multiple stops share coordinates)
+        if not skip_alighting:
+            # Find passengers whose destination is this stop
+            # Only alight passengers whose destination exactly matches this stop's stop_num
+            passengers_to_alight = [
+                p for p in tram_state.passengers 
+                if p.status == "ON_TRAM" and p.destination_stop_id == stop_time.stop_num
+            ]
+            
+            for passenger in passengers_to_alight:
+                passenger.status = "ALIGHTED"
+                passenger.alighting_time_minutes = current_time_minutes
+                passenger.current_tram_id = None
+                passengers_alighted += 1
+            
+            # Remove alighted passengers from tram
+            # Keep only passengers that are still ON_TRAM
+            tram_state.passengers = [
+                p for p in tram_state.passengers 
+                if p.status == "ON_TRAM"
+            ]
+            tram_state.update_occupancy()
         
         # Step 2: Boarding
         # Get waiting passengers at this stop
@@ -112,9 +117,10 @@ class PassengerManager:
         
         # Remove boarded passengers from waiting queue
         # Use list comprehension to filter out boarded passengers
+        remove_ids = set(p.passenger_id for p in passengers_to_remove)
         stop_state.waiting_passengers = [
             p for p in stop_state.waiting_passengers 
-            if p not in passengers_to_remove
+            if p.passenger_id not in remove_ids and p.status == "WAITING"
         ]
         
         # Also clean up any passengers that are no longer WAITING (defensive)
