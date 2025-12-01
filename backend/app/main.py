@@ -34,6 +34,9 @@ async def startup_event():
     print(f"Loaded {len(app.state.tram_stops)} tram stops.")
     print(f"Loaded {len(app.state.tram_shapes)} tram line shapes.")
     
+    # Cache stops in engine to avoid reloading
+    simulation_engine._cached_stops = app.state.tram_stops
+    
     # Start the simulation
     await simulation_engine.start()
 

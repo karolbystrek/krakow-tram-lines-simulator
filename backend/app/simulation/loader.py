@@ -32,6 +32,9 @@ def load_shapes_from_geojson() -> Dict[str, List[Shape]]:
     return shapes_by_line
 
 
+# Cache for stop coordinates to avoid rescanning all services
+_cached_stop_coordinates = None
+
 def get_tram_stop_coordinates_from_schedules() -> set:
     """
     Collect all unique stop coordinates from tram schedule data across all services.
@@ -43,9 +46,16 @@ def get_tram_stop_coordinates_from_schedules() -> set:
     Returns:
         Set of tuples (lat, lon) representing stop coordinates used in tram schedules
     """
+    global _cached_stop_coordinates
+    
+    # Return cached result if available
+    if _cached_stop_coordinates is not None:
+        return _cached_stop_coordinates
+    
     tram_stop_coords = set()
     
     if not TRAM_LINES_DATA_DIR.exists():
+        _cached_stop_coordinates = tram_stop_coords
         return tram_stop_coords
     
     # Check all services
@@ -82,6 +92,8 @@ def get_tram_stop_coordinates_from_schedules() -> set:
                     # Skip files that can't be read
                     continue
     
+    # Cache the result
+    _cached_stop_coordinates = tram_stop_coords
     return tram_stop_coords
 
 

@@ -40,37 +40,10 @@ class SimulationEngine:
         # Key: (block_id, stop_num), Value: last processed time
         self.processed_stops: Dict[Tuple[str, str], float] = {}
         
-        # Preload all services
-        services = ["service_1", "service_2", "service_3", "service_4", "service_5"]
-        print("Preloading all services...")
-        
-        for svc in services:
-            print(f"Loading {svc}...")
-            blocks_by_line = load_tram_blocks(service=svc)
-            all_blocks = []
-            for line_blocks in blocks_by_line.values():
-                all_blocks.extend(line_blocks)
-            
-            self.cached_services[svc] = all_blocks
-            
-            # Calculate bounds for this service
-            min_time = 24 * 60
-            max_time = 0
-            
-            for block in all_blocks:
-                for trip in block.trips:
-                    trip.initialize_shape_indices()
-                    start = trip.get_start_time_minutes()
-                    end = trip.get_end_time_minutes()
-                    if start < min_time: min_time = start
-                    if end > max_time: max_time = end
-            
-            if not all_blocks:
-                min_time = 0
-                max_time = 24 * 60
-                
-            self.service_bounds[svc] = (min_time, max_time)
-            print(f"Loaded {svc}: {len(all_blocks)} blocks, range {min_time}-{max_time}")
+        # Lazy-load services: Only load the needed service initially for faster startup
+        # Other services will be loaded on-demand when switching services
+        print(f"Loading initial service: {service_id}...")
+        self._load_service(service_id)
 
     async def start(self):
         """Start the simulation loop."""
@@ -96,16 +69,52 @@ class SimulationEngine:
         
         # Initialize passenger simulation (only if blocks are loaded)
         if self.blocks:
-            self._initialize_passenger_simulation()
+            # Stops will be passed from main.py if available, otherwise load them
+            self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
         else:
             print("Warning: No blocks loaded, skipping passenger simulation initialization")
             
         print("Simulation started.")
         self.task = asyncio.create_task(self._loop())
 
+    def _load_service(self, service_id: str):
+        """Load a service into cache if not already loaded."""
+        if service_id in self.cached_services:
+            return  # Already loaded
+        
+        print(f"Loading {service_id}...")
+        blocks_by_line = load_tram_blocks(service=service_id)
+        all_blocks = []
+        for line_blocks in blocks_by_line.values():
+            all_blocks.extend(line_blocks)
+        
+        self.cached_services[service_id] = all_blocks
+        
+        # Calculate bounds for this service
+        min_time = 24 * 60
+        max_time = 0
+        
+        for block in all_blocks:
+            for trip in block.trips:
+                trip.initialize_shape_indices()
+                start = trip.get_start_time_minutes()
+                end = trip.get_end_time_minutes()
+                if start < min_time: min_time = start
+                if end > max_time: max_time = end
+        
+        if not all_blocks:
+            min_time = 0
+            max_time = 24 * 60
+            
+        self.service_bounds[service_id] = (min_time, max_time)
+        print(f"Loaded {service_id}: {len(all_blocks)} blocks, range {min_time}-{max_time}")
+
     async def reload_service(self, service_id: str):
         """Reload the simulation with a new service ID."""
         print(f"Reloading simulation with service: {service_id}")
+        
+        # Load the service if not already cached
+        self._load_service(service_id)
         
         # Stop current simulation
         await self.stop()
@@ -117,7 +126,7 @@ class SimulationEngine:
         self.stop_states = {}
         self.tram_states = {}
         
-        # Restart simulation (start() will pick up new service from cache)
+        # Restart simulation (start() will pick up new service from cache and use cached stops)
         await self.start()
 
     async def stop(self):
@@ -147,8 +156,8 @@ class SimulationEngine:
         """Restart the simulation."""
         self.current_time_minutes = self.start_time_minutes
         self.paused = False
-        # Reset passenger simulation
-        self._initialize_passenger_simulation()
+        # Reset passenger simulation (use cached stops if available)
+        self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
         print("Simulation restarted.")
 
     async def _loop(self):
@@ -220,7 +229,7 @@ class SimulationEngine:
         # If jumping backward significantly, reset passenger simulation
         if time_minutes < old_time - 60:  # Jumped back more than 1 hour
             print("Time jumped backward significantly, resetting passenger simulation...")
-            self._initialize_passenger_simulation()
+            self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
         
         print(f"Simulation time manually set to: {int(self.current_time_minutes // 60):02d}:{int(self.current_time_minutes % 60):02d}")
 
@@ -345,10 +354,15 @@ class SimulationEngine:
         
         return lat, lon
     
-    def _initialize_passenger_simulation(self):
-        """Initialize passenger simulation state."""
-        # Load all stops to create stop states
-        stops = load_tram_stops()
+    def _initialize_passenger_simulation(self, stops: Optional[Dict] = None):
+        """Initialize passenger simulation state.
+        
+        Args:
+            stops: Optional pre-loaded stops dict to avoid reloading. If None, loads stops.
+        """
+        # Use provided stops or load them
+        if stops is None:
+            stops = load_tram_stops()
         
         # Initialize stop states for all stops (by kod_busman)
         # These are the stops where passengers will actually wait
