@@ -1,15 +1,14 @@
 import asyncio
-import time
+import threading
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy
+import simpy
 
 from .models import TramBlock, Trip, StopTime
 from .loader import load_tram_blocks, load_tram_stops
 from .passenger_model import StopState, TramState
 from .arrival_model import ArrivalRateModel
 from .passenger_handling import PassengerManager
-from .passenger_predictor import PassengerPredictor
 
 class SimulationEngine:
     def __init__(self, service_id: str = "service_1"):
@@ -19,12 +18,14 @@ class SimulationEngine:
         self.paused = False
         self.start_time_minutes = 0
         self.end_time_minutes = 24 * 60
-        self.current_time_minutes = 0
         self.task = None # Keep task for potential cancellation if needed later
         self.service_id = service_id
 
-        # Prediction setup
-        self.predictor = PassengerPredictor()
+        # SimPy environment
+        self.env = simpy.Environment()
+        self.simpy_thread = None
+        self.simpy_running = False
+        self._time_lock = threading.Lock()
 
         # Cache for all services
         self.cached_services: Dict[str, List[TramBlock]] = {}
@@ -44,6 +45,12 @@ class SimulationEngine:
         # Other services will be loaded on-demand when switching services
         print(f"Loading initial service: {service_id}...")
         self._load_service(service_id)
+    
+    @property
+    def current_time_minutes(self) -> float:
+        """Get current simulation time from simpy environment."""
+        with self._time_lock:
+            return self.env.now if hasattr(self, 'env') and self.env else 0.0
 
     async def start(self):
         """Start the simulation loop."""
@@ -60,7 +67,6 @@ class SimulationEngine:
             if self.service_id in self.cached_services:
                 self.blocks = self.cached_services[self.service_id]
                 self.start_time_minutes, self.end_time_minutes = self.service_bounds[self.service_id]
-                self.current_time_minutes = self.start_time_minutes
                 
                 print(f"Simulation range: {self.start_time_minutes // 60:02d}:{self.start_time_minutes % 60:02d} - {self.end_time_minutes // 60:02d}:{self.end_time_minutes % 60:02d}")
             else:
@@ -73,6 +79,9 @@ class SimulationEngine:
             self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
         else:
             print("Warning: No blocks loaded, skipping passenger simulation initialization")
+        
+        # Initialize and start simpy
+        self._reset_env(self.start_time_minutes)
             
         print("Simulation started.")
         self.task = asyncio.create_task(self._loop())
@@ -132,6 +141,7 @@ class SimulationEngine:
     async def stop(self):
         """Stop the simulation."""
         self.running = False
+        self.simpy_running = False
         if self.task:
             self.task.cancel()
             try:
@@ -139,6 +149,9 @@ class SimulationEngine:
             except asyncio.CancelledError:
                 pass
 
+        # Wait for simpy thread to finish
+        if self.simpy_thread and self.simpy_thread.is_alive():
+            self.simpy_thread.join(timeout=1.0)
 
         print("Simulation stopped.")
 
@@ -154,33 +167,92 @@ class SimulationEngine:
 
     def restart(self):
         """Restart the simulation."""
-        self.current_time_minutes = self.start_time_minutes
         self.paused = False
         # Reset passenger simulation (use cached stops if available)
         self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
+        # Reset simpy environment/thread
+        self._reset_env(self.start_time_minutes)
         print("Simulation restarted.")
 
+    def _run_simpy(self):
+        """Run simpy simulation in a separate thread."""
+        import time as real_time
+        try:
+            while self.simpy_running:
+                if not self.paused:
+                    # Run simpy for a small step (0.1 minutes)
+                    # Match original speed: 0.1 minutes simulation = 0.1 seconds real time
+                    start_real_time = real_time.time()
+                    current_simpy_time = self.env.now
+                    next_timeout = min(current_simpy_time + 0.1, self.end_time_minutes)
+                    
+                    if next_timeout > current_simpy_time:
+                        # Run simpy until next timeout
+                        self.env.run(until=next_timeout)
+                        
+                        # Wait to match real-time speed (0.1 minutes sim = 0.1 seconds real)
+                        elapsed_real = real_time.time() - start_real_time
+                        sleep_time = max(0, 0.1 - elapsed_real)
+                        if sleep_time > 0:
+                            real_time.sleep(sleep_time)
+                        
+                        # Check if we've reached the end
+                        if self.env.now >= self.end_time_minutes:
+                            print("Simulation finished (end time reached).")
+                            self.running = False
+                            self.simpy_running = False
+                            break
+                    else:
+                        # Reached end time
+                        break
+                else:
+                    # When paused, just sleep a bit to avoid busy waiting
+                    real_time.sleep(0.1)
+        except Exception as e:
+            print(f"Error in simpy thread: {e}")
+            import traceback
+            traceback.print_exc()
+            self.running = False
+            self.simpy_running = False
+    
+    def _simpy_passenger_update_loop(self):
+        """Simpy process for passenger simulation updates."""
+        while self.simpy_running and self.env.now < self.end_time_minutes:
+            # Wait for 0.1 minutes of simulation time
+            yield self.env.timeout(0.1)
+            
+            # Update passenger simulation (only if initialized)
+            if self.stop_states:
+                self._update_passenger_simulation(delta_time=0.1)
+            
+            # Check if we've reached the end
+            if self.env.now >= self.end_time_minutes:
+                break
+
     async def _loop(self):
-        """Main simulation loop."""
+        """Main asyncio loop for WebSocket updates."""
         print("Simulation loop started.")
         while self.running:
-            # 0.1 second real time = 0.1 minute simulation time
+            # 0.1 second real time for WebSocket updates
             await asyncio.sleep(0.1)
-            
-            if not self.paused:
-                self.current_time_minutes += 0.1
-                
-                # Update passenger simulation (only if initialized)
-                if self.stop_states:
-                    self._update_passenger_simulation(delta_time=0.1)
-                
-                # Stop if we go past the end time
-                if self.current_time_minutes > self.end_time_minutes:
-                    print("Simulation finished (end time reached).")
-                    self.running = False
-                    break
-            
-            # print(f"Simulation time: {self.current_time_minutes // 60:02d}:{self.current_time_minutes % 60:02d}")
+            # Time is managed by simpy, we just keep the loop running for WebSocket updates
+
+    def _reset_env(self, initial_time: float):
+        """Reset SimPy environment and thread safely."""
+        # Stop existing simpy loop if running
+        self.simpy_running = False
+        if self.simpy_thread and self.simpy_thread.is_alive():
+            self.simpy_thread.join(timeout=1.0)
+
+        # Create new environment
+        with self._time_lock:
+            self.env = simpy.Environment(initial_time=initial_time)
+            self.simpy_running = True
+            self.env.process(self._simpy_passenger_update_loop())
+
+        # Start simpy in a separate thread
+        self.simpy_thread = threading.Thread(target=self._run_simpy, daemon=True)
+        self.simpy_thread.start()
 
     def get_tram_positions(self) -> List[Dict[str, Any]]:
         """Get current positions of all active trams."""
@@ -224,14 +296,20 @@ class SimulationEngine:
         # Clamp time to valid range
         old_time = self.current_time_minutes
         time_minutes = max(self.start_time_minutes, min(time_minutes, self.end_time_minutes))
-        self.current_time_minutes = time_minutes
+        
+        # Update simpy environment time safely
+        if self.running:
+            self._reset_env(time_minutes)
+        else:
+            with self._time_lock:
+                self.env = simpy.Environment(initial_time=time_minutes)
         
         # If jumping backward significantly, reset passenger simulation
         if time_minutes < old_time - 60:  # Jumped back more than 1 hour
             print("Time jumped backward significantly, resetting passenger simulation...")
             self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
         
-        print(f"Simulation time manually set to: {int(self.current_time_minutes // 60):02d}:{int(self.current_time_minutes % 60):02d}")
+        print(f"Simulation time manually set to: {int(time_minutes // 60):02d}:{int(time_minutes % 60):02d}")
 
     def get_status(self) -> Dict[str, Any]:
         """Get current simulation status."""
@@ -413,11 +491,13 @@ class SimulationEngine:
     
     def _update_passenger_simulation(self, delta_time: float):
         """Update passenger simulation for one time step."""
+        current_time = self.env.now
+        
         # 1. Generate new arrivals at all stops
         for stop_state in self.stop_states.values():
             new_passengers = self.arrival_model.generate_arrivals(
                 stop_state,
-                self.current_time_minutes,
+                current_time,
                 delta_time,
                 self.service_id
             )
@@ -428,7 +508,7 @@ class SimulationEngine:
         
         # 3. Clean up old processed_stops entries (older than 10 minutes) to prevent memory growth
         if len(self.processed_stops) > 1000:  # Only clean if we have many entries
-            cutoff_time = self.current_time_minutes - 10.0
+            cutoff_time = current_time - 10.0
             self.processed_stops = {
                 k: v for k, v in self.processed_stops.items() 
                 if v > cutoff_time
@@ -436,8 +516,10 @@ class SimulationEngine:
     
     def _process_tram_arrivals(self):
         """Check all active trams and process arrivals at stops."""
+        current_time = self.env.now
+        
         for block in self.blocks:
-            active_trip = block.get_active_trip(self.current_time_minutes)
+            active_trip = block.get_active_trip(current_time)
             if not active_trip:
                 continue
             
@@ -445,7 +527,7 @@ class SimulationEngine:
             # Increased tolerance to 0.5 minutes (30 seconds) to ensure stops aren't missed
             for stop_time in active_trip.stop_times:
                 scheduled_time = stop_time.to_minutes()
-                time_diff = abs(self.current_time_minutes - scheduled_time)
+                time_diff = abs(current_time - scheduled_time)
                 
                 # If within 0.5 minute of scheduled stop time (before or after)
                 # Also check that we haven't already processed this stop recently
@@ -453,7 +535,7 @@ class SimulationEngine:
                 last_processed = self.processed_stops.get(stop_key, -999)
                 
                 # Process if within time window AND not processed in last 1 minute
-                if time_diff < 0.5 and (self.current_time_minutes - last_processed) > 1.0:
+                if time_diff < 0.5 and (current_time - last_processed) > 1.0:
                     # Find ALL matching stop states by matching coordinates
                     # Multiple stops can share the same coordinates, and we need to board passengers from ALL of them
                     matching_stop_states = []
@@ -503,7 +585,7 @@ class SimulationEngine:
                     # Process first stop with alighting + boarding
                     if matching_stop_states:
                         boarded, alighted = self.passenger_manager.handle_tram_at_stop(
-                            block, stop_time, self.current_time_minutes,
+                            block, stop_time, current_time,
                             matching_stop_states[0], tram_state,
                             skip_alighting=False
                         )
@@ -513,14 +595,14 @@ class SimulationEngine:
                     # Board passengers from remaining matching stops (skip alighting - already done)
                     for stop_state in matching_stop_states[1:]:
                         boarded, _ = self.passenger_manager.handle_tram_at_stop(
-                            block, stop_time, self.current_time_minutes,
+                            block, stop_time, current_time,
                             stop_state, tram_state,
                             skip_alighting=True
                         )
                         total_boarded += boarded
                     
                     # Mark this stop as processed
-                    self.processed_stops[stop_key] = self.current_time_minutes
+                    self.processed_stops[stop_key] = current_time
                     
                     # Only process once per stop arrival (avoid duplicate processing)
                     # Move to next block after processing one stop
