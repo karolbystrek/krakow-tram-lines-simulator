@@ -1,6 +1,5 @@
-/* CSS Variables */
 :root {
-    --color-primary: #2196F3; /* Modern Blue */
+    --color-primary: #2196F3;
     --color-primary-hover: #1976D2;
     --color-secondary: #f5f5f5;
     --color-secondary-hover: #e0e0e0;
@@ -27,7 +26,6 @@ body {
     overflow: hidden;
 }
 
-/* Map */
 #map {
     height: 100vh;
     width: 100vw;
@@ -37,7 +35,6 @@ body {
     z-index: 1;
 }
 
-/* UI Panels */
 .control-panel {
     position: fixed;
     background: var(--color-bg);
@@ -58,7 +55,7 @@ body {
 #settings-panel {
     top: 20px;
     right: 20px;
-    padding: 0; /* Reset padding for the toggle button container */
+    padding: 0;
     background: transparent;
     box-shadow: none;
 }
@@ -67,7 +64,7 @@ body {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    padding: 0 32px 0 12px; /* Extra padding on right for arrow */
+    padding: 0 32px 0 12px;
     border: 1px solid var(--color-border);
     border-radius: 6px;
     font-size: 14px;
@@ -77,10 +74,8 @@ body {
     cursor: pointer;
     transition: all var(--transition-base);
     outline: none;
-    height: 35px; /* Match button height */
+    height: 35px;
     line-height: 1.5;
-    
-    /* Custom Arrow */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.762L10.825 4z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 10px center;
@@ -97,7 +92,6 @@ body {
     box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
 }
 
-/* Buttons */
 .btn {
     padding: 8px 16px;
     border: none;
@@ -166,7 +160,6 @@ body {
     background: var(--color-primary-hover);
 }
 
-/* Settings Content */
 .settings-content {
     position: absolute;
     top: 56px;
@@ -356,7 +349,7 @@ body {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #1E6BB8; /* Blue to match time slider */
+    background: #1E6BB8;
     cursor: pointer;
     transition: transform 0.1s, background 0.2s;
     border: 2px solid #fff;
@@ -401,4 +394,91 @@ body {
     min-width: auto;
     font-variant-numeric: tabular-nums;
     text-align: right;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+}
+
+.overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--color-text);
+}
+
+.loading-text {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.tram-spinner {
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    animation: pulse 1.5s infinite ease-in-out;
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+    }
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 20px rgba(33, 150, 243, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+    }
+}
+
+.error-content h2 {
+    margin: 16px 0 8px 0;
+    color: #d32f2f;
+}
+
+.error-content p {
+    margin: 0 0 24px 0;
+    color: var(--color-text-light);
+}
+
+.error-icon {
+    color: #ef5350;
+    margin-bottom: 8px;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
 }

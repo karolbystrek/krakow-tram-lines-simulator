@@ -15,13 +15,14 @@ export class SimulationUI {
     this.isDraggingTimeSlider = false;
     this.isDraggingSpeedSlider = false;
 
+    this.loadingOverlay = document.getElementById('loading-overlay');
+    this.connectionErrorOverlay = document.getElementById('connection-error-overlay');
+
     this.initializeControls();
   }
 
   initializeControls() {
-    if (this.timeDisplay) {
-        this.timeDisplay.textContent = 'Connecting...';
-    }
+    this.showLoading();
 
     this.initializeTimeSlider();
     this.initializeSpeedSlider();
@@ -108,7 +109,7 @@ export class SimulationUI {
     this.serviceSelector.value = getDefaultService();
     this.serviceSelector.addEventListener('change', (e) => {
       this.client.sendCommand('change_service', { service_id: e.target.value });
-      if (this.timeDisplay) this.timeDisplay.textContent = 'Loading...';
+      this.showLoading();
     });
   }
 
@@ -134,6 +135,7 @@ export class SimulationUI {
   update(data) {
     if (data.time) {
       this.updateTimeDisplay(data.time);
+      this.hideLoading();
     }
 
     if (this.pauseBtn && data.status) {
@@ -170,8 +172,35 @@ export class SimulationUI {
   }
 
   setConnected(isConnected) {
-    if (this.timeDisplay) {
-        this.timeDisplay.textContent = isConnected ? 'Connected' : 'Disconnected';
+    if (isConnected) {
+        this.hideConnectionError();
+    } else {
+        this.showConnectionError();
     }
+  }
+
+  showLoading() {
+      if (this.loadingOverlay) {
+          this.loadingOverlay.classList.remove('hidden');
+      }
+  }
+
+  hideLoading() {
+      if (this.loadingOverlay) {
+          this.loadingOverlay.classList.add('hidden');
+      }
+  }
+
+  showConnectionError() {
+      if (this.connectionErrorOverlay) {
+          this.hideLoading();
+          this.connectionErrorOverlay.classList.remove('hidden');
+      }
+  }
+
+  hideConnectionError() {
+      if (this.connectionErrorOverlay) {
+          this.connectionErrorOverlay.classList.add('hidden');
+      }
   }
 }
