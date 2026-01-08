@@ -32,74 +32,57 @@ export class TramMarker {
     this.id = id;
     this.map = map;
     this.data = data;
+    this.currentOccupancyLevel = -1;
 
-    // Update marker color if occupancy changed
     const occupancy = data.occupancy || 0;
     const occupancyIcon = this.getOccupancyIcon(occupancy);
-
-    // Create Leaflet marker
-    this.marker = L.marker([data.lat, data.lon], occupancyIcon);
-
-    this.marker.bindTooltip(`Line ${data.line} - ${id}`, {
-      direction: 'top',
-      offset: [0, -35]
-    });
+    this.currentOccupancyLevel = this.getOccupancyLevel(occupancy);
+    
+    this.marker = L.marker([data.lat, data.lon], { icon: occupancyIcon });
 
     this.data.occupancy = data.occupancy;
-    this.marker.bindTooltip(`<b>Line:</b> ${this.data.line} - ${id}<br>
-                             <b>Occupancy:</b> ${this.data.occupancy}`, {
+    this.marker.bindTooltip(this.getTooltipContent(data), {
       direction: 'top',
       offset: [0, -35]
     });
 
     this.marker.addTo(map);
 
-    // Interpolation state
     this.currentLat = data.lat;
     this.currentLon = data.lon;
     this.targetLat = data.lat;
     this.targetLon = data.lon;
     this.lastUpdate = performance.now();
-    this.animationDuration = 1000; // Default fallback duration
+    this.animationDuration = 1000;
     this.animating = false;
   }
 
-  getOccupancyIcon(occupancyNumber) {
-  if (occupancyNumber < 50) {
-    return icons.green;
-  } else if (occupancyNumber < 100) {
-    return icons.orange;
-  } else if (occupancyNumber < 150) {
-    return icons.red;
-  } else {
-    return icons.darkred;
+  getOccupancyLevel(occupancy) {
+    if (occupancy < 50) return 0;
+    if (occupancy < 100) return 1;
+    if (occupancy < 150) return 2;
+    return 3;
   }
-}
 
-  updateTooltip(data) {
-    const occupancy = data.occupancy_percent || 0;
-    const occupancyText = data.occupancy !== undefined
-      ? `${data.occupancy}/${data.max_capacity || 200} (${occupancy.toFixed(1)}%)`
-      : 'N/A';
+  getOccupancyIcon(occupancyNumber) {
+    const level = this.getOccupancyLevel(occupancyNumber);
+    switch (level) {
+      case 0: return icons.green;
+      case 1: return icons.orange;
+      case 2: return icons.red;
+      default: return icons.darkred;
+    }
+  }
 
-    this.marker.bindTooltip(
-      `Line ${data.line} - ${this.id}<br>Occupancy: ${occupancyText}`,
-      {
-        direction: 'top',
-        offset: [0, -35]
-      }
-    );
+  getTooltipContent(data) {
+    const occupancy = data.occupancy || 0;
+    return `<b>Line:</b> ${data.line} - ${this.id}<br><b>Occupancy:</b> ${occupancy}`;
   }
 
   updateTarget(data) {
     const now = performance.now();
-    // Calculate time since last update to adjust animation duration dynamically
-    // This makes it modular: if server sends every 100ms, duration becomes ~100ms.
-    // If server sends every 1s, duration becomes ~1s.
     const timeDelta = now - this.lastUpdate;
 
-    // Smooth out jitter by averaging or clamping?
-    // For simplicity, just use the delta, but clamp it to reasonable bounds to avoid jumps on pauses
     if (timeDelta > 0 && timeDelta < 5000) {
         this.animationDuration = timeDelta;
     }
@@ -111,14 +94,16 @@ export class TramMarker {
     this.targetLon = data.lon;
     this.startTime = now;
 
-    this.data.occupancy = data.occupancy;
-            this.marker.setTooltipContent(`
-                <b>Line:</b> ${this.data.line} - ${this.id}<br>
-                <b>Occupancy:</b> ${this.data.occupancy}
-            `);
-
-    // Create Leaflet marker
-    this.marker.setIcon(this.getOccupancyIcon(this.data.occupancy))
+    if (this.data.occupancy !== data.occupancy) {
+        this.data.occupancy = data.occupancy;
+        this.marker.setTooltipContent(this.getTooltipContent(data));
+        
+        const newLevel = this.getOccupancyLevel(data.occupancy);
+        if (newLevel !== this.currentOccupancyLevel) {
+            this.currentOccupancyLevel = newLevel;
+            this.marker.setIcon(this.getOccupancyIcon(data.occupancy));
+        }
+    }
 
     if (!this.animating) {
       this.animate();
@@ -128,12 +113,11 @@ export class TramMarker {
   animate() {
     this.animating = true;
 
-    requestAnimationFrame((timestamp) => {
+    requestAnimationFrame(() => {
       const now = performance.now();
       const elapsed = now - this.startTime;
       const progress = Math.min(elapsed / this.animationDuration, 1.0);
 
-      // Linear interpolation
       this.currentLat = this.startLat + (this.targetLat - this.startLat) * progress;
       this.currentLon = this.startLon + (this.targetLon - this.startLon) * progress;
 

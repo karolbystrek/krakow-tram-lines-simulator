@@ -27,13 +27,15 @@ export function createStopMarker(feature) {
   return marker;
 }
 
-// Update stop marker with passenger data
 export function updateStopMarker(marker, waitingCount) {
   if (!marker) return;
 
+  if (marker.waitingCount === waitingCount) {
+    return;
+  }
+
   marker.waitingCount = waitingCount;
 
-  // Update color based on waiting passengers
   let color = CONFIG.STOPS.COLOR;
   let fillColor = CONFIG.STOPS.FILL_COLOR;
 
@@ -42,11 +44,9 @@ export function updateStopMarker(marker, waitingCount) {
     fillColor: fillColor
   });
 
-  // Update tooltip
   const stopName = marker.stopName || 'Stop';
   marker.setTooltipContent(`${stopName}<br>Waiting: ${waitingCount}`);
 
-  // Update popup if open
   if (marker.isPopupOpen()) {
     const popupElement = document.getElementById(`stop-passengers-${marker.stopId}`);
     if (popupElement) {
@@ -71,15 +71,12 @@ export async function loadTramStops(stopsLayer, map, simulationController) {
       const marker = createStopMarker(feature);
       marker.addTo(stopsLayer);
 
-      // Store marker in simulation controller for updates
-      // Try multiple ID fields to ensure we can match with backend
       const kod_busman = feature.properties.kod_busman || '';
       const id = feature.properties.id || '';
       const stopId = kod_busman || id;
 
       if (stopId && simulationController) {
         simulationController.stopMarkers[stopId] = marker;
-        // Also store by both IDs if they differ
         if (kod_busman && id && kod_busman !== id) {
           simulationController.stopMarkers[id] = marker;
         }
@@ -87,12 +84,9 @@ export async function loadTramStops(stopsLayer, map, simulationController) {
     });
 
     stopsLayer.addTo(map);
-    console.log(`Loaded ${data.features.length} tram stops`);
-    console.log(`Stored ${Object.keys(simulationController?.stopMarkers || {}).length} stop markers for updates`);
 
     return true;
   } catch (error) {
-    console.error('Error loading tram stops:', error);
     return false;
   }
 }

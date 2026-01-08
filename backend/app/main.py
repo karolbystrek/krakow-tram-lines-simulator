@@ -164,6 +164,10 @@ async def websocket_endpoint(websocket: WebSocket):
                     time_minutes = data.get("time")
                     if time_minutes is not None:
                         simulation_engine.set_time(float(time_minutes))
+                elif command == "set_speed":
+                    speed = data.get("speed")
+                    if speed is not None:
+                        simulation_engine.set_speed(float(speed))
         except WebSocketDisconnect:
             print("Client disconnected (receive_commands).")
         except Exception as e:

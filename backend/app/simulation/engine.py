@@ -20,6 +20,7 @@ class SimulationEngine:
         self.end_time_minutes = 24 * 60
         self.task = None # Keep task for potential cancellation if needed later
         self.service_id = service_id
+        self.simulation_speed_factor = 1.0 # Default: 1 real sec = 1 sim minute
 
         # SimPy environment
         self.env = simpy.Environment()
@@ -190,9 +191,12 @@ class SimulationEngine:
                         # Run simpy until next timeout
                         self.env.run(until=next_timeout)
                         
-                        # Wait to match real-time speed (0.1 minutes sim = 0.1 seconds real)
+                        # Wait to match real-time speed (0.1 minutes sim = 0.1 seconds real at 1x)
+                        # Speed factor 1.0: 0.1s real -> 0.1m sim
+                        # Speed factor 2.0: 0.05s real -> 0.1m sim
                         elapsed_real = real_time.time() - start_real_time
-                        sleep_time = max(0, 0.1 - elapsed_real)
+                        target_real_duration = 0.1 / max(0.1, self.simulation_speed_factor)
+                        sleep_time = max(0, target_real_duration - elapsed_real)
                         if sleep_time > 0:
                             real_time.sleep(sleep_time)
                         
@@ -311,6 +315,11 @@ class SimulationEngine:
         
         print(f"Simulation time manually set to: {int(time_minutes // 60):02d}:{int(time_minutes % 60):02d}")
 
+    def set_speed(self, speed: float):
+        """Set the simulation speed factor."""
+        self.simulation_speed_factor = max(0.1, speed)
+        print(f"Simulation speed set to: {self.simulation_speed_factor}x")
+
     def get_status(self) -> Dict[str, Any]:
         """Get current simulation status."""
         hours = int(self.current_time_minutes // 60)
@@ -322,7 +331,8 @@ class SimulationEngine:
             "start_time_minutes": self.start_time_minutes,
             "end_time_minutes": self.end_time_minutes,
             "running": self.running,
-            "paused": self.paused
+            "paused": self.paused,
+            "speed": self.simulation_speed_factor
         }
 
     def _interpolate_position_on_shape(

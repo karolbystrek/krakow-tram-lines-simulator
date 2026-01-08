@@ -24,9 +24,16 @@
             <option value="service_2">Saturday</option>
             <option value="service_3">Sunday</option>
         </select>
-        <div id="simulation-time" class="time-display">Time: --:--</div>
         <div class="slider-container">
+            <div class="slider-label">
+                <span>Time:</span>
+                <span id="simulation-time" class="time-display">--:--</span>
+            </div>
             <input type="range" id="time-slider" class="time-slider" min="0" max="1440" value="0" step="1">
+        </div>
+        <div class="slider-container">
+            <label for="speed-slider" class="slider-label">Speed: <span id="speed-display">1.0x</span></label>
+            <input type="range" id="speed-slider" class="speed-slider" min="-1" max="1" value="0" step="0.01" title="1 real second = 1 simulation minute">
         </div>
         <button id="btn-pause" class="btn btn-secondary">
             <i class="fas fa-pause"></i> Pause
