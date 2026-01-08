@@ -85,3 +85,23 @@ krakow-tram-lines-simulator/
 ├── requirements.txt        # Python dependencies
 └── README.md               # Project documentation
 ```
+
+## 🐳 Docker Support
+
+You can also run the application using Docker, which automatically handles all dependencies (including Playwright).
+
+### Prerequisites
+- **Docker** and **Docker Compose**
+
+### Running with Docker
+
+1.  **Build and start the container**
+    ```bash
+    docker-compose up --build
+    ```
+    *First run might take a while to fetch the base image and download tram data.*
+
+2.  **Access the application**
+    Open [http://localhost:8000](http://localhost:8000)
+
+The Docker setup allows for data persistence using a volume. **Note:** You must have the tram data fetched locally in `backend/app/data` (or the volume must be populated) before running, or check the logs if errors occur.

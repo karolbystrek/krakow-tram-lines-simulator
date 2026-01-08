@@ -1,0 +1,9 @@
+services:
+  simulation-server:
+    build: .
+    container_name: krakow-tram-lines-simulation
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./frontend:/app/frontend
+      - ./backend:/app/backend

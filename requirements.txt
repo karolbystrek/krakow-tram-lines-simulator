@@ -4,5 +4,4 @@ websockets
 simpy
 geojson
 pandas
-playwright
 httpx

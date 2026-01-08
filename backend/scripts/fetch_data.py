@@ -1,34 +1,41 @@
 import json
+import time
 from pathlib import Path
 from typing import List, Dict, Any
 
-from playwright.sync_api import sync_playwright, Page, BrowserContext
+import httpx
 
-TRAM_LINES_URL = "https://tomekzaw.pl/ttss/linie"
-API_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/routes/"
-BLOCKS_API_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/blocks/tram"
-TRAM_SHAPES_GEOJSON_URL = "https://services-eu1.arcgis.com/svTzSt3AvH7sK6q9/arcgis/rest/services/Linie_KMK/FeatureServer/replicafilescache/Linie_KMK_7975846146257302888.geojson"
-TRAM_STOPS_GEOJSON_URL = "https://services-eu1.arcgis.com/svTzSt3AvH7sK6q9/ArcGIS/rest/services/Przystanki_Komunikacji_Miejskiej_w_Krakowie/FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson"
 DATA_DIR = Path(__file__).resolve().parent.parent / "app" / "data"
-TRAM_LINES_DATA_DIR = DATA_DIR / "lines"
-TRAM_SHAPES_DATA_DIR = DATA_DIR / "line-shapes"
-TRAM_STOPS_DATA_DIR = DATA_DIR / "stops"
+
+LINES_DIR = DATA_DIR / "lines"
+ROUTES_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/routes"
+BLOCKS_URL = "https://tomekzaw-ttss-gtfs.herokuapp.com/api/blocks/tram"
+
+LINE_SHAPES_DIR = DATA_DIR / "line-shapes"
+LINE_SHAPES_URL = "https://services-eu1.arcgis.com/svTzSt3AvH7sK6q9/arcgis/rest/services/Linie_KMK/FeatureServer/replicafilescache/Linie_KMK_7975846146257302888.geojson"
+
+STOPS_DIR = DATA_DIR / "stops"
+STOPS_URL = "https://services-eu1.arcgis.com/svTzSt3AvH7sK6q9/ArcGIS/rest/services/Przystanki_Komunikacji_Miejskiej_w_Krakowie/FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson"
 
 
-def _get_tram_line_numbers(page: Page) -> List[str]:
-    page.goto(TRAM_LINES_URL)
-    page.wait_for_selector("text=Linie tramwajowe dzienne")
-    header = page.get_by_text("Linie tramwajowe dzienne")
-    line_links = header.locator("xpath=..").locator("a")
-    return [
-        line_links.nth(i).inner_text().strip()
-        for i in range(line_links.count())
-        if line_links.nth(i).inner_text().strip()
-    ]
+def _get_tram_line_numbers() -> List[str]:
+    print(f"Fetching routes from {ROUTES_URL}...")
+    try:
+        resp = httpx.get(ROUTES_URL, timeout=10.0)
+        resp.raise_for_status()
+        data = resp.json()
+        for group in data.get("groups", []):
+            if group.get("group_name") == "Linie tramwajowe dzienne":
+                return group.get("route_short_names", [])
+    except Exception as e:
+        print(f"Error fetching route list: {e}")
+    return []
 
 
-def _fetch_line_api_data(context: BrowserContext, line_number: str) -> Dict[str, Any]:
-    return context.request.fetch(f"{API_URL}{line_number}").json()
+def _fetch_line_api_data(line_number: str) -> Dict[str, Any]:
+    resp = httpx.get(f"{ROUTES_URL}/{line_number}", timeout=10.0)
+    resp.raise_for_status()
+    return resp.json()
 
 
 def _save_data_to_json(data: Dict[str, Any], file_path: Path):
@@ -37,69 +44,93 @@ def _save_data_to_json(data: Dict[str, Any], file_path: Path):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
-def fetch_tram_shapes_geojson(context: BrowserContext) -> None:
-    output_file = TRAM_SHAPES_DATA_DIR / "krakow_tram_lines.geojson"
-    _save_data_to_json(
-        context.request.fetch(TRAM_SHAPES_GEOJSON_URL).json(), output_file
-    )
-    print(f"Fetched tram route shapes geojson")
-
-
-def fetch_tram_stops_geojson(context: BrowserContext) -> None:
-    output_file = TRAM_STOPS_DATA_DIR / "krakow_tram_stops.geojson"
-    resp = context.request.fetch(TRAM_STOPS_GEOJSON_URL)
+def fetch_tram_shapes_geojson() -> None:
+    output_file = LINE_SHAPES_DIR / "krakow_tram_lines.geojson"
     try:
-        data = resp.json()
-        _save_data_to_json(data, output_file)
+        print("Fetching tram shapes...")
+        resp = httpx.get(LINE_SHAPES_URL, timeout=10.0, follow_redirects=True)
+        resp.raise_for_status()
+        _save_data_to_json(resp.json(), output_file)
+        print(f"Fetched tram route shapes geojson")
+    except Exception as e:
+        print(f"Error fetching shapes: {e}")
+
+
+def fetch_tram_stops_geojson() -> None:
+    output_file = STOPS_DIR / "krakow_tram_stops.geojson"
+    try:
+        print("Fetching tram stops...")
+        resp = httpx.get(STOPS_URL, timeout=10.0)
+        resp.raise_for_status()
+        _save_data_to_json(resp.json(), output_file)
         print(f"Fetched tram stops geojson")
     except Exception as e:
-        print("Failed to parse JSON:", e)
-        print("Raw body:", resp.text())
+        print(f"Failed to fetch stops: {e}")
         return
 
 
+def fetch_tram_blocks() -> None:
+    output_file = DATA_DIR / "tram_blocks.json"
+    try:
+        print("Fetching tram blocks...")
+        resp = httpx.get("https://api.odjazdowykrakow.pl/api/blocks", timeout=10.0)
+        resp.raise_for_status()
+        _save_data_to_json(resp.json(), output_file)
+        resp = httpx.get(
+            "https://tomekzaw-ttss-gtfs.herokuapp.com/api/blocks/tram/service_1/block_725/stop_times",
+            timeout=10.0,
+        )
+        resp.raise_for_status()
+        _save_data_to_json(resp.json(), DATA_DIR / "sample_tram_block_stop_times.json")
+        print(f"Fetched tram blocks data")
+    except Exception as e:
+        print(f"Failed to fetch tram blocks: {e}")
+        return
+
 
 def fetch_tram_data():
-    with sync_playwright() as pw:
-        browser = pw.chromium.launch(headless=True)
-        context = browser.new_context()
-        page = context.new_page()
+    line_numbers = _get_tram_line_numbers()
+    if not line_numbers:
+        print("No tram lines found or error fetching list.")
+        return
+
+    for line_number in line_numbers:
+        line_dir = LINES_DIR / line_number
 
         try:
-            line_numbers = _get_tram_line_numbers(page)
-            # Fetch line data, save to JSON files, and fetch block info
-            for line_number in line_numbers:
-                # Create directory for this line
-                line_dir = TRAM_LINES_DATA_DIR / line_number
+            line_data = _fetch_line_api_data(line_number)
+            _save_data_to_json(line_data, line_dir / f"{line_number}.json")
+            print(f"Fetched line data for {line_number}")
 
-                # Fetch and save line data
-                line_data = _fetch_line_api_data(context, line_number)
-                _save_data_to_json(line_data, line_dir / f"{line_number}.json")
-                print(f"Fetched line data for {line_number}")
+            # blocks = line_data.get("blocks", [])
+            #
+            # for block in blocks:
+            #     service_id = block["service_id"]
+            #     block_id = block["block_id"]
+            #
+            #     try:
+            #         url = f"{BLOCKS_URL}/{service_id}/{block_id}/stop_times"
+            #         resp = httpx.get(url, timeout=10.0)
+            #         resp.raise_for_status()
+            #         stop_times_data = resp.json()
+            #
+            #         print(
+            #             f"Fetched stop times for block {block_id} of line {line_number}"
+            #         )
+            #
+            #         block_file = line_dir / service_id / f"{block_id}.json"
+            #         _save_data_to_json(stop_times_data, block_file)
+            #     except Exception as e:
+            #         print(f"Failed to fetch stop times for {block_id}: {e}")
 
-                # Parse blocks and fetch stop times for this line
-                blocks = line_data.get("blocks", [])
+            time.sleep(0.1)
 
-                for block in blocks:
-                    service_id = block["service_id"]
-                    block_id = block["block_id"]
+        except Exception as e:
+            print(f"Error processing line {line_number}: {e}")
 
-                    try:
-                        url = f"{BLOCKS_API_URL}/{service_id}/{block_id}/stop_times"
-                        stop_times_data = context.request.fetch(url).json()
-
-                        # Save block stop times data in /{service_id}/ subdirectory
-                        block_dir = line_dir / service_id
-                        block_file = block_dir / f"{block_id}.json"
-                        _save_data_to_json(stop_times_data, block_file)
-                        print(f"Fetched stop times for {block_id}")
-                    except Exception as e:
-                        print(f"Failed to fetch stop times for {block_id}: {e}")
-
-            fetch_tram_shapes_geojson(context)
-            fetch_tram_stops_geojson(context)
-        finally:
-            browser.close()
+    fetch_tram_shapes_geojson()
+    fetch_tram_stops_geojson()
+    fetch_tram_blocks()
 
 
 if __name__ == "__main__":
