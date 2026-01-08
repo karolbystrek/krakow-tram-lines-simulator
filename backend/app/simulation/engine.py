@@ -41,6 +41,13 @@ class SimulationEngine:
         # Track which stops have been processed to avoid duplicate processing
         # Key: (block_id, stop_num), Value: last processed time
         self.processed_stops: Dict[Tuple[str, str], float] = {}
+
+        # Statistics
+        self.stats = {
+            "total_boarded": 0,
+            "total_alighted": 0,
+            "hourly_stats": {}
+        }
         
         # Lazy-load services: Only load the needed service initially for faster startup
         # Other services will be loaded on-demand when switching services
@@ -169,6 +176,14 @@ class SimulationEngine:
     def restart(self):
         """Restart the simulation."""
         self.paused = False
+        
+        # Reset statistics
+        self.stats = {
+            "total_boarded": 0,
+            "total_alighted": 0,
+            "hourly_stats": {}
+        }
+
         # Reset passenger simulation (use cached stops if available)
         self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
         # Reset simpy environment/thread
@@ -299,21 +314,73 @@ class SimulationEngine:
         """Set the simulation time manually."""
         # Clamp time to valid range
         old_time = self.current_time_minutes
-        time_minutes = max(self.start_time_minutes, min(time_minutes, self.end_time_minutes))
+        target_time = max(self.start_time_minutes, min(time_minutes, self.end_time_minutes))
         
-        # Update simpy environment time safely
-        if self.running:
-            self._reset_env(time_minutes)
+        print(f"Setting time to: {int(target_time // 60):02d}:{int(target_time % 60):02d} (was {int(old_time // 60):02d}:{int(old_time % 60):02d})")
+
+        # 1. Stop the asynchronous runner loop temporarily
+        self.simpy_running = False
+        if self.simpy_thread and self.simpy_thread.is_alive():
+            self.simpy_thread.join(timeout=1.0)
+
+        # IMPORTANT: Set simpy_running = True so the generator process (_simpy_passenger_update_loop)
+        # does not exit when we run the environment synchronously in _fast_forward.
+        # The thread is stopped, so it won't run in the background, but env.run() needs this flag.
+        self.simpy_running = True
+
+        try:
+            # 2. Determine if we need to reset/jump back
+            # If moving backward OR if we simply need to re-calculate stats from start
+            if target_time < old_time:
+                print("Time jumped backward, resetting simulation state...")
+                
+                # Reset statistics
+                self.stats = {
+                    "total_boarded": 0,
+                    "total_alighted": 0,
+                    "hourly_stats": {}
+                }
+                
+                # Reset passenger simulation
+                self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
+                
+                # Reset SimPy environment to START time
+                with self._time_lock:
+                    self.env = simpy.Environment(initial_time=self.start_time_minutes)
+                    # Attach the passenger update process to the NEW environment
+                    self.env.process(self._simpy_passenger_update_loop())
+                    
+                # Fast forward from start to target_time
+                self._fast_forward(target_time)
+                
+            else:
+                # Moving forward: fast forward from current time to target time
+                # Only if target > current, otherwise we are already there
+                if target_time > self.env.now:
+                    print(f"Fast forwarding from {self.env.now} to {target_time}...")
+                    self._fast_forward(target_time)
+        except Exception as e:
+            print(f"Error during time set operations: {e}")
+            import traceback
+            traceback.print_exc()
+
+        # 3. Restart the runner loop if needed
+        if self.running and target_time < self.end_time_minutes:
+            self.simpy_thread = threading.Thread(target=self._run_simpy, daemon=True)
+            self.simpy_thread.start()
         else:
-            with self._time_lock:
-                self.env = simpy.Environment(initial_time=time_minutes)
+            self.simpy_running = False
+
+    def _fast_forward(self, target_time: float):
+        """Fast forward simulation to target time, processing all events."""
+        if not self.env:
+            return
         
-        # If jumping backward significantly, reset passenger simulation
-        if time_minutes < old_time - 60:  # Jumped back more than 1 hour
-            print("Time jumped backward significantly, resetting passenger simulation...")
-            self._initialize_passenger_simulation(getattr(self, '_cached_stops', None))
-        
-        print(f"Simulation time manually set to: {int(time_minutes // 60):02d}:{int(time_minutes % 60):02d}")
+        try:
+            if self.env.now < target_time:
+                self.env.run(until=target_time)
+        except Exception as e:
+            print(f"Error during fast forward: {e}")
 
     def set_speed(self, speed: float):
         """Set the simulation speed factor."""
@@ -602,14 +669,15 @@ class SimulationEngine:
                         total_boarded += boarded
                         total_alighted = alighted
                     
-                    # Board passengers from remaining matching stops (skip alighting - already done)
-                    for stop_state in matching_stop_states[1:]:
                         boarded, _ = self.passenger_manager.handle_tram_at_stop(
                             block, stop_time, current_time,
                             stop_state, tram_state,
                             skip_alighting=True
                         )
                         total_boarded += boarded
+
+                    # Update statistics
+                    self._update_stats(total_boarded, total_alighted, current_time)
                     
                     # Mark this stop as processed
                     self.processed_stops[stop_key] = current_time
@@ -617,3 +685,24 @@ class SimulationEngine:
                     # Only process once per stop arrival (avoid duplicate processing)
                     # Move to next block after processing one stop
                     break
+    
+    def _update_stats(self, boarded: int, alighted: int, time_minutes: float):
+        """Update simulation statistics."""
+        if boarded == 0 and alighted == 0:
+            return
+
+        self.stats["total_boarded"] += boarded
+        self.stats["total_alighted"] += alighted
+
+        # Calculate hour index (0-based from start of day, continuously increasing)
+        hour_index = int(time_minutes // 60)
+        
+        if hour_index not in self.stats["hourly_stats"]:
+            self.stats["hourly_stats"][hour_index] = {"boarded": 0, "alighted": 0}
+        
+        self.stats["hourly_stats"][hour_index]["boarded"] += boarded
+        self.stats["hourly_stats"][hour_index]["alighted"] += alighted
+
+    def get_statistics(self) -> Dict[str, Any]:
+        """Get current simulation statistics."""
+        return self.stats

@@ -46,6 +46,7 @@ export class SimulationUI {
 
     this.timeSlider.addEventListener('change', (e) => {
       this.isDraggingTimeSlider = false;
+      this.showLoading("Updating time...");
       this.client.sendCommand('set_time', { time: parseFloat(e.target.value) });
     });
 
@@ -81,13 +82,12 @@ export class SimulationUI {
 
   initializeButtons() {
     if (this.pauseBtn) {
-      // Clone to remove old listeners if any (though usually we are initing once)
       const newPauseBtn = this.pauseBtn.cloneNode(true);
       this.pauseBtn.parentNode.replaceChild(newPauseBtn, this.pauseBtn);
       this.pauseBtn = newPauseBtn;
 
       this.pauseBtn.addEventListener('click', () => {
-        const isPaused = this.pauseBtn.textContent.includes('Resume');
+        const isPaused = this.pauseBtn.querySelector('.fa-play') !== null;
         this.client.sendCommand(isPaused ? 'resume' : 'pause');
       });
     }
@@ -140,9 +140,11 @@ export class SimulationUI {
 
     if (this.pauseBtn && data.status) {
         if (data.status === 'paused') {
-            this.pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+            this.pauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            this.pauseBtn.title = "Resume Simulation";
         } else {
-            this.pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+            this.pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            this.pauseBtn.title = "Pause Simulation";
         }
     }
   }
@@ -179,8 +181,12 @@ export class SimulationUI {
     }
   }
 
-  showLoading() {
+  showLoading(message = "Loading simulation data...") {
       if (this.loadingOverlay) {
+          const textEl = this.loadingOverlay.querySelector('.loading-text');
+          if (textEl) {
+              textEl.textContent = message;
+          }
           this.loadingOverlay.classList.remove('hidden');
       }
   }

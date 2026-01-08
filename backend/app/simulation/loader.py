@@ -1,21 +1,21 @@
 import json
-from typing import Dict, Tuple, List
 from datetime import time
+from typing import Dict, Tuple, List
 
 from .models import Stop, Shape, TramLine, Trip, StopTime, TramBlock
 from ..config import (
-    GEOJSON_SHAPES_PATH,
+    GEOJSON_LINE_SHAPES_PATH,
     GEOJSON_STOPS_PATH,
-    TRAM_LINES_DATA_DIR,
+    TRAM_LINES_DIR,
 )
 
 
 def load_shapes_from_geojson() -> Dict[str, List[Shape]]:
-    if not GEOJSON_SHAPES_PATH.exists():
-        print(f"Warning: GeoJSON file not found at {GEOJSON_SHAPES_PATH}")
+    if not GEOJSON_LINE_SHAPES_PATH.exists():
+        print(f"Warning: GeoJSON file not found at {GEOJSON_LINE_SHAPES_PATH}")
         return {}
 
-    with open(GEOJSON_SHAPES_PATH, "r", encoding="utf-8") as f:
+    with open(GEOJSON_LINE_SHAPES_PATH, "r", encoding="utf-8") as f:
         geojson_data = json.load(f)
 
     shapes_by_line = {}
@@ -35,50 +35,51 @@ def load_shapes_from_geojson() -> Dict[str, List[Shape]]:
 # Cache for stop coordinates to avoid rescanning all services
 _cached_stop_coordinates = None
 
+
 def get_tram_stop_coordinates_from_schedules() -> set:
     """
     Collect all unique stop coordinates from tram schedule data across all services.
     This identifies which stops are actually used by trams.
-    
+
     Since kod_busman format in geojson doesn't match the line-stop format in schedules,
     we match stops by coordinates instead.
-    
+
     Returns:
         Set of tuples (lat, lon) representing stop coordinates used in tram schedules
     """
     global _cached_stop_coordinates
-    
+
     # Return cached result if available
     if _cached_stop_coordinates is not None:
         return _cached_stop_coordinates
-    
+
     tram_stop_coords = set()
-    
-    if not TRAM_LINES_DATA_DIR.exists():
+
+    if not TRAM_LINES_DIR.exists():
         _cached_stop_coordinates = tram_stop_coords
         return tram_stop_coords
-    
+
     # Check all services
     services = ["service_1", "service_2", "service_3", "service_4", "service_5"]
-    
+
     for service in services:
         # Scan all line directories
-        for line_dir in TRAM_LINES_DATA_DIR.iterdir():
+        for line_dir in TRAM_LINES_DIR.iterdir():
             if not line_dir.is_dir():
                 continue
-            
+
             service_dir = line_dir / service
             if not service_dir.exists():
                 continue
-            
+
             # Get all block files for this line and service
             block_files = sorted(service_dir.glob("block_*.json"))
-            
+
             for block_path in block_files:
                 try:
                     with open(block_path, "r", encoding="utf-8") as f:
                         data = json.load(f)
-                    
+
                     # Extract coordinates from all stop_times
                     for stop_time_data in data.get("stop_times", []):
                         stop_lat = stop_time_data.get("stop_lat")
@@ -91,7 +92,7 @@ def get_tram_stop_coordinates_from_schedules() -> set:
                 except Exception as e:
                     # Skip files that can't be read
                     continue
-    
+
     # Cache the result
     _cached_stop_coordinates = tram_stop_coords
     return tram_stop_coords
@@ -100,11 +101,11 @@ def get_tram_stop_coordinates_from_schedules() -> set:
 def load_tram_stops(filter_by_tram_schedules: bool = True) -> Dict[str, Stop]:
     """
     Load tram stops from GeoJSON file.
-    
+
     Args:
         filter_by_tram_schedules: If True, only include stops that are used in tram schedules.
                                   This filters out bus-only stops.
-    
+
     Returns:
         Dictionary mapping kod_busman to Stop objects
     """
@@ -125,11 +126,11 @@ def load_tram_stops(filter_by_tram_schedules: bool = True) -> Dict[str, Stop]:
     stops_dict = {}
     skipped_count = 0
     filtered_count = 0
-    
+
     for feature in geojson_data.get("features", []):
         properties = feature.get("properties", {})
         coordinates = feature.get("geometry", {}).get("coordinates", [])
-        
+
         # Handle kod_busman - it might be None, empty string, or missing
         kod_busman = properties.get("kod_busman")
         if kod_busman is None:
@@ -149,31 +150,34 @@ def load_tram_stops(filter_by_tram_schedules: bool = True) -> Dict[str, Stop]:
             else:
                 skipped_count += 1
                 continue
-        
+
         # Ensure kod_busman is a non-empty string
         kod_busman = str(kod_busman).strip()
         if not kod_busman:
             skipped_count += 1
             continue
-        
+
         # Filter: Only include stops that are used in tram schedules
         # Match by coordinates (within 0.001 degrees ~ 100 meters)
         if filter_by_tram_schedules and tram_stop_coords:
             geojson_lat = round(float(coordinates[1]), 6)
             geojson_lon = round(float(coordinates[0]), 6)
-            
+
             # Check if this stop's coordinates match any schedule stop coordinates
             matched = False
             for sched_lat, sched_lon in tram_stop_coords:
                 # Use a small threshold to account for coordinate precision differences
-                if abs(geojson_lat - sched_lat) < 0.001 and abs(geojson_lon - sched_lon) < 0.001:
+                if (
+                    abs(geojson_lat - sched_lat) < 0.001
+                    and abs(geojson_lon - sched_lon) < 0.001
+                ):
                     matched = True
                     break
-            
+
             if not matched:
                 filtered_count += 1
                 continue
-        
+
         # Skip if we already have a stop with this kod_busman (avoid duplicates)
         if kod_busman in stops_dict:
             skipped_count += 1
@@ -192,13 +196,17 @@ def load_tram_stops(filter_by_tram_schedules: bool = True) -> Dict[str, Stop]:
             print(f"Warning: Skipping stop with kod_busman={kod_busman}: {e}")
             skipped_count += 1
             continue
-    
+
     if skipped_count > 0:
-        print(f"Warning: Skipped {skipped_count} stops due to missing or invalid kod_busman")
-    
+        print(
+            f"Warning: Skipped {skipped_count} stops due to missing or invalid kod_busman"
+        )
+
     if filter_by_tram_schedules and filtered_count > 0:
-        print(f"Filtered out {filtered_count} stops not used in tram schedules (bus-only stops)")
-    
+        print(
+            f"Filtered out {filtered_count} stops not used in tram schedules (bus-only stops)"
+        )
+
     print(f"Loaded {len(stops_dict)} valid tram stops")
     return stops_dict
 
@@ -234,13 +242,13 @@ def get_bounding_box(
 def get_service_for_weekday(weekday: int) -> str:
     """
     Map weekday index to service_id.
-    
+
     Args:
         weekday: Integer 0-6 (Monday=0, Sunday=6)
-    
+
     Returns:
         service_id string (service_1 to service_5)
-    
+
     Service mapping:
     - service_1: Monday, Tuesday, Wednesday
     - service_5: Thursday
@@ -285,20 +293,20 @@ def parse_time_to_minutes(time_str: str) -> int:
     hour = int(parts[0])
     minute = int(parts[1])
     # second = int(parts[2]) # We don't need seconds for minute precision
-    
+
     return hour * 60 + minute
 
 
 def load_tram_blocks(service: str = "service_1") -> Dict[str, List[TramBlock]]:
     """Load and process tram schedule data for all lines and blocks in a service."""
-    if not TRAM_LINES_DATA_DIR.exists():
-        print(f"Warning: Lines data directory not found at {TRAM_LINES_DATA_DIR}")
+    if not TRAM_LINES_DIR.exists():
+        print(f"Warning: Lines data directory not found at {TRAM_LINES_DIR}")
         return {}
 
     blocks_by_line: Dict[str, List[TramBlock]] = {}
 
     # Scan all line directories
-    for line_dir in TRAM_LINES_DATA_DIR.iterdir():
+    for line_dir in TRAM_LINES_DIR.iterdir():
         if not line_dir.is_dir():
             continue
 

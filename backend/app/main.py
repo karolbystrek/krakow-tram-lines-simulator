@@ -92,6 +92,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
     async def send_updates():
         try:
+            was_running = False
             while True:
                 # Get current state from the engine
                 status = simulation_engine.get_status()
@@ -135,6 +136,26 @@ async def websocket_endpoint(websocket: WebSocket):
                 
                 # Send the current simulation state to the client
                 await websocket.send_json(payload)
+                
+                # Check if simulation just finished (natural end)
+                # If running is False but was previously True (we can track this via simulation_engine state)
+                # However, sending stats on every frame when stopped is wasteful but safe if handled by frontend
+                # Better: Send a specific event when simulation finishes
+                
+                # Note: simulation_engine.running becomes False when it hits end time
+                if was_running and not simulation_engine.running and not simulation_engine.paused:
+                   print("Simulation finished detected in WS loop. Sending statistics.")
+                   stats = simulation_engine.get_statistics()
+                   await websocket.send_json({
+                       "type": "simulation_ended",
+                       "statistics": stats
+                   })
+                   # Reset flag to avoid sending multiple times
+                   was_running = False
+                
+                # Update running state tracker
+                if simulation_engine.running:
+                    was_running = True
 
                 # Send updates every 0.1 second (matching the simulation step)
                 await asyncio.sleep(0.1)
@@ -168,6 +189,12 @@ async def websocket_endpoint(websocket: WebSocket):
                     speed = data.get("speed")
                     if speed is not None:
                         simulation_engine.set_speed(float(speed))
+                elif command == "get_statistics":
+                    stats = simulation_engine.get_statistics()
+                    await websocket.send_json({
+                        "type": "statistics_update",
+                        "statistics": stats
+                    })
         except WebSocketDisconnect:
             print("Client disconnected (receive_commands).")
         except Exception as e:

@@ -2,6 +2,7 @@ import { TramMarker } from '../map/tramMarker.js';
 import { updateStopMarker } from '../map/stopsLayer.js';
 import { SimulationClient } from './SimulationClient.js';
 import { SimulationUI } from './SimulationUI.js';
+import { StatisticsUI } from '../ui/stats.js';
 
 export class SimulationController {
   constructor(map) {
@@ -22,6 +23,41 @@ export class SimulationController {
     );
 
     this.ui = new SimulationUI(this.client);
+    this.statsUI = new StatisticsUI();
+    this.isPaused = false;
+    this.wasRunningBeforeStats = false;
+    
+    this.setupStatistics();
+  }
+
+  setupStatistics() {
+    this.statsBtn = document.getElementById('btn-stats');
+    if (this.statsBtn) {
+        this.statsBtn.addEventListener('click', () => {
+             this.openStatistics();
+        });
+    }
+
+    this.statsUI.onClose = () => {
+        this.closeStatistics();
+    };
+  }
+
+  openStatistics() {
+    this.wasRunningBeforeStats = !this.isPaused; 
+    
+    if (this.wasRunningBeforeStats) {
+        this.client.sendCommand('pause');
+    }
+
+    this.client.sendCommand('get_statistics');
+  }
+
+  closeStatistics() {
+    // Resume if we were running
+    if (this.wasRunningBeforeStats) {
+        this.client.sendCommand('resume');
+    }
   }
 
   connect() {
@@ -41,6 +77,20 @@ export class SimulationController {
   }
 
   handleUpdate(data) {
+    // Update local pause state tracking
+    if (data.status) {
+        this.isPaused = data.status === 'paused';
+    }
+
+    if ((data.type === 'simulation_ended' || data.type === 'statistics_update') && data.statistics) {
+        console.log("Received statistics. Showing UI.");
+        this.statsUI.show(data.statistics);
+        if (data.type === 'simulation_ended') {
+            this.wasRunningBeforeStats = false; 
+        }
+        return;
+    }
+
     this.ui.update(data);
 
     if (data.type === 'service_changed') {
