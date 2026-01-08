@@ -40,4 +40,4 @@ wheels/
 Thumbs.db
 
 # data
-**/data/
+# **/data/
