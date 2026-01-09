@@ -1,3 +1,5 @@
+import { debounce } from '../utils/debounce.js';
+
 // Create toggle HTML for a line
 function createLineToggleHTML(lineNumber, id) {
   return `
@@ -9,6 +11,24 @@ function createLineToggleHTML(lineNumber, id) {
       </label>
     </div>
   `;
+}
+
+function createSliderHTML(id, label, min, max, value, step = 1) {
+    return `
+      <div class="settings-item settings-slider-item">
+          <div class="slider-header">
+            <label for="${id}">${label}</label>
+            <span id="${id}-value" class="slider-value">${value}</span>
+          </div>
+          <input type="range" id="${id}" min="${min}" max="${max}" value="${value}" step="${step}" class="slider-input">
+      </div>
+    `;
+}
+
+function formatTime(minutes) {
+    const h = Math.floor(minutes / 60);
+    const m = Math.floor(minutes % 60);
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
 }
 
 
@@ -36,6 +56,38 @@ export function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers
       }
     }
   });
+
+  // --- Passenger Generation Controls ---
+  const genHeader = document.createElement('h3');
+  genHeader.className = 'settings-section-header';
+  genHeader.textContent = 'Passenger Generation';
+  content.appendChild(genHeader);
+
+  const genControls = document.createElement('div');
+  genControls.className = 'generation-controls';
+  
+  const openModalBtn = document.createElement('button');
+  openModalBtn.className = 'btn btn-secondary';
+  openModalBtn.style.width = '100%';
+  openModalBtn.textContent = 'Configure Demand Scenarios';
+  openModalBtn.onclick = () => {
+      if (simulation.generationModal) {
+          simulation.generationModal.open();
+      }
+  };
+  genControls.appendChild(openModalBtn);
+  content.appendChild(genControls);
+
+  // Separator
+  const separator = document.createElement('hr');
+  separator.className = 'settings-separator';
+  content.appendChild(separator);
+
+  // --- Line Controls ---
+  const linesHeader = document.createElement('h3');
+  linesHeader.className = 'settings-section-header';
+  linesHeader.textContent = 'Tram Lines';
+  content.appendChild(linesHeader);
 
   // Add master toggle for all lines
   const masterToggleItem = document.createElement('div');

@@ -1,121 +1,235 @@
 """
 Passenger arrival and destination selection models
 """
-import random
+
 import math
+import random
+import json
+from dataclasses import dataclass, asdict
 from typing import List, Dict, Optional
-from .models import Trip, StopTime
+from pathlib import Path
+
+from .models import Trip
 from .passenger_model import Passenger, StopState
+
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+DEMAND_PROFILE_PATH = DATA_DIR / "demand_profile.json"
+
+@dataclass
+class Peak:
+    """Represents a demand peak (Gaussian distribution)."""
+    time: float
+    width: float
+    height: float
+
+    def to_dict(self):
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(**data)
+
+
+@dataclass
+class DemandProfile:
+    """
+    Configuration for the global passenger demand curve.
+    Dynamic model with configurable peaks.
+    """
+
+    # Base Load (Constant background traffic)
+    base_demand_rate: float = 50.0  # passengers per minute system-wide
+
+    # Dynamic Peaks list
+    peaks: List[Peak] = None
+
+    def __post_init__(self):
+        if self.peaks is None:
+            self.peaks = [
+                Peak(time=7.5 * 60, width=90.0, height=700.0),   # Morning
+                Peak(time=13.5 * 60, width=150.0, height=420.0), # Midday
+                Peak(time=17.0 * 60, width=120.0, height=700.0)  # Evening
+            ]
+
+    def to_dict(self):
+        return {
+            "base_demand_rate": self.base_demand_rate,
+            "peaks": [p.to_dict() for p in self.peaks]
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        profile = cls(base_demand_rate=data.get("base_demand_rate", 50.0))
+        if "peaks" in data:
+            profile.peaks = [Peak.from_dict(p) for p in data["peaks"]]
+        return profile
 
 
 class ArrivalRateModel:
     """
-    Models passenger arrival rates:
-    - Weekdays: sharp double-peaked Gaussian profile (morning/evening rush)
-    - Weekends: simple time-of-day multipliers (quieter overall)
+    Models passenger arrival rates using a global demand curve distributed
+    to stops based on their weights.
     """
 
-    def __init__(self):
-        self.offpeak_rate = 0.05
+    def __init__(self, profile: DemandProfile = None):
+        if profile:
+            self.profile = profile
+        else:
+            # Try loading from file
+            loaded_profile = self.load_from_file()
+            self.profile = loaded_profile if loaded_profile else DemandProfile()
+        
+        # Stop weights registry
+        self.stop_weights: Dict[str, float] = {}
+        self.total_system_weight: float = 0.0
 
-        # Peak amplitudes (pass/min added during peak)
-        self.morning_peak_amplitude = 2
-        self.evening_peak_amplitude = 1.5
-        self.base_amplitude = 0.3
+        # Known major hubs in Krakow with higher passenger generation
+        # These are partial string matches for stop names
+        self.HUB_WEIGHTS = {
+            "Rondo Mogilskie": 8.0,
+            "Teatr Bagatela": 7.5,
+            "Dworzec Główny": 9.0,
+            "Rondo Grzegórzeckie": 6.5,
+            "Starowiślna": 6.0,
+            "Plac Wszystkich Świętych": 5.5,
+            "Poczta Główna": 5.5,
+            "Rondo Matecznego": 5.0,
+            "Rondo Czyżyńskie": 5.0,
+            "Biprostal": 4.0,
+            "Stary Kleparz": 4.5,
+        }
 
-        # Gaussian width – narrow for sharp real-life peaks (20–30 min)
-        self.morning_width = 40
-        self.evening_width = 50
-        self.base_width = 10*60
-        # Peak times
-        self.morning_peak_time = 7.5 * 60   # 7:30
-        self.evening_peak_time = 16 * 60  # 16:00
-        self.noon = 12*60
+    def load_from_file(self) -> Optional[DemandProfile]:
+        """Load demand profile from JSON file."""
+        if not DEMAND_PROFILE_PATH.exists():
+            return None
+        
+        try:
+            with open(DEMAND_PROFILE_PATH, 'r') as f:
+                data = json.load(f)
+                print(f"Loaded demand profile from {DEMAND_PROFILE_PATH}")
+                return DemandProfile.from_dict(data)
+        except Exception as e:
+            print(f"Error loading demand profile: {e}")
+            return None
 
-        # Weekend multipliers
-        self.rush_hour_multiplier = 1.6
-        self.off_peak_multiplier = 0.6
-        self.night_multiplier = 0.08
+    def save_to_file(self):
+        """Save current demand profile to JSON file."""
+        try:
+            # Ensure directory exists
+            DEMAND_PROFILE_PATH.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(DEMAND_PROFILE_PATH, 'w') as f:
+                json.dump(self.profile.to_dict(), f, indent=2)
+            print(f"Saved demand profile to {DEMAND_PROFILE_PATH}")
+        except Exception as e:
+            print(f"Error saving demand profile: {e}")
 
-        # Rush hour times for weekends
-        self.morning_rush = [7, 8, 9]
-        self.evening_rush = [16, 17, 18]
+    def update_profile(self, params: Dict):
+        """
+        Update the demand profile parameters dynamically.
+        Params expected format:
+        {
+            "base_demand_rate": float,
+            "peaks": [
+                {"time": float, "width": float, "height": float},
+                ...
+            ]
+        }
+        """
+        if "base_demand_rate" in params:
+            self.profile.base_demand_rate = float(params["base_demand_rate"])
+        
+        if "peaks" in params and isinstance(params["peaks"], list):
+            new_peaks = []
+            for p_data in params["peaks"]:
+                new_peaks.append(Peak(
+                    time=float(p_data.get("time", 0)),
+                    width=float(p_data.get("width", 60)),
+                    height=float(p_data.get("height", 100))
+                ))
+            self.profile.peaks = new_peaks
 
-        # Optional overrides
-        self.stop_specific_rates: Dict[str, float] = {}
+        print(f"Updated demand profile. Base: {self.profile.base_demand_rate}, Peaks: {len(self.profile.peaks)}")
 
     def gaussian(self, x: float, mu: float, sigma: float) -> float:
         """Calculate Gaussian value."""
         if sigma == 0:
             return 0.0
-        return math.exp(-((x - mu)**2) / (2 * sigma * sigma))
+        return math.exp(-((x - mu) ** 2) / (2 * sigma * sigma))
 
-    def weekday_arrival_rate(self, time_minutes: float, stop_id: str) -> float:
-        """High-fidelity weekday arrival model with sharp peaks."""
-
+    def _calculate_global_demand_rate(self, time_minutes: float) -> float:
+        """
+        Returns the total system-wide passengers per minute at a given time.
+        """
         t = time_minutes % 1440
+        total_rate = self.profile.base_demand_rate
 
-        base = self.stop_specific_rates.get(stop_id, self.offpeak_rate)
-        g1 = self.gaussian(t, self.morning_peak_time, self.morning_width)
-        morning_peak = self.morning_peak_amplitude * g1
-        g2 = self.gaussian(t, self.evening_peak_time, self.evening_width)
-        evening_peak = self.evening_peak_amplitude * g2
-        g3 = self.gaussian(t, self.noon, self.base_width)
-        base_gauss = self.base_amplitude * g3
-        return base + morning_peak + evening_peak + base_gauss
+        for peak in self.profile.peaks:
+            total_rate += peak.height * self.gaussian(t, peak.time, peak.width)
 
-    def weekend_arrival_rate(self, time_minutes: float, stop_id: str) -> float:
-        """Weekend model remains multiplicative but separate from weekday logic."""
-        base_rate = self.stop_specific_rates.get(stop_id, self.offpeak_rate)
+        return total_rate
 
-        hour = int(time_minutes // 60) % 24
+    def set_stop_weight(self, stop_id: str, weight: float):
+        """Updates weight for a specific stop and recalculates total."""
+        if stop_id in self.stop_weights:
+            self.total_system_weight -= self.stop_weights[stop_id]
 
-        if hour in self.morning_rush or hour in self.evening_rush:
-            multiplier = self.rush_hour_multiplier
-        elif 22 <= hour or hour < 5:
-            multiplier = self.night_multiplier
-        else:
-            multiplier = self.off_peak_multiplier
+        self.stop_weights[stop_id] = weight
+        self.total_system_weight += weight
 
-        service_multiplier = 0.7
-        return base_rate * multiplier * service_multiplier
+    def initialize_weights(self, stops: List[StopState]):
+        """
+        Initialize weights for all provided stops.
+        Applies heuristic boosting for major hubs based on name.
+        """
+        self.stop_weights = {}
+        self.total_system_weight = 0.0
 
-    def get_arrival_rate(
-        self,
-        stop_id: str,
-        time_minutes: float,
-        service_id: str
-    ) -> float:
-        """Final arrival rate selection."""
+        for stop in stops:
+            weight = 1.0
 
-        if service_id in ["service_1", "service_4", "service_5"]:
-            return self.weekday_arrival_rate(time_minutes, stop_id)
-        else:
-            return self.weekend_arrival_rate(time_minutes, stop_id)
+            # Apply Hub Multipliers
+            for hub_name, multiplier in self.HUB_WEIGHTS.items():
+                if hub_name in stop.name:
+                    weight = multiplier
+                    break
+
+            self.stop_weights[stop.stop_id] = weight
+            self.total_system_weight += weight
+
+        print(
+            f"Initialized weights for {len(stops)} stops. Total system weight: {self.total_system_weight:.2f}"
+        )
+
+    def get_arrival_rate(self, stop_id: str, time_minutes: float) -> float:
+        """
+        Calculate arrival rate for a specific stop at a specific time.
+        Rate = Global_Rate(t) * (Stop_Weight / Total_Weights)
+        """
+        if self.total_system_weight == 0 or stop_id not in self.stop_weights:
+            return 0.0
+
+        global_rate = self._calculate_global_demand_rate(time_minutes)
+        local_share = self.stop_weights[stop_id] / self.total_system_weight
+
+        return global_rate * local_share
 
     def generate_arrivals(
-        self,
-        stop_state: StopState,
-        time_minutes: float,
-        delta_time: float,
-        service_id: str = "service_1"
+        self, stop_state: StopState, time_minutes: float, delta_time: float
     ) -> List[Passenger]:
 
-        arrival_rate = self.get_arrival_rate(
-            stop_state.stop_id,
-            time_minutes,
-            service_id
-        )
+        arrival_rate = self.get_arrival_rate(stop_state.stop_id, time_minutes)
 
         stop_state.arrival_rate_per_minute = arrival_rate
 
         expected_arrivals = arrival_rate * delta_time
         new_passengers = []
 
+        # Poisson-like sampling for integer arrivals
         if expected_arrivals >= 1.0:
-            num_arrivals = (
-                int(expected_arrivals)
-                + (1 if random.random() < (expected_arrivals % 1.0) else 0)
+            num_arrivals = int(expected_arrivals) + (
+                1 if random.random() < (expected_arrivals % 1.0) else 0
             )
         else:
             num_arrivals = 1 if random.random() < expected_arrivals else 0
@@ -127,7 +241,7 @@ class ArrivalRateModel:
                 origin_stop_id=stop_state.stop_id,
                 destination_stop_id="",
                 arrival_time_minutes=time_minutes,
-                status="WAITING"
+                status="WAITING",
             )
             new_passengers.append(passenger)
             stop_state.total_arrived += 1
@@ -138,12 +252,7 @@ class ArrivalRateModel:
 class DestinationModel:
     """Models passenger destination selection."""
 
-    def select_destination(
-        self,
-        origin_stop_id: str,
-        line_number: str,
-        trip: Trip
-    ) -> Optional[str]:
+    def select_destination(self, origin_stop_id: str, trip: Trip) -> Optional[str]:
 
         if not trip.stop_times or len(trip.stop_times) < 2:
             return None
@@ -157,7 +266,7 @@ class DestinationModel:
         if origin_idx is None or origin_idx >= len(trip.stop_times) - 1:
             return None
 
-        possible_destinations = trip.stop_times[origin_idx + 1:]
+        possible_destinations = trip.stop_times[origin_idx + 1 :]
         if not possible_destinations:
             return None
 

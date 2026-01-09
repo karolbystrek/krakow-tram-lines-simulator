@@ -195,6 +195,18 @@ async def websocket_endpoint(websocket: WebSocket):
                         "type": "statistics_update",
                         "statistics": stats
                     })
+                elif command == "update_generation_params":
+                    params = data.get("params")
+                    if params:
+                        simulation_engine.update_generation_params(params)
+                elif command == "get_generation_params":
+                    params = simulation_engine.get_generation_params()
+                    await websocket.send_json({
+                        "type": "generation_params",
+                        "params": params
+                    })
+                elif command == "save_generation_params":
+                    simulation_engine.save_generation_params()
         except WebSocketDisconnect:
             print("Client disconnected (receive_commands).")
         except Exception as e:

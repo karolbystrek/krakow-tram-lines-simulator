@@ -3,6 +3,7 @@ import { updateStopMarker } from '../map/stopsLayer.js';
 import { SimulationClient } from './SimulationClient.js';
 import { SimulationUI } from './SimulationUI.js';
 import { StatisticsUI } from '../ui/stats.js';
+import { PassengerGenerationModal } from '../ui/PassengerGenerationModal.js';
 
 export class SimulationController {
   constructor(map) {
@@ -24,6 +25,8 @@ export class SimulationController {
 
     this.ui = new SimulationUI(this.client);
     this.statsUI = new StatisticsUI();
+    this.generationModal = new PassengerGenerationModal(this.client, this);
+    
     this.isPaused = false;
     this.wasRunningBeforeStats = false;
     
@@ -87,6 +90,13 @@ export class SimulationController {
         this.statsUI.show(data.statistics);
         if (data.type === 'simulation_ended') {
             this.wasRunningBeforeStats = false; 
+        }
+        return;
+    }
+
+    if (data.type === 'generation_params') {
+        if (this.generationModal) {
+            this.generationModal.setParams(data.params);
         }
         return;
     }
