@@ -450,6 +450,44 @@ body {
     border: none;
 }
 
+/* Loading Overlay Specifics */
+.loading-text {
+    margin-top: 24px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.tram-spinner {
+    width: 80px;
+    height: 80px;
+    background-color: var(--color-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+    animation: tram-pulse 2s infinite;
+}
+
+@keyframes tram-pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+    }
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 25px rgba(33, 150, 243, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+    }
+}
+
 /* Statistics Panel Specifics */
 .stats-content {
     width: 1200px;

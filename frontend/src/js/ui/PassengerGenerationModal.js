@@ -158,6 +158,8 @@ export class PassengerGenerationModal {
     // Initialize chart if needed
     if (!this.chart) {
         this.initChart();
+    } else {
+        this.updateChart();
     }
   }
 
@@ -339,7 +341,7 @@ export class PassengerGenerationModal {
       for(let i = 0; i < 1440; i += 30) {
           const h = Math.floor(i / 60);
           labels.push(`${h.toString().padStart(2,'0')}:00`);
-          data.push(0);
+          data.push(this.calculateRate(i));
       }
 
       this.chart = new Chart(ctx, {
