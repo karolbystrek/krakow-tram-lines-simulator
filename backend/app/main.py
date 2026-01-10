@@ -120,7 +120,7 @@ async def get_detailed_stats():
                 }
             )
 
-    top_stops = sorted(stop_stats, key=lambda x: x["boarded"], reverse=True)[:50]
+    top_stops = sorted(stop_stats, key=lambda x: x["boarded"], reverse=True)
 
     response_data = {"global": stats, "top_stops": top_stops}
     return JSONResponse(content=response_data)
