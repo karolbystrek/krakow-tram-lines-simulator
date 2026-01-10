@@ -66,9 +66,9 @@ class SimulationEngine:
             print(f"Starting simulation with service: {self.service_id}")
             if self.service_id in self.cached_services:
                 self.blocks = self.cached_services[self.service_id]
-                self.start_time_minutes, self.end_time_minutes = self.service_bounds[
-                    self.service_id
-                ]
+                # Default to full 24h simulation
+                self.start_time_minutes = 0
+                self.end_time_minutes = 24 * 60
 
                 print(
                     f"Simulation range: {self.start_time_minutes // 60:02d}:{self.start_time_minutes % 60:02d} - {self.end_time_minutes // 60:02d}:{self.end_time_minutes % 60:02d}"
@@ -145,8 +145,13 @@ class SimulationEngine:
             max_time = 24 * 60
 
         self.service_bounds[service_id] = (min_time, max_time)
+        
+        # Ensure simulation always runs for the full 24 hours to match demand projections
+        self.start_time_minutes = 0
+        self.end_time_minutes = 24 * 60
+        
         print(
-            f"Loaded {service_id}: {len(all_blocks)} blocks, range {min_time}-{max_time}"
+            f"Loaded {service_id}: {len(all_blocks)} blocks. Tram activity: {min_time // 60:02d}:{min_time % 60:02d} - {max_time // 60:02d}:{max_time % 60:02d}"
         )
 
     async def reload_service(self, service_id: str):

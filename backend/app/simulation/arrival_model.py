@@ -260,7 +260,7 @@ class ArrivalRateModel:
     def initialize_weights(self, stops: List[StopState], blocks: List[TramBlock]):
         """
         Initialize weights for all provided stops and lines.
-        Also builds the reachability map.
+        Also builds the reachability map and identifies boarding-capable stops.
         """
         self.current_stops = stops
         self.current_blocks = blocks
@@ -269,36 +269,12 @@ class ArrivalRateModel:
         self.stop_weights_by_full_name = {}
         self.total_system_weight = 0.0
 
-        for stop in stops:
-            weight = 1.0
+        # 1. Build reachability map first to identify stops that can actually board passengers
+        self.line_reachability = {}
+        boarding_capable_full_names = set()
 
-            # 1. Try exact match by Stop ID
-            if stop.stop_id in self.file_weights:
-                weight = self.file_weights[stop.stop_id]
-            # 2. Try exact match by Name
-            elif stop.name in self.file_weights:
-                weight = self.file_weights[stop.name]
-            else:
-                # 3. Partial match for names (e.g. "Rondo Mogilskie" in "Rondo Mogilskie 01")
-                # Sort keys by length descending to match longest specific name first
-                for key in sorted(self.file_weights.keys(), key=len, reverse=True):
-                    if key in stop.name:
-                        weight = self.file_weights[key]
-                        break
-
-            self.stop_weights[stop.stop_id] = weight
-            if stop.full_name:
-                self.stop_weights_by_full_name[stop.full_name] = weight
-                
-            self.total_system_weight += weight
-
-        # Initialize line weights for all lines in blocks
         for block in blocks:
             ln = block.line_number
-            if ln not in self.line_weights:
-                self.line_weights[ln] = 1.0
-
-            # Build reachability
             if ln not in self.line_reachability:
                 self.line_reachability[ln] = {}
             
@@ -316,9 +292,42 @@ class ArrivalRateModel:
                         
                         if dest not in self.line_reachability[ln][origin] or dist < self.line_reachability[ln][origin][dest]:
                             self.line_reachability[ln][origin][dest] = dist
+                        
+                        # If a stop has at least one destination on at least one line, it can board
+                        boarding_capable_full_names.add(origin)
+
+        # 2. Initialize stop weights, only contributing to total if boarding-capable
+        for stop in stops:
+            weight = 0.0 # Default to 0 for non-boarding stops
+            
+            # Check if this stop appears as an origin with destinations in our reachability map
+            if stop.full_name in boarding_capable_full_names:
+                weight = 1.0
+                # Try to get custom weight from config
+                if stop.stop_id in self.file_weights:
+                    weight = self.file_weights[stop.stop_id]
+                elif stop.name in self.file_weights:
+                    weight = self.file_weights[stop.name]
+                else:
+                    for key in sorted(self.file_weights.keys(), key=len, reverse=True):
+                        if key in stop.name:
+                            weight = self.file_weights[key]
+                            break
+            
+            self.stop_weights[stop.stop_id] = weight
+            if stop.full_name:
+                self.stop_weights_by_full_name[stop.full_name] = weight
+                
+            self.total_system_weight += weight
+
+        # 3. Initialize line weights for all lines in blocks
+        for block in blocks:
+            ln = block.line_number
+            if ln not in self.line_weights:
+                self.line_weights[ln] = 1.0
 
         print(
-            f"Initialized weights for {len(stops)} stops. Total system weight: {self.total_system_weight:.2f}"
+            f"Initialized weights for {len(stops)} stops. Boarding-capable: {len(boarding_capable_full_names)}. Total system weight: {self.total_system_weight:.2f}"
         )
         print(f"Initialized reachability maps for {len(self.line_reachability)} lines")
 
