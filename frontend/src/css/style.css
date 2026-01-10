@@ -300,11 +300,72 @@ body {
     outline: none !important;
 }
 
-/* Slider Styles */
-.slider-container {
-    width: 100%;
-    margin: 10px 0;
-    padding: 0 5px;
+.control-group-horizontal {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.control-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 200px;
+}
+
+.vertical-separator {
+    width: 1px;
+    height: 32px;
+    background-color: var(--color-border);
+    margin: 0 8px;
+}
+
+.slider-compact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.label-icon {
+    color: var(--color-text-light);
+    width: 16px;
+    text-align: center;
+}
+
+.time-display-compact, .speed-display-compact {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+    min-width: 45px;
+    text-align: right;
+}
+
+.btn-icon {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-icon:hover {
+    background-color: var(--color-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-icon:active {
+    transform: translateY(0);
+}
+
+/* Adjustments for sliders in compact mode */
+.slider-compact input[type=range] {
+    flex: 1;
+    margin: 0;
 }
 
 .time-slider {
@@ -445,32 +506,71 @@ body {
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    max-width: 95vw;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 90vw;
+    height: 85vh;
+    max-width: 1200px;
     max-height: 90vh;
     border: none;
+    padding: 0;
+    text-align: left;
+    overflow: hidden;
+}
+
+/* Loading Overlay Specifics - Override generic modal styles */
+#loading-overlay .overlay-content,
+#connection-error-overlay .overlay-content {
+    width: auto;
+    height: auto;
+    min-width: 300px;
+    max-width: 500px;
+    padding: 40px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: visible;
 }
 
 /* Loading Overlay Specifics */
 .loading-text {
     margin-top: 24px;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--color-primary);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-text);
+    letter-spacing: 0.5px;
 }
 
 .tram-spinner {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     background-color: var(--color-primary);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
-    animation: tram-pulse 2s infinite;
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4);
+    animation: tram-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.error-content h2 {
+    margin: 20px 0 10px 0;
+    font-size: 24px;
+    color: var(--color-text);
+}
+
+.error-content p {
+    color: var(--color-text-light);
+    margin: 0;
+    font-size: 16px;
+}
+
+.error-icon {
+    color: #ef5350;
+    margin-bottom: 20px;
+    display: inline-block;
+    line-height: 1;
 }
 
 @keyframes tram-pulse {
@@ -490,10 +590,62 @@ body {
 
 /* Statistics Panel Specifics */
 .stats-content {
-    width: 1200px;
+    /* Dimensions handled by .modal-content */
+    padding: 0;
+    gap: 0;
+}
+
+.stats-body {
+    padding: 24px;
+    flex: 1;
     overflow-y: auto;
-    padding: 32px;
-    gap: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.stats-details {
+    width: 100%;
+}
+
+.stats-summary {
+    cursor: pointer;
+    padding: 12px;
+    font-weight: 600;
+    background: var(--color-secondary);
+    border-radius: var(--border-radius);
+    outline: none;
+    user-select: none;
+    color: var(--color-text);
+    transition: background-color var(--transition-base);
+    list-style: none; /* Hide default arrow */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stats-summary::-webkit-details-marker {
+    display: none;
+}
+
+.stats-summary::after {
+    content: '\f078'; /* FontAwesome Chevron Down */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    transition: transform var(--transition-base);
+}
+
+details[open] .stats-summary::after {
+    transform: rotate(180deg);
+}
+
+.stats-summary:hover {
+    background: var(--color-secondary-hover);
+}
+
+.stats-table-wrapper {
+    margin-top: 12px;
+    padding: 0 12px;
 }
 
 .stats-header-centered {
@@ -655,7 +807,7 @@ body {
 
 /* Passenger Generation Modal Specifics */
 .modal-content.large-modal {
-    width: 900px;
+    /* Width handled by default .modal-content */
 }
 
 .modal-header {
@@ -810,7 +962,7 @@ body {
 
 /* Weight Settings Modal */
 .weights-list {
-    max-height: 400px;
+    flex: 1;
     overflow-y: auto;
     border: 1px solid #ddd;
     border-radius: 4px;

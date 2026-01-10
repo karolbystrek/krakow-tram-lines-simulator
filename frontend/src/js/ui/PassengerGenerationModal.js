@@ -26,7 +26,7 @@ export class PassengerGenerationModal {
     this.modal.id = 'passenger-gen-modal';
     this.modal.className = 'modal hidden';
     this.modal.innerHTML = `
-      <div class="modal-content large-modal">
+      <div class="modal-content">
         <div class="modal-header">
           <h2>Passenger Demand Configuration</h2>
           <button class="close-modal-btn">&times;</button>

@@ -45,5 +45,3 @@ Thumbs.db
 # gemini files
 GEMINI.md
 .geminiignore
-plans/
-.commit_message*.txt

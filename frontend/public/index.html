@@ -16,41 +16,51 @@
 <div id="map"></div>
 
 <div id="simulation-controls" class="control-panel">
-    <select id="service-selector" class="service-selector">
-        <option value="service_1">Mon-Tue-Wed</option>
-        <option value="service_5">Thursday</option>
-        <option value="service_4">Friday</option>
-        <option value="service_2">Saturday</option>
-        <option value="service_3">Sunday</option>
-    </select>
-    <div class="slider-container">
-        <div class="slider-label">
-            <span>Time:</span>
-            <span id="simulation-time" class="time-display">--:--</span>
+    <div class="control-group-horizontal">
+        <select id="service-selector" class="service-selector" title="Select Service Day">
+            <option value="service_1">Mon-Tue-Wed</option>
+            <option value="service_5">Thursday</option>
+            <option value="service_4">Friday</option>
+            <option value="service_2">Saturday</option>
+            <option value="service_3">Sunday</option>
+        </select>
+    </div>
+    
+    <div class="vertical-separator"></div>
+
+    <div class="control-group-vertical">
+        <div class="slider-compact">
+            <span class="label-icon"><i class="far fa-clock"></i></span>
+            <input type="range" id="time-slider" class="time-slider" min="0" max="1440" value="0" step="1">
+            <span id="simulation-time" class="time-display-compact">--:--</span>
         </div>
-        <input type="range" id="time-slider" class="time-slider" min="0" max="1440" value="0" step="1">
+        <div class="slider-compact">
+            <span class="label-icon"><i class="fas fa-tachometer-alt"></i></span>
+            <input type="range" id="speed-slider" class="speed-slider" min="-1" max="1" value="0" step="0.01">
+            <span id="speed-display" class="speed-display-compact">1.0x</span>
+        </div>
     </div>
-    <div class="slider-container">
-        <label for="speed-slider" class="slider-label">Speed: <span id="speed-display">1.0x</span></label>
-        <input type="range" id="speed-slider" class="speed-slider" min="-1" max="1" value="0" step="0.01"
-               title="1 real second = 1 simulation minute">
+
+    <div class="vertical-separator"></div>
+
+    <div class="control-group-horizontal">
+        <button id="btn-pause" class="btn btn-icon" title="Pause/Resume">
+            <i class="fas fa-pause"></i>
+        </button>
+        <button id="btn-restart" class="btn btn-icon" title="Restart">
+            <i class="fas fa-redo"></i>
+        </button>
+        <button id="btn-stats" class="btn btn-icon" title="Statistics">
+            <i class="fas fa-chart-bar"></i>
+        </button>
     </div>
-    <button id="btn-pause" class="btn btn-secondary" title="Pause Simulation">
-        <i class="fas fa-pause"></i>
-    </button>
-    <button id="btn-restart" class="btn btn-secondary" title="Restart Simulation">
-        <i class="fas fa-redo"></i>
-    </button>
-    <button id="btn-stats" class="btn btn-secondary" title="View Statistics">
-        <i class="fas fa-chart-bar"></i>
-    </button>
 </div>
 
 <div class="right-controls">
     <!-- Simulation Configuration -->
     <div id="config-panel" class="control-panel-item">
-        <button id="config-toggle" class="settings-toggle-btn" title="Simulation Configuration">
-            <i class="fas fa-sliders-h" style="font-size: 20px;"></i>
+        <button id="config-toggle" class="btn btn-icon" title="Simulation Configuration" style="width: 44px; height: 44px;">
+            <i class="fas fa-sliders-h"></i>
         </button>
         <div id="config-content" class="settings-content config-content-right">
             <h3 class="settings-title">Simulation Config</h3>
@@ -69,8 +79,8 @@
 
     <!-- Map Settings -->
     <div id="settings-panel" class="control-panel-item">
-        <button id="settings-toggle" class="settings-toggle-btn" title="Map Settings">
-            <i class="fas fa-layer-group" style="font-size: 20px;"></i>
+        <button id="settings-toggle" class="btn btn-icon" title="Map Settings" style="width: 44px; height: 44px;">
+            <i class="fas fa-layer-group"></i>
         </button>
         <div id="settings-content" class="settings-content">
             <h3 class="settings-title">Map Settings</h3>
@@ -96,9 +106,9 @@
 
 <div id="connection-error-overlay" class="overlay hidden">
     <div class="overlay-content error-content">
-        <i class="fas fa-wifi-slash fa-3x error-icon"></i>
+        <i class="fas fa-wifi-slash fa-4x error-icon"></i>
         <h2>Connection Lost</h2>
-        <p>Unable to connect to the simulation server. Make sure that the server is running and try again.</p>
+        <p>Unable to connect to the simulation server.</p>
     </div>
 </div>
 
@@ -108,32 +118,38 @@
             <h2>Simulation Statistics</h2>
             <button id="close-stats-btn" class="close-modal-btn">&times;</button>
         </div>
-        <div class="stats-summary-centered">
-            <div class="stat-card-centered">
-                <div class="stat-label">Total Boarded</div>
-                <div id="stat-total-boarded" class="stat-value-large">0</div>
+        <div class="modal-body">
+            <div class="stats-summary-centered">
+                <div class="stat-card-centered">
+                    <div class="stat-label">Total Boarded</div>
+                    <div id="stat-total-boarded" class="stat-value-large">0</div>
+                </div>
+                <div class="stat-card-centered">
+                    <div class="stat-label">Total Alighted</div>
+                    <div id="stat-total-alighted" class="stat-value-large">0</div>
+                </div>
             </div>
-            <div class="stat-card-centered">
-                <div class="stat-label">Total Alighted</div>
-                <div id="stat-total-alighted" class="stat-value-large">0</div>
+            <div class="stats-chart-container">
+                <canvas id="passenger-chart"></canvas>
             </div>
-        </div>
-        <div class="stats-chart-container">
-            <canvas id="passenger-chart"></canvas>
-        </div>
-        <div class="detailed-stats-container">
-             <h3 style="text-align: center; margin-bottom: 15px;">Detailed Stop Statistics</h3>
-             <table id="top-stops-table" style="width: 100%; text-align: left; border-collapse: collapse;">
-                 <thead>
-                     <tr style="border-bottom: 2px solid #eee;">
-                         <th style="padding: 12px;">Stop Name</th>
-                         <th style="padding: 12px; text-align: right;">Boarded</th>
-                         <th style="padding: 12px; text-align: right;">Alighted</th>
-                     </tr>
-                 </thead>
-                 <tbody>
-                 </tbody>
-             </table>
+            <div class="detailed-stats-container">
+                 <details class="stats-details">
+                     <summary class="stats-summary">Detailed Stop Statistics</summary>
+                     <div class="stats-table-wrapper">
+                         <table id="top-stops-table" style="width: 100%; text-align: left; border-collapse: collapse;">
+                             <thead>
+                                 <tr style="border-bottom: 2px solid #eee;">
+                                     <th style="padding: 12px;">Stop Name</th>
+                                     <th style="padding: 12px; text-align: right;">Boarded</th>
+                                     <th style="padding: 12px; text-align: right;">Alighted</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                             </tbody>
+                         </table>
+                     </div>
+                 </details>
+            </div>
         </div>
     </div>
 </div>

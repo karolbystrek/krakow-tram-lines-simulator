@@ -17,7 +17,7 @@ export class WeightSettings {
     this.modal.id = 'weight-settings-modal';
     this.modal.className = 'modal hidden';
     this.modal.innerHTML = `
-      <div class="modal-content large-modal">
+      <div class="modal-content">
         <div class="modal-header">
           <h2>Stop Weights Configuration</h2>
           <button class="close-modal-btn">&times;</button>
@@ -25,7 +25,7 @@ export class WeightSettings {
         
         <div class="modal-body">
             <div class="weights-search-container">
-                <input type="text" id="weights-search" placeholder="Search stops..." class="form-control" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                <input type="text" id="weights-search" placeholder="Search stops..." class="form-control" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;">
             </div>
             <div class="weights-list-header">
                 <span>Stop Name</span>
