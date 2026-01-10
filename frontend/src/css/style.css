@@ -76,19 +76,36 @@ body {
     box-shadow: none;
 }
 
-/* Override absolute positioning for contents in right dock */
+/* Shared Settings/Config Content Styles */
 .settings-content, .config-content-right {
-    top: 0 !important;
-    right: 55px !important; /* To the left of the button (44px + gap) */
-    left: auto !important;
-    transform: translateX(10px); /* Start slightly to the right */
-    transform-origin: top right;
+    position: absolute;
+    top: 0;
+    right: 56px; /* Position to the left of the button (44px btn + 12px gap) */
+    left: auto;
+    
+    background: var(--color-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--color-shadow);
+    border: 1px solid var(--color-border);
+    padding: 0;
+    min-width: 280px;
+    
+    /* Closed State */
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
 }
 
 .settings-content-open {
+    max-height: 80vh;
     opacity: 1;
-    transform: translateX(0) !important;
+    transform: translateX(0);
     pointer-events: all;
+    padding: 20px;
+    overflow-y: auto;
 }
 
 .service-selector {
