@@ -40,8 +40,7 @@ wheels/
 Thumbs.db
 
 # data
-**/data/
+#**/data/
 
 # gemini files
 GEMINI.md
-.geminiignore
