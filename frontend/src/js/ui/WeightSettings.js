@@ -77,11 +77,18 @@ export class WeightSettings {
     });
   }
 
-  async open() {
+  async open(initialSearch = null) {
     this.isOpen = true;
     this.modal.classList.remove('hidden');
     await this.fetchWeights();
-    this.renderList();
+    
+    if (initialSearch) {
+        this.searchInput.value = initialSearch;
+        this.filterList(initialSearch);
+    } else {
+        this.searchInput.value = '';
+        this.renderList();
+    }
   }
 
   close() {

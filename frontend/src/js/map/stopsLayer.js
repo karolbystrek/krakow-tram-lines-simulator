@@ -2,7 +2,7 @@ import { CONFIG } from './mapConfig.js';
 
 
 // Create stop marker
-export function createStopMarker(feature) {
+export function createStopMarker(feature, simulationController) {
   const props = feature.properties;
   const [lon, lat] = feature.geometry.coordinates;
 
@@ -20,9 +20,35 @@ export function createStopMarker(feature) {
   marker.stopName = props.name || props.stop_name || 'Stop';
   marker.waitingCount = 0;
 
-  const popupContent = `<b>${props.name || props.stop_name}</b><br>Code: ${props.kod_busman || ''}<br>ID: ${props.id || ''}<br><span id="stop-passengers-${marker.stopId}">Waiting: 0</span>`;
-  marker.bindPopup(popupContent, { maxWidth: 300 });
-  marker.bindTooltip(props.name || props.stop_name);
+  marker.bindPopup(() => {
+    const container = document.createElement('div');
+    container.innerHTML = `<b>${marker.stopName}</b><br>Code: ${props.kod_busman || ''}<br>ID: ${props.id || ''}<br><span id="stop-passengers-${marker.stopId}">Waiting: ${marker.waitingCount}</span>`;
+
+    if (simulationController && simulationController.weightSettings) {
+      const btn = document.createElement('button');
+      btn.textContent = 'Adjust Weight';
+      btn.style.marginTop = '8px';
+      btn.style.width = '100%';
+      // Simple inline styles to match the dark/light theme neutral look
+      btn.style.backgroundColor = '#6c757d';
+      btn.style.color = 'white';
+      btn.style.border = 'none';
+      btn.style.padding = '4px 8px';
+      btn.style.borderRadius = '4px';
+      btn.style.cursor = 'pointer';
+
+      btn.onclick = () => {
+        simulationController.weightSettings.open(marker.stopName);
+        marker.closePopup();
+      };
+
+      container.appendChild(document.createElement('br'));
+      container.appendChild(btn);
+    }
+    return container;
+  }, { maxWidth: 300 });
+
+  marker.bindTooltip(marker.stopName);
 
   return marker;
 }
@@ -68,7 +94,7 @@ export async function loadTramStops(stopsLayer, map, simulationController) {
     }
 
     data.features.forEach(feature => {
-      const marker = createStopMarker(feature);
+      const marker = createStopMarker(feature, simulationController);
       marker.addTo(stopsLayer);
 
       const kod_busman = feature.properties.kod_busman || '';
