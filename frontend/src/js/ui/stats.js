@@ -146,9 +146,9 @@ export class StatisticsUI {
             const row = document.createElement('tr');
             row.style.borderBottom = '1px solid #eee';
             row.innerHTML = `
-                <td style="padding: 6px;">${stop.name}</td>
-                <td style="padding: 6px;">${stop.boarded.toLocaleString()}</td>
-                <td style="padding: 6px;">${stop.alighted.toLocaleString()}</td>
+                <td style="padding: 12px;">${stop.name}</td>
+                <td style="padding: 12px; text-align: right; font-variant-numeric: tabular-nums;">${stop.boarded.toLocaleString()}</td>
+                <td style="padding: 12px; text-align: right; font-variant-numeric: tabular-nums;">${stop.alighted.toLocaleString()}</td>
             `;
             tbody.appendChild(row);
         });
