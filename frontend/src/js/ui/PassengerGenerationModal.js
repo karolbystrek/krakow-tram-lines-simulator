@@ -338,9 +338,12 @@ export class PassengerGenerationModal {
       const ctx = document.getElementById('scenario-chart').getContext('2d');
       const labels = [];
       const data = [];
-      for(let i = 0; i < 1440; i += 30) {
+      for(let i = 0; i < 1800; i += 30) {
           const h = Math.floor(i / 60);
-          labels.push(`${h.toString().padStart(2,'0')}:00`);
+          const validHour = h % 24;
+          const timeStr = `${validHour.toString().padStart(2,'0')}:00`;
+          const label = h >= 24 ? `${timeStr} (+1)` : timeStr;
+          labels.push(label);
           data.push(this.calculateRate(i));
       }
 
@@ -383,7 +386,7 @@ export class PassengerGenerationModal {
       if (!this.chart) return;
       
       const newData = [];
-      for(let i = 0; i < 1440; i += 30) {
+      for(let i = 0; i < 1800; i += 30) {
           newData.push(this.calculateRate(i));
       }
       
