@@ -251,6 +251,10 @@ class ArrivalRateModel:
         # If we want persistence, we should probably update self.file_weights too using the stop name.
         pass 
 
+    def set_line_weight(self, line_number: str, weight: float):
+        """Updates weight for a specific line."""
+        self.line_weights[line_number] = weight
+
     def update_weight_config(self, name_or_id: str, weight: float):
         """Update the persistent configuration for a stop weight."""
         self.file_weights[name_or_id] = weight

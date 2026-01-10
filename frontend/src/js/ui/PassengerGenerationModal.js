@@ -337,18 +337,24 @@ export class PassengerGenerationModal {
     }
 
     calculateTotalProjected() {
-        // Analytic integral of the demand curve over 24 hours (1440 minutes)
-        // Total = (BaseRate * 1440) + Sum(PeakHeight * PeakWidth * sqrt(2*pi))
+        // Calculate the integral of the demand curve over the ACTIVE simulation window
+        // This ensures the projection matches what the simulation actually generates.
+        
+        const startTime = this.simulation.status?.start_time_minutes ?? 0;
+        const endTime = this.simulation.status?.end_time_minutes ?? 1440;
+        
+        // Use numerical integration (trapezoidal rule) for the active window
+        // since the analytic formula is for the full infinite Gaussian range.
+        let total = 0;
+        const step = 1; // 1 minute precision
+        for (let t = startTime; t < endTime; t += step) {
+            // Average of start and end of minute
+            const r1 = this.calculateRate(t);
+            const r2 = this.calculateRate(t + step);
+            total += ((r1 + r2) / 2) * step;
+        }
 
-        const baseTotal = this.config.baseRate * 1440;
-        const SQRT_2_PI = 2.506628;
-
-        let peaksTotal = 0;
-        this.config.peaks.forEach(p => {
-            peaksTotal += p.height * p.width * SQRT_2_PI;
-        });
-
-        return Math.round(baseTotal + peaksTotal);
+        return Math.round(total);
     }
 
     initChart() {

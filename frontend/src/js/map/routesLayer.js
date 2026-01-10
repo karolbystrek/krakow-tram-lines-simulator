@@ -12,7 +12,7 @@ function sortLineNumbers(a, b) {
 }
 
 // Create route polyline
-function createRoutePolyline(feature, lineNumber) {
+function createRoutePolyline(feature, lineNumber, simulationController) {
   const coords = feature.geometry.coordinates;
   const latLngs = coords.map(([lon, lat]) => [lat, lon]);
 
@@ -21,6 +21,33 @@ function createRoutePolyline(feature, lineNumber) {
     weight: CONFIG.ROUTES.WEIGHT,
     opacity: CONFIG.ROUTES.OPACITY
   });
+
+  polyline.bindPopup(() => {
+    const container = document.createElement('div');
+    container.innerHTML = `<b>Tram Line ${lineNumber}</b>`;
+
+    if (simulationController && simulationController.lineWeightSettings) {
+      const btn = document.createElement('button');
+      btn.textContent = 'Adjust Weight';
+      btn.style.marginTop = '8px';
+      btn.style.width = '100%';
+      btn.style.backgroundColor = '#6c757d';
+      btn.style.color = 'white';
+      btn.style.border = 'none';
+      btn.style.padding = '4px 8px';
+      btn.style.borderRadius = '4px';
+      btn.style.cursor = 'pointer';
+
+      btn.onclick = () => {
+        simulationController.lineWeightSettings.open(lineNumber);
+        polyline.closePopup();
+      };
+
+      container.appendChild(document.createElement('br'));
+      container.appendChild(btn);
+    }
+    return container;
+  }, { maxWidth: 300 });
 
   // Bind tooltip that follows the mouse cursor
   polyline.bindTooltip(`Tram Line ${lineNumber}`, {
@@ -40,7 +67,7 @@ function createRoutePolyline(feature, lineNumber) {
 }
 
 // Load and display tram routes
-export async function loadTramRoutes(map, overlayMaps) {
+export async function loadTramRoutes(map, overlayMaps, simulationController) {
   try {
     const response = await fetch('/api/routes');
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -67,7 +94,7 @@ export async function loadTramRoutes(map, overlayMaps) {
     sortedLineNumbers.forEach(lineNumber => {
       const lineLayer = L.layerGroup();
       featuresByLine[lineNumber].forEach(feature => {
-        createRoutePolyline(feature, lineNumber).addTo(lineLayer);
+        createRoutePolyline(feature, lineNumber, simulationController).addTo(lineLayer);
       });
 
       lineLayers[lineNumber] = lineLayer;

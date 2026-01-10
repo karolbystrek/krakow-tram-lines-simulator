@@ -13,6 +13,7 @@ class Passenger:
     passenger_id: str
     origin_stop_id: str
     destination_stop_id: str
+    target_line: str
     arrival_time_minutes: float
     boarding_time_minutes: Optional[float] = None
     alighting_time_minutes: Optional[float] = None

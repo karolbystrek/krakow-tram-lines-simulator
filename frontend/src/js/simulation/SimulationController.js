@@ -5,6 +5,7 @@ import { SimulationUI } from './SimulationUI.js';
 import { StatisticsUI } from '../ui/stats.js';
 import { PassengerGenerationModal } from '../ui/PassengerGenerationModal.js';
 import { WeightSettings } from '../ui/WeightSettings.js';
+import { LineWeightSettings } from '../ui/LineWeightSettings.js';
 
 export class SimulationController {
   constructor(map) {
@@ -28,6 +29,7 @@ export class SimulationController {
     this.statsUI = new StatisticsUI();
     this.generationModal = new PassengerGenerationModal(this.client, this);
     this.weightSettings = new WeightSettings(this.client, this);
+    this.lineWeightSettings = new LineWeightSettings(this.client, this);
     this.stopsLayer = null;
     
     this.isPaused = false;
@@ -77,6 +79,15 @@ export class SimulationController {
     if (btnWeights) {
         btnWeights.addEventListener('click', () => {
             if (this.weightSettings) this.weightSettings.open();
+            configContent.classList.remove('settings-content-open');
+            configToggle.classList.remove('settings-toggle-btn-active');
+        });
+    }
+
+    const btnLineWeights = document.getElementById('btn-config-line-weights');
+    if (btnLineWeights) {
+        btnLineWeights.addEventListener('click', () => {
+            if (this.lineWeightSettings) this.lineWeightSettings.open();
             configContent.classList.remove('settings-content-open');
             configToggle.classList.remove('settings-toggle-btn-active');
         });

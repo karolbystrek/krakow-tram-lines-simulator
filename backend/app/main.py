@@ -104,6 +104,41 @@ async def update_stop_weights(weights: Dict[str, float] = Body(...)):
     )
 
 
+@app.get("/api/simulation/line-weights")
+async def get_line_weights():
+    """Get current line weights."""
+    if not simulation_engine.arrival_model:
+        return JSONResponse(content=[])
+
+    weights = simulation_engine.arrival_model.line_weights
+    result = []
+
+    for line_num, weight in weights.items():
+        result.append({"id": line_num, "name": f"Line {line_num}", "weight": weight})
+
+    # Sort by line number
+    try:
+        result.sort(key=lambda x: int(x["id"]))
+    except ValueError:
+        result.sort(key=lambda x: x["id"])
+
+    return JSONResponse(content=result)
+
+
+@app.post("/api/simulation/line-weights")
+async def update_line_weights(weights: Dict[str, float] = Body(...)):
+    """Update line weights."""
+    if simulation_engine.arrival_model:
+        for line_num, weight in weights.items():
+            simulation_engine.arrival_model.set_line_weight(line_num, weight)
+
+        simulation_engine.arrival_model.save_line_weights()
+        return JSONResponse(content={"status": "updated", "count": len(weights)})
+    return JSONResponse(
+        content={"status": "error", "message": "Engine not ready"}, status_code=500
+    )
+
+
 @app.get("/api/simulation/stats/detailed")
 async def get_detailed_stats():
     """Get detailed statistics including top stops."""

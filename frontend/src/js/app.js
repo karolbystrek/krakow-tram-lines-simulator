@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     simulation.connect();
 
     const [routesResult, stopsLoaded] = await Promise.all([
-      loadTramRoutes(map, overlayMaps),
+      loadTramRoutes(map, overlayMaps, simulation),
       loadTramStops(stopsLayer, map, simulation),
     ]);
 

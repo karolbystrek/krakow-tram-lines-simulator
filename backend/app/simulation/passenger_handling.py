@@ -4,7 +4,6 @@ Passenger boarding and alighting logic
 
 from typing import Tuple
 
-from .arrival_model import DestinationModel
 from .models import TramBlock, StopTime
 from .passenger_model import StopState, TramState
 
@@ -15,7 +14,30 @@ class PassengerManager:
     """
 
     def __init__(self):
-        self.destination_model = DestinationModel()
+        pass
+
+    def _is_stop_reachable(
+        self,
+        tram_block: TramBlock,
+        current_stop_time: StopTime,
+        destination_stop_id: str,
+    ) -> bool:
+        """
+        Check if a stop is reachable from current position in the future path of the block.
+        """
+        found_current = False
+        for trip in tram_block.trips:
+            for st in trip.stop_times:
+                if not found_current:
+                    # We need to find where we are first (exact object match or ID+time)
+                    if st == current_stop_time:
+                        found_current = True
+                    continue
+                
+                # Once we found current stop, all subsequent stops are potential destinations
+                if st.full_name == destination_stop_id:
+                    return True
+        return False
 
     def handle_tram_at_stop(
         self,
@@ -35,24 +57,23 @@ class PassengerManager:
         Returns: (passengers_boarded, passengers_alighted)
 
         Steps:
-        1. Alighting: Find all passengers on tram with destination = current stop
-        2. Boarding: Get waiting passengers, board up to capacity
+        1. Alighting: Passengers alight if their destination_stop_id matches current stop.
+        2. Boarding: Board passengers if:
+            - target_line == tram line number
+            - destination is reachable in the block's future path
+            - capacity allows
         """
         passengers_alighted = 0
         passengers_boarded = 0
 
-        # Step 1: Alighting (skip if requested - used when multiple stops share coordinates)
+        # Step 1: Alighting
         if not skip_alighting:
-            # Check if this is the last stop of the trip
-            active_trip = tram_block.get_active_trip(current_time_minutes)
-            is_last_stop = active_trip and stop_time == active_trip.stop_times[-1]
-
-            # Find passengers whose destination is this stop
-            # OR force alight all if it's the last stop
+            # Passengers alight ONLY if they reached their destination
+            # No more forced alighting at trip termini!
             passengers_to_alight = [
                 p
                 for p in tram_state.passengers
-                if p.status == "ON_TRAM" and (is_last_stop or p.destination_stop_id == stop_time.full_name)
+                if p.status == "ON_TRAM" and p.destination_stop_id == stop_time.full_name
             ]
 
             for passenger in passengers_to_alight:
@@ -64,7 +85,6 @@ class PassengerManager:
             stop_state.total_alighted += passengers_alighted
 
             # Remove alighted passengers from tram
-            # Keep only passengers that are still ON_TRAM
             tram_state.passengers = [
                 p for p in tram_state.passengers if p.status == "ON_TRAM"
             ]
@@ -79,32 +99,21 @@ class PassengerManager:
         if not waiting_passengers:
             return passengers_boarded, passengers_alighted
 
-        # Get active trip for destination assignment
-        active_trip = tram_block.get_active_trip(current_time_minutes)
-
-        if not active_trip:
-            return passengers_boarded, passengers_alighted
-
         # Try to board passengers
         passengers_to_remove = []
         for passenger in waiting_passengers:
-            # Recalculate available space for each passenger (in case capacity changed)
+            # 1. Check if capacity allows
             available_space = tram_state.get_available_space()
-
             if available_space <= 0:
                 break
 
-            # Assign destination if not already set
-            if not passenger.destination_stop_id or passenger.destination_stop_id == "":
-                destination = self.destination_model.select_destination(
-                    stop_time.full_name, active_trip
-                )
-                if destination:
-                    passenger.destination_stop_id = destination
-                else:
-                    # Skip if no valid destination (can't board without destination)
-                    # This can happen if we're at the last stop or origin not found in trip
-                    continue
+            # 2. Check if this tram is on the passenger's target line
+            if passenger.target_line != tram_block.line_number:
+                continue
+            
+            # 3. Check if destination is reachable with this tram block
+            if not self._is_stop_reachable(tram_block, stop_time, passenger.destination_stop_id):
+                continue
 
             # Board the passenger
             passenger.status = "ON_TRAM"
@@ -121,17 +130,11 @@ class PassengerManager:
             tram_state.update_occupancy()
 
         # Remove boarded passengers from waiting queue
-        # Use list comprehension to filter out boarded passengers
         remove_ids = set(p.passenger_id for p in passengers_to_remove)
         stop_state.waiting_passengers = [
             p
             for p in stop_state.waiting_passengers
             if p.passenger_id not in remove_ids and p.status == "WAITING"
-        ]
-
-        # Also clean up any passengers that are no longer WAITING (defensive)
-        stop_state.waiting_passengers = [
-            p for p in stop_state.waiting_passengers if p.status == "WAITING"
         ]
 
         # Update tram occupancy
