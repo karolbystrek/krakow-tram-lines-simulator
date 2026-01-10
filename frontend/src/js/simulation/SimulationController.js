@@ -45,6 +45,22 @@ export class SimulationController {
             configContent.classList.toggle('settings-content-open');
             configToggle.classList.toggle('settings-toggle-btn-active');
         });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && configContent.classList.contains('settings-content-open')) {
+                configContent.classList.remove('settings-content-open');
+                configToggle.classList.remove('settings-toggle-btn-active');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (configContent.classList.contains('settings-content-open')) {
+                if (!configContent.contains(e.target) && !configToggle.contains(e.target)) {
+                    configContent.classList.remove('settings-content-open');
+                    configToggle.classList.remove('settings-toggle-btn-active');
+                }
+            }
+        });
     }
 
     const btnDemand = document.getElementById('btn-config-demand');

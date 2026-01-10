@@ -59,6 +59,22 @@ export class WeightSettings {
     this.searchInput.addEventListener('input', debounce((e) => {
         this.filterList(e.target.value);
     }, 300));
+
+    this.initEvents();
+  }
+
+  initEvents() {
+    this.modal.addEventListener('click', (e) => {
+      if (e.target === this.modal) {
+        this.close();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isOpen) {
+        this.close();
+      }
+    });
   }
 
   async open() {
@@ -115,9 +131,8 @@ export class WeightSettings {
 
   renderList() {
     this.listContainer.innerHTML = '';
-    const itemsToShow = this.filteredList.slice(0, 100);
     
-    itemsToShow.forEach(item => {
+    this.filteredList.forEach(item => {
       const el = document.createElement('div');
       el.className = 'weight-item';
       el.innerHTML = `

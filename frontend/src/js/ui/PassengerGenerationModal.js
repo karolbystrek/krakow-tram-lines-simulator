@@ -105,6 +105,22 @@ export class PassengerGenerationModal {
         this.baseRateInput.value = this.config.baseRate;
         this.updateChart();
     });
+
+    this.initEvents();
+  }
+
+  initEvents() {
+    this.modal.addEventListener('click', (e) => {
+      if (e.target === this.modal) {
+        this.close();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.isOpen) {
+        this.close();
+      }
+    });
   }
 
   setParams(params) {

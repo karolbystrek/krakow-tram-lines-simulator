@@ -57,6 +57,24 @@ export function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers
     }
   });
 
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && content.classList.contains('settings-content-open')) {
+      content.classList.remove('settings-content-open');
+      toggle.classList.remove('settings-toggle-btn-active');
+    }
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (content.classList.contains('settings-content-open')) {
+        if (!content.contains(e.target) && !toggle.contains(e.target)) {
+            content.classList.remove('settings-content-open');
+            toggle.classList.remove('settings-toggle-btn-active');
+        }
+    }
+  });
+
   // --- Line Controls ---
   const linesHeader = document.createElement('h3');
   linesHeader.className = 'settings-section-header';
