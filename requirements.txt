@@ -3,5 +3,4 @@ uvicorn[standard]
 websockets
 simpy
 geojson
-pandas
 httpx

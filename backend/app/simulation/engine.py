@@ -199,19 +199,13 @@ class SimulationEngine:
         try:
             while self.simpy_running:
                 if not self.paused:
-                    # Run simpy for a small step (0.1 minutes)
-                    # Match original speed: 0.1 minutes simulation = 0.1 seconds real time
                     start_real_time = real_time.time()
                     current_simpy_time = self.env.now
                     next_timeout = min(current_simpy_time + 0.1, self.end_time_minutes)
 
                     if next_timeout > current_simpy_time:
-                        # Run simpy until next timeout
                         self.env.run(until=next_timeout)
 
-                        # Wait to match real-time speed (0.1 minutes sim = 0.1 seconds real at 1x)
-                        # Speed factor 1.0: 0.1s real -> 0.1m sim
-                        # Speed factor 2.0: 0.05s real -> 0.1m sim
                         elapsed_real = real_time.time() - start_real_time
                         target_real_duration = 0.1 / max(
                             0.1, self.simulation_speed_factor
@@ -220,17 +214,14 @@ class SimulationEngine:
                         if sleep_time > 0:
                             real_time.sleep(sleep_time)
 
-                        # Check if we've reached the end
                         if self.env.now >= self.end_time_minutes:
                             print("Simulation finished (end time reached).")
                             self.running = False
                             self.simpy_running = False
                             break
                     else:
-                        # Reached end time
                         break
                 else:
-                    # When paused, just sleep a bit to avoid busy waiting
                     real_time.sleep(0.1)
         except Exception as e:
             print(f"Error in simpy thread: {e}")
@@ -243,14 +234,11 @@ class SimulationEngine:
     def _simpy_passenger_update_loop(self):
         """Simpy process for passenger simulation updates."""
         while self.simpy_running and self.env.now < self.end_time_minutes:
-            # Wait for 0.1 minutes of simulation time
             yield self.env.timeout(0.1)
 
-            # Update passenger simulation (only if initialized)
             if self.stop_states:
                 self._update_passenger_simulation(delta_time=0.1)
 
-            # Check if we've reached the end
             if self.env.now >= self.end_time_minutes:
                 break
 
@@ -258,24 +246,19 @@ class SimulationEngine:
         """Main asyncio loop for WebSocket updates."""
         print("Simulation loop started.")
         while self.running:
-            # 0.1 second real time for WebSocket updates
             await asyncio.sleep(0.1)
-            # Time is managed by simpy, we just keep the loop running for WebSocket updates
 
     def _reset_env(self, initial_time: float):
         """Reset SimPy environment and thread safely."""
-        # Stop existing simpy loop if running
         self.simpy_running = False
         if self.simpy_thread and self.simpy_thread.is_alive():
             self.simpy_thread.join(timeout=1.0)
 
-        # Create new environment
         with self._time_lock:
             self.env = simpy.Environment(initial_time=initial_time)
             self.simpy_running = True
             self.env.process(self._simpy_passenger_update_loop())
 
-        # Start simpy in a separate thread
         self.simpy_thread = threading.Thread(target=self._run_simpy, daemon=True)
         self.simpy_thread.start()
 
@@ -286,7 +269,6 @@ class SimulationEngine:
             pos = self._get_tram_position_at_time(block, self.current_time_minutes)
             if pos:
                 lat, lon = pos
-                # Get occupancy from tram state
                 tram_state = self.tram_states.get(block.block_id)
                 occupancy = tram_state.current_occupancy if tram_state else 0
                 max_capacity = tram_state.max_capacity if tram_state else 200
@@ -324,7 +306,6 @@ class SimulationEngine:
 
     def set_time(self, time_minutes: float):
         """Set the simulation time manually."""
-        # Clamp time to valid range
         old_time = self.current_time_minutes
         target_time = max(
             self.start_time_minutes, min(time_minutes, self.end_time_minutes)
@@ -334,46 +315,31 @@ class SimulationEngine:
             f"Setting time to: {int(target_time // 60):02d}:{int(target_time % 60):02d} (was {int(old_time // 60):02d}:{int(old_time % 60):02d})"
         )
 
-        # 1. Stop the asynchronous runner loop temporarily
         self.simpy_running = False
         if self.simpy_thread and self.simpy_thread.is_alive():
             self.simpy_thread.join(timeout=1.0)
 
-        # IMPORTANT: Set simpy_running = True so the generator process (_simpy_passenger_update_loop)
-        # does not exit when we run the environment synchronously in _fast_forward.
-        # The thread is stopped, so it won't run in the background, but env.run() needs this flag.
         self.simpy_running = True
 
         try:
-            # 2. Determine if we need to reset/jump back
-            # If moving backward OR if we simply need to re-calculate stats from start
             if target_time < old_time:
                 print("Time jumped backward, resetting simulation state...")
-
-                # Reset statistics
                 self.stats = {
                     "total_boarded": 0,
                     "total_alighted": 0,
                     "hourly_stats": {},
                 }
-
-                # Reset passenger simulation
                 self._initialize_passenger_simulation(
                     getattr(self, "_cached_stops", None)
                 )
 
-                # Reset SimPy environment to START time
                 with self._time_lock:
                     self.env = simpy.Environment(initial_time=self.start_time_minutes)
-                    # Attach the passenger update process to the NEW environment
                     self.env.process(self._simpy_passenger_update_loop())
 
-                # Fast forward from start to target_time
                 self._fast_forward(target_time)
 
             else:
-                # Moving forward: fast forward from current time to target time
-                # Only if target > current, otherwise we are already there
                 if target_time > self.env.now:
                     print(f"Fast forwarding from {self.env.now} to {target_time}...")
                     self._fast_forward(target_time)
@@ -383,7 +349,6 @@ class SimulationEngine:
 
             traceback.print_exc()
 
-        # 3. Restart the runner loop if needed
         if self.running and target_time < self.end_time_minutes:
             self.simpy_thread = threading.Thread(target=self._run_simpy, daemon=True)
             self.simpy_thread.start()
@@ -444,12 +409,6 @@ class SimulationEngine:
         """Interpolate position along the shape path."""
         target_dist = start_dist + (end_dist - start_dist) * fraction
 
-        # Find the segment in trip.shape that contains target_dist
-        # trip._shape_distances is monotonic
-
-        # Binary search or linear search? Linear is fine for now as shapes aren't huge
-        # and we can optimize later if needed.
-
         distances = trip._shape_distances
         if not distances:
             return trip.shape[0]
@@ -459,7 +418,6 @@ class SimulationEngine:
             d2 = distances[i + 1]
 
             if d1 <= target_dist <= d2:
-                # Found the segment
                 segment_len = d2 - d1
                 if segment_len == 0:
                     return trip.shape[i]
@@ -472,7 +430,6 @@ class SimulationEngine:
                 lon = lon1 + (lon2 - lon1) * segment_fraction
                 return lat, lon
 
-        # Fallback if out of bounds (shouldn't happen with correct logic)
         return trip.shape[-1]
 
     def _get_tram_position_at_time(
@@ -483,15 +440,11 @@ class SimulationEngine:
         active_trip = block.get_active_trip(time_minutes)
 
         if not active_trip:
-            # Tram waiting at terminus - show at last stop of previous trip
-            # Or check if it's in depot
-            # For simplicity, let's just check if it's between trips
             if block.trips:
                 first_start = block.trips[0].get_start_time_minutes()
                 last_end = block.trips[-1].get_end_time_minutes()
 
                 if first_start <= time_minutes <= last_end:
-                    # Find the previous trip
                     last_trip = None
                     for trip in block.trips:
                         if trip.get_end_time_minutes() <= time_minutes:
@@ -505,11 +458,9 @@ class SimulationEngine:
 
             return None
 
-        # Get current segment (between which two stops)
         segment = active_trip.get_current_segment(time_minutes)
 
         if not segment:
-            # Might be at a stop exactly
             for stop_time in active_trip.stop_times:
                 if stop_time.to_minutes() == time_minutes:
                     return stop_time.stop_lat, stop_time.stop_lon
@@ -526,7 +477,6 @@ class SimulationEngine:
         fraction = (time_minutes - start_time) / (end_time - start_time)
         fraction = max(0.0, min(1.0, fraction))
 
-        # Use shape-based interpolation if available
         if active_trip._shape_distances:
             return self._interpolate_position_on_shape(
                 active_trip,
@@ -535,7 +485,6 @@ class SimulationEngine:
                 fraction,
             )
 
-        # Fallback to linear interpolation between stops
         lat = prev_stop.stop_lat + (next_stop.stop_lat - prev_stop.stop_lat) * fraction
         lon = prev_stop.stop_lon + (next_stop.stop_lon - prev_stop.stop_lon) * fraction
 
@@ -547,58 +496,43 @@ class SimulationEngine:
         Args:
             stops: Optional pre-loaded stops dict to avoid reloading. If None, loads stops.
         """
-        # Use provided stops or load them
         if stops is None:
             stops = load_tram_stops()
 
-        # Initialize stop states for all stops (by kod_busman)
-        # These are the stops where passengers will actually wait
         self.stop_states = {}
         for stop_id, stop in stops.items():
             self.stop_states[stop_id] = StopState(stop_id=stop_id, name=stop.name)
 
-        # Initialize weights for arrival model
         self.arrival_model.initialize_weights(list(self.stop_states.values()))
-
-        # Create mapping from stop_num coordinates to kod_busman
-        # This allows us to find the correct stop state when trams arrive
-        # Key: (lat, lon) rounded to 6 decimals, Value: List[kod_busman] (can be multiple stops at same location)
         self.stop_num_to_kod_busman = {}
 
-        # Build mapping by matching stop_num coordinates to geojson stop coordinates
         for block in self.blocks:
             for trip in block.trips:
                 for stop_time in trip.stop_times:
                     if stop_time.stop_num and stop_time.stop_lat and stop_time.stop_lon:
-                        # Round coordinates to match precision used in filtering
                         sched_lat = round(float(stop_time.stop_lat), 6)
                         sched_lon = round(float(stop_time.stop_lon), 6)
                         coord_key = (sched_lat, sched_lon)
 
-                        # Find ALL matching geojson stops by coordinates (multiple stops can share coordinates)
                         if coord_key not in self.stop_num_to_kod_busman:
                             matching_stops = []
                             for kod_busman, geojson_stop in stops.items():
                                 geojson_lat = round(float(geojson_stop.lat), 6)
                                 geojson_lon = round(float(geojson_stop.lon), 6)
 
-                                # Match within small threshold (0.001 degrees ~ 11 meters)
                                 if (
                                     abs(sched_lat - geojson_lat) < 0.001
                                     and abs(sched_lon - geojson_lon) < 0.001
                                 ):
                                     matching_stops.append(kod_busman)
 
-                            # Store list of matching stops (can be empty, single, or multiple)
                             if matching_stops:
                                 self.stop_num_to_kod_busman[coord_key] = matching_stops
 
-        # Initialize tram states for all blocks
         self.tram_states = {}
         for block in self.blocks:
             self.tram_states[block.block_id] = TramState(block_id=block.block_id)
 
-        # Reset processed stops tracking
         self.processed_stops = {}
 
         print(
@@ -612,22 +546,43 @@ class SimulationEngine:
         """Update passenger simulation for one time step."""
         current_time = self.env.now
 
-        # 1. Generate new arrivals at all stops
         for stop_state in self.stop_states.values():
             new_passengers = self.arrival_model.generate_arrivals(
                 stop_state, current_time, delta_time
             )
             stop_state.waiting_passengers.extend(new_passengers)
 
-        # 2. Check if any trams are arriving at stops
         self._process_tram_arrivals()
 
-        # 3. Clean up old processed_stops entries (older than 10 minutes) to prevent memory growth
-        if len(self.processed_stops) > 1000:  # Only clean if we have many entries
+        if len(self.processed_stops) > 1000:
             cutoff_time = current_time - 10.0
             self.processed_stops = {
                 k: v for k, v in self.processed_stops.items() if v > cutoff_time
             }
+
+    def _find_matching_stop_states(self, stop_time: Any) -> List[StopState]:
+        """Find matching StopStates for a given stop_time from schedule."""
+        matching_stop_states = []
+
+        if stop_time.stop_lat and stop_time.stop_lon:
+            sched_lat = round(float(stop_time.stop_lat), 6)
+            sched_lon = round(float(stop_time.stop_lon), 6)
+            coord_key = (sched_lat, sched_lon)
+
+            kod_busman_list = self.stop_num_to_kod_busman.get(coord_key)
+            if kod_busman_list:
+                for kod_busman in kod_busman_list:
+                    stop_state = self.stop_states.get(kod_busman)
+                    if stop_state:
+                        matching_stop_states.append(stop_state)
+
+        if not matching_stop_states:
+            stop_id = stop_time.stop_num
+            stop_state = self.stop_states.get(stop_id)
+            if stop_state:
+                matching_stop_states.append(stop_state)
+
+        return matching_stop_states
 
     def _process_tram_arrivals(self):
         """Check all active trams and process arrivals at stops."""
@@ -638,69 +593,35 @@ class SimulationEngine:
             if not active_trip:
                 continue
 
-            # Check if tram is at a stop (within tolerance)
-            # Increased tolerance to 0.5 minutes (30 seconds) to ensure stops aren't missed
             for stop_time in active_trip.stop_times:
                 scheduled_time = stop_time.to_minutes()
                 time_diff = abs(current_time - scheduled_time)
-
-                # If within 0.5 minute of scheduled stop time (before or after)
-                # Also check that we haven't already processed this stop recently
                 stop_key = (block.block_id, stop_time.stop_num)
                 last_processed = self.processed_stops.get(stop_key, -999)
 
-                # Process if within time window AND not processed in last 1 minute
                 if time_diff < 0.5 and (current_time - last_processed) > 1.0:
-                    # Find ALL matching stop states by matching coordinates
-                    # Multiple stops can share the same coordinates, and we need to board passengers from ALL of them
-                    matching_stop_states = []
+                    matching_stop_states = self._find_matching_stop_states(stop_time)
 
-                    if stop_time.stop_lat and stop_time.stop_lon:
-                        # Round coordinates to match precision
-                        sched_lat = round(float(stop_time.stop_lat), 6)
-                        sched_lon = round(float(stop_time.stop_lon), 6)
-                        coord_key = (sched_lat, sched_lon)
-
-                        # Find ALL matching kod_busman values from mapping (can be multiple stops at same location)
-                        kod_busman_list = self.stop_num_to_kod_busman.get(coord_key)
-                        if kod_busman_list:
-                            # kod_busman_list is now a list, not a single value
-                            for kod_busman in kod_busman_list:
-                                stop_state = self.stop_states.get(kod_busman)
-                                if stop_state:
-                                    matching_stop_states.append(stop_state)
-
-                    # Fallback: try direct lookup by stop_num (for backwards compatibility)
                     if not matching_stop_states:
                         stop_id = stop_time.stop_num
-                        stop_state = self.stop_states.get(stop_id)
-                        if stop_state:
-                            matching_stop_states.append(stop_state)
-
-                    # Create if somehow missing
-                    if not matching_stop_states:
-                        # Use stop_num as fallback
-                        stop_id = stop_time.stop_num
-                        stop_state = StopState(stop_id=stop_id, name=stop_time.stop_name) # Use stop_name from trip data
+                        stop_state = StopState(
+                            stop_id=stop_id, name=stop_time.stop_name
+                        )
                         self.stop_states[stop_id] = stop_state
                         matching_stop_states.append(stop_state)
                         print(
                             f"DEBUG: Created new stop state for {stop_id} (fallback). Coordinates: {stop_time.stop_lat}, {stop_time.stop_lon}"
                         )
 
-                    # Get tram state (should already exist)
                     tram_state = self.tram_states.get(block.block_id)
                     if not tram_state:
                         tram_state = TramState(block_id=block.block_id)
                         self.tram_states[block.block_id] = tram_state
 
-                    # Handle boarding/alighting
                     total_boarded = 0
                     total_alighted = 0
 
                     for i, stop_state_to_process in enumerate(matching_stop_states):
-                        # Alighting only happens for the first stop in the matched list
-                        # to prevent multiple alighting for the same group of passengers
                         should_skip_alighting = i > 0
 
                         boarded, alighted = self.passenger_manager.handle_tram_at_stop(
@@ -712,16 +633,10 @@ class SimulationEngine:
                             skip_alighting=should_skip_alighting,
                         )
                         total_boarded += boarded
-                        total_alighted += alighted  # alighted will be 0 for i > 0
+                        total_alighted += alighted
 
-                    # Update statistics
                     self._update_stats(total_boarded, total_alighted, current_time)
-
-                    # Mark this stop as processed
                     self.processed_stops[stop_key] = current_time
-
-                    # Only process once per stop arrival (avoid duplicate processing)
-                    # Move to next block after processing one stop
                     break
 
     def _update_stats(self, boarded: int, alighted: int, time_minutes: float):
