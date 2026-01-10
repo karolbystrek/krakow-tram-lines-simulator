@@ -38,28 +38,36 @@ _cached_stop_details = None
 
 def clean_stop_name(name: str) -> str:
     """
-    Remove suffixes like (nż), (nz) from stop names.
+    Remove suffixes like (nż), (nz) from stop names, handling variations and spaces.
     """
-    cleaned = name.replace("(nż)", "").replace("(nz)", "").strip()
-    return cleaned
+    if not name:
+        return ""
+    
+    import re
+    # Remove suffixes like (nż), (nz), (nż.), (nz.) with or without parentheses
+    cleaned = re.sub(r"\(?nż\.?\)?", "", name, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\(?nz\.?\)?", "", cleaned, flags=re.IGNORECASE)
+    
+    # Remove extra spaces and return
+    return " ".join(cleaned.split())
 
 
-def get_tram_stop_map_from_schedules() -> Dict[Tuple[float, float], Tuple[str, str]]:
+def get_tram_stop_names_from_schedules() -> Set[str]:
     """
-    Collect all unique stop details from tram schedule data across all services.
-    Maps (lat, lon) -> (clean_stop_name, stop_num).
+    Collect all unique full stop names from tram schedule data across all services.
+    Returns a set of full_name strings.
     """
     global _cached_stop_details
 
-    # Return cached result if available
-    if _cached_stop_details is not None:
+    # Return cached result if available (reuse _cached_stop_details for names if it's a set)
+    if isinstance(_cached_stop_details, set):
         return _cached_stop_details
 
-    stop_map = {}
+    stop_names = set()
 
     if not TRAM_LINES_DIR.exists():
-        _cached_stop_details = stop_map
-        return stop_map
+        _cached_stop_details = stop_names
+        return stop_names
 
     # Check all services
     services = ["service_1", "service_2", "service_3", "service_4", "service_5"]
@@ -82,41 +90,36 @@ def get_tram_stop_map_from_schedules() -> Dict[Tuple[float, float], Tuple[str, s
                     with open(block_path, "r", encoding="utf-8") as f:
                         data = json.load(f)
 
-                    # Extract coordinates from all stop_times
+                    # Extract names from all stop_times
                     for stop_time_data in data.get("stop_times", []):
-                        stop_lat = stop_time_data.get("stop_lat")
-                        stop_lon = stop_time_data.get("stop_lon")
                         stop_name = stop_time_data.get("stop_name", "")
                         stop_num = stop_time_data.get("stop_num", "")
-
-                        if stop_lat is not None and stop_lon is not None:
-                            # Round to 6 decimal places (~0.1 meter precision)
-                            lat_rounded = round(float(stop_lat), 6)
-                            lon_rounded = round(float(stop_lon), 6)
-                            
-                            clean_name = clean_stop_name(stop_name)
-                            stop_map[(lat_rounded, lon_rounded)] = (clean_name, stop_num)
+                        
+                        clean_name = clean_stop_name(stop_name)
+                        full_name = f"{clean_name} {stop_num}".strip()
+                        if full_name:
+                            stop_names.add(full_name)
                             
                 except Exception as e:
                     # Skip files that can't be read
                     continue
 
     # Cache the result
-    _cached_stop_details = stop_map
-    return stop_map
+    _cached_stop_details = stop_names
+    return stop_names
 
 
 def load_tram_stops(
-    filter_by_tram_schedules: bool = True, filter_names: Optional[Set[str]] = None
+    filter_by_tram_schedules: bool = True,
+    active_full_names: Optional[Set[str]] = None,
 ) -> Dict[str, Stop]:
     """
     Load tram stops from GeoJSON file.
 
     Args:
-        filter_by_tram_schedules: If True, only include stops that are used in tram schedules.
-                                  This filters out bus-only stops.
-        filter_names: Optional set of full stop names (e.g. "Łagiewniki 04") to filter by.
-                      If provided, filter_by_tram_schedules is ignored for coordinate matching.
+        filter_by_tram_schedules: If True and active_full_names is None,
+                                  only include stops that are used in any tram schedule.
+        active_full_names: Optional set of full stop names (e.g., "Stop Name 01") to filter by.
 
     Returns:
         Dictionary mapping kod_busman to Stop objects
@@ -125,12 +128,11 @@ def load_tram_stops(
         print(f"Warning: Tram stops GeoJSON file not found at {GEOJSON_STOPS_PATH}")
         return {}
 
-    # Get set of stop details used in tram schedules if filtering is enabled
-    tram_stop_map = {}
-    if filter_by_tram_schedules and filter_names is None:
-        print("Collecting stop details from tram schedules...")
-        tram_stop_map = get_tram_stop_map_from_schedules()
-        print(f"Found {len(tram_stop_map)} unique stops used in tram schedules")
+    # Get set of stop names used in tram schedules if filtering is enabled and no explicit filters provided
+    if filter_by_tram_schedules and active_full_names is None:
+        print("Collecting stop names from tram schedules...")
+        active_full_names = get_tram_stop_names_from_schedules()
+        print(f"Found {len(active_full_names)} unique stop names used in tram schedules")
 
     with open(GEOJSON_STOPS_PATH, "r", encoding="utf-8") as f:
         geojson_data = json.load(f)
@@ -138,6 +140,7 @@ def load_tram_stops(
     stops_dict = {}
     skipped_count = 0
     filtered_count = 0
+    filtered_names_dropped = set()
 
     for feature in geojson_data.get("features", []):
         properties = feature.get("properties", {})
@@ -171,57 +174,32 @@ def load_tram_stops(
 
         # Determine name and number from GeoJSON properties
         raw_name_with_num = properties.get("Nazwa_przystanku_nr", "")
-        cleaned_raw_name = clean_stop_name(raw_name_with_num)
-        
-        # Filtering by names if provided
-        if filter_names is not None:
-            if cleaned_raw_name not in filter_names:
-                filtered_count += 1
-                continue
-        
-        # Filter: Only include stops that are used in tram schedules (if no filter_names)
-        # Match by coordinates (within 0.001 degrees ~ 100 meters)
-        
-        geojson_lat = round(float(coordinates[1]), 6)
-        geojson_lon = round(float(coordinates[0]), 6)
-        
-        matched_details = None
+        # Clean the name as it appears in GeoJSON
+        geojson_full_name = clean_stop_name(raw_name_with_num)
 
-        if filter_names is None and filter_by_tram_schedules and tram_stop_map:
-            # Check if this stop's coordinates match any schedule stop coordinates
-            for (sched_lat, sched_lon), (s_name, s_num) in tram_stop_map.items():
-                # Use a small threshold to account for coordinate precision differences
-                if (
-                    abs(geojson_lat - sched_lat) < 0.001
-                    and abs(geojson_lon - sched_lon) < 0.001
-                ):
-                    matched_details = (s_name, s_num)
-                    break
-
-            if not matched_details:
+        # Filtering logic
+        if filter_by_tram_schedules and active_full_names is not None:
+            if geojson_full_name not in active_full_names:
                 filtered_count += 1
+                filtered_names_dropped.add(geojson_full_name)
                 continue
-        
-        # Determine final name and number
-        clean_name = clean_stop_name(raw_name_with_num)
+
+        # Determine final name and number for internal Stop object
+        clean_name = geojson_full_name
         stop_num = ""
-        
+
         # If we have a number at the end, extract it
         if " " in clean_name:
             parts = clean_name.rsplit(" ", 1)
             # Check if last part is numeric or looks like a stop number
-            if parts[1].isdigit() or (len(parts[1]) <= 3 and any(c.isdigit() for c in parts[1])):
+            if parts[1].isdigit() or (
+                len(parts[1]) <= 3 and any(c.isdigit() for c in parts[1])
+            ):
                 clean_name = parts[0]
                 stop_num = parts[1]
-        
+
+        # Final full name construction (standardized)
         full_name = f"{clean_name} {stop_num}".strip()
-        
-        # If we matched with schedule data (coordinate based), use that
-        if matched_details:
-            sched_name, sched_num = matched_details
-            clean_name = sched_name
-            stop_num = sched_num
-            full_name = f"{clean_name} {stop_num}".strip()
 
         # Skip if we already have a stop with this kod_busman (avoid duplicates)
         if kod_busman in stops_dict:
@@ -237,13 +215,14 @@ def load_tram_stops(
                 kod_busman=kod_busman,
                 stop_num=stop_num,
                 clean_name=clean_name,
-                full_name=full_name
+                full_name=full_name,
             )
         except Exception as e:
             # Skip stops that fail validation
             print(f"Warning: Skipping stop with kod_busman={kod_busman}: {e}")
             skipped_count += 1
             continue
+
 
     if skipped_count > 0:
         print(
@@ -252,8 +231,9 @@ def load_tram_stops(
 
     if filter_by_tram_schedules and filtered_count > 0:
         print(
-            f"Filtered out {filtered_count} stops not used in tram schedules (bus-only stops)"
+            f"Filtered out {filtered_count} stops not used in tram schedules (bus-only or inactive stops):"
         )
+        print(f"Dropped: {sorted(filtered_names_dropped)}")
 
     print(f"Loaded {len(stops_dict)} valid tram stops")
     return stops_dict

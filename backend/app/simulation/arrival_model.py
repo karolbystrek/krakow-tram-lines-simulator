@@ -6,15 +6,17 @@ import math
 import random
 import json
 from dataclasses import dataclass, asdict
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 
-from .models import Trip
+from .models import Trip, TramBlock
+from .loader import clean_stop_name
 from .passenger_model import Passenger, StopState
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DEMAND_PROFILE_PATH = DATA_DIR / "demand_profile.json"
 STOP_WEIGHTS_PATH = DATA_DIR / "stop_weights.json"
+LINE_WEIGHTS_PATH = DATA_DIR / "line_weights.json"
 
 @dataclass
 class Peak:
@@ -85,8 +87,18 @@ class ArrivalRateModel:
         self.stop_weights_by_full_name: Dict[str, float] = {}
         self.total_system_weight: float = 0.0
 
+        # Line weights registry
+        self.line_weights: Dict[str, float] = self.load_line_weights()
+        
+        # Reachability map: Dict[LineNumber, Dict[OriginStopID, Dict[DestinationStopID, MinDistance]]]
+        self.line_reachability: Dict[str, Dict[str, Dict[str, float]]] = {}
+
         # Load weights from file
         self.file_weights = self.load_weights_from_file()
+        
+        # Cache for current simulation state to allow runtime weight updates
+        self.current_stops: List[StopState] = []
+        self.current_blocks: List[TramBlock] = []
 
     def load_from_file(self) -> Optional[DemandProfile]:
         """Load demand profile from JSON file."""
@@ -117,6 +129,21 @@ class ArrivalRateModel:
             print(f"Error loading stop weights: {e}")
             return {}
 
+    def load_line_weights(self) -> Dict[str, float]:
+        """Load line weights from JSON file."""
+        if not LINE_WEIGHTS_PATH.exists():
+            print("No line weights file found, using defaults.")
+            return {}
+            
+        try:
+            with open(LINE_WEIGHTS_PATH, 'r') as f:
+                weights = json.load(f)
+                print(f"Loaded {len(weights)} line weights from {LINE_WEIGHTS_PATH}")
+                return weights
+        except Exception as e:
+            print(f"Error loading line weights: {e}")
+            return {}
+
     def save_to_file(self):
         """Save current demand profile to JSON file."""
         try:
@@ -142,16 +169,29 @@ class ArrivalRateModel:
         except Exception as e:
             print(f"Error saving stop weights: {e}")
 
+    def save_line_weights(self):
+        """Save current line weights to JSON file."""
+        try:
+            LINE_WEIGHTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+            with open(LINE_WEIGHTS_PATH, 'w') as f:
+                json.dump(self.line_weights, f, indent=2)
+            print(f"Saved line weights to {LINE_WEIGHTS_PATH}")
+        except Exception as e:
+            print(f"Error saving line weights: {e}")
+
+    def clean_stop_name(self, name: str) -> str:
+        """Utility to clean stop names consistently with loader."""
+        return clean_stop_name(name)
+
     def update_profile(self, params: Dict):
         """
         Update the demand profile parameters dynamically.
         Params expected format:
         {
             "base_demand_rate": float,
-            "peaks": [
-                {"time": float, "width": float, "height": float},
-                ...
-            ]
+            "peaks": [...],
+            "line_weights": {"line_num": float, ...},
+            "stop_weights": {"stop_name_or_id": float, ...}
         }
         """
         if "base_demand_rate" in params:
@@ -166,6 +206,15 @@ class ArrivalRateModel:
                     height=float(p_data.get("height", 100))
                 ))
             self.profile.peaks = new_peaks
+
+        if "line_weights" in params:
+            self.line_weights.update(params["line_weights"])
+        
+        if "stop_weights" in params:
+            self.file_weights.update(params["stop_weights"])
+            # Re-initialize weights if we have active stops
+            if self.current_stops:
+                self.initialize_weights(self.current_stops, self.current_blocks)
 
         print(f"Updated demand profile. Base: {self.profile.base_demand_rate}, Peaks: {len(self.profile.peaks)}")
 
@@ -208,11 +257,14 @@ class ArrivalRateModel:
         # Note: This doesn't automatically update self.stop_weights until re-initialization
         # or we need to iterate and update all matching stops.
 
-    def initialize_weights(self, stops: List[StopState]):
+    def initialize_weights(self, stops: List[StopState], blocks: List[TramBlock]):
         """
-        Initialize weights for all provided stops.
-        Applies weights from loaded configuration.
+        Initialize weights for all provided stops and lines.
+        Also builds the reachability map.
         """
+        self.current_stops = stops
+        self.current_blocks = blocks
+        
         self.stop_weights = {}
         self.stop_weights_by_full_name = {}
         self.total_system_weight = 0.0
@@ -240,9 +292,35 @@ class ArrivalRateModel:
                 
             self.total_system_weight += weight
 
+        # Initialize line weights for all lines in blocks
+        for block in blocks:
+            ln = block.line_number
+            if ln not in self.line_weights:
+                self.line_weights[ln] = 1.0
+
+            # Build reachability
+            if ln not in self.line_reachability:
+                self.line_reachability[ln] = {}
+            
+            for trip in block.trips:
+                for i, stop_time_origin in enumerate(trip.stop_times):
+                    origin = stop_time_origin.full_name
+                    if origin not in self.line_reachability[ln]:
+                        self.line_reachability[ln][origin] = {}
+                    
+                    origin_dist = stop_time_origin.shape_dist_traveled
+                    
+                    for stop_time_dest in trip.stop_times[i+1:]:
+                        dest = stop_time_dest.full_name
+                        dist = max(50.0, stop_time_dest.shape_dist_traveled - origin_dist)
+                        
+                        if dest not in self.line_reachability[ln][origin] or dist < self.line_reachability[ln][origin][dest]:
+                            self.line_reachability[ln][origin][dest] = dist
+
         print(
             f"Initialized weights for {len(stops)} stops. Total system weight: {self.total_system_weight:.2f}"
         )
+        print(f"Initialized reachability maps for {len(self.line_reachability)} lines")
 
     def get_arrival_rate(self, stop_id: str, time_minutes: float) -> float:
         """
@@ -256,6 +334,41 @@ class ArrivalRateModel:
         local_share = self.stop_weights[stop_id] / self.total_system_weight
 
         return global_rate * local_share
+
+    def _select_line_and_destination(self, origin_full_name: str) -> Optional[Tuple[str, str]]:
+        """
+        Select a target line and destination for a passenger generated at a stop.
+        Returns (target_line, destination_stop_id) or None if no lines serve this stop.
+        """
+        # 1. Find all lines passing through this stop
+        available_lines = []
+        for ln, reachability in self.line_reachability.items():
+            if origin_full_name in reachability and reachability[origin_full_name]:
+                available_lines.append(ln)
+        
+        if not available_lines:
+            return None
+        
+        # 2. Weighted selection of target_line
+        line_weights = [self.line_weights.get(ln, 1.0) for ln in available_lines]
+        target_line = random.choices(available_lines, weights=line_weights, k=1)[0]
+        
+        # 3. Select destination from reachability map of target_line
+        destinations_dict = self.line_reachability[target_line][origin_full_name]
+        dest_names = list(destinations_dict.keys())
+        
+        dest_weights = []
+        for d_name in dest_names:
+            dist = destinations_dict[d_name]
+            stop_mass = self.stop_weights_by_full_name.get(d_name, 1.0)
+            
+            # Gravity model
+            w = stop_mass / (dist + 800.0)
+            dest_weights.append(w)
+            
+        destination_stop_id = random.choices(dest_names, weights=dest_weights, k=1)[0]
+        
+        return target_line, destination_stop_id
 
     def generate_arrivals(
         self, stop_state: StopState, time_minutes: float, delta_time: float
@@ -277,11 +390,18 @@ class ArrivalRateModel:
             num_arrivals = 1 if random.random() < expected_arrivals else 0
 
         for i in range(num_arrivals):
+            line_and_dest = self._select_line_and_destination(stop_state.full_name)
+            if not line_and_dest:
+                continue
+            
+            target_line, destination_stop_id = line_and_dest
+            
             passenger_id = f"p_{stop_state.stop_id}_{int(time_minutes * 10)}_{i}"
             passenger = Passenger(
                 passenger_id=passenger_id,
                 origin_stop_id=stop_state.stop_id,
-                destination_stop_id="",
+                destination_stop_id=destination_stop_id,
+                target_line=target_line,
                 arrival_time_minutes=time_minutes,
                 status="WAITING",
             )
@@ -289,65 +409,3 @@ class ArrivalRateModel:
             stop_state.total_arrived += 1
 
         return new_passengers
-
-
-class DestinationModel:
-    """Models passenger destination selection."""
-    
-    def __init__(self):
-        self.stop_weights: Dict[str, float] = {}
-
-    def set_weights(self, weights: Dict[str, float]):
-        """Update the knowledge of stop weights for destination logic."""
-        self.stop_weights = weights
-
-    def select_destination(self, origin_stop_id: str, trip: Trip) -> Optional[str]:
-
-        if not trip.stop_times or len(trip.stop_times) < 2:
-            return None
-
-        origin_idx = None
-        for i, stop_time in enumerate(trip.stop_times):
-            if stop_time.full_name == origin_stop_id:
-                origin_idx = i
-                break
-
-        if origin_idx is None or origin_idx >= len(trip.stop_times) - 1:
-            return None
-
-        possible_destinations = trip.stop_times[origin_idx + 1 :]
-        if not possible_destinations:
-            return None
-
-        weights = []
-        origin_dist = trip.stop_times[origin_idx].shape_dist_traveled
-        
-        for stop_time in possible_destinations:
-            # Passenger distribution should be influenced by stop weights
-            # AND distance (Gravity Model) to avoid excessive accumulation at terminals.
-            
-            # 1. Get Stop "Mass" (Weight)
-            stop_mass = self.stop_weights.get(stop_time.full_name, 1.0)
-            
-            # 2. Get Distance along the shape
-            dist = max(50.0, stop_time.shape_dist_traveled - origin_dist)
-            
-            # 3. Calculate Weight using a balanced decay function
-            # Adding a constant (800m) to distance makes short trips likely 
-            # but doesn't make long trips impossible.
-            w = stop_mass / (dist + 800.0)
-            
-            weights.append(w)
-
-        total_weight = sum(weights)
-        if total_weight == 0:
-            return possible_destinations[0].full_name
-
-        r = random.random() * total_weight
-        cumulative = 0
-        for i, w in enumerate(weights):
-            cumulative += w
-            if r <= cumulative:
-                return possible_destinations[i].full_name
-
-        return possible_destinations[-1].full_name
