@@ -30,13 +30,14 @@ simulation_engine = SimulationEngine(service_id=default_service_id)
 
 @app.on_event("startup")
 async def startup_event():
-    print("Loading tram stops and shapes...")
-    app.state.tram_stops: Dict[str, Stop] = load_tram_stops()
+    print("Loading tram shapes...")
     app.state.tram_shapes: Dict[str, List[Shape]] = load_shapes_from_geojson()
-    print(f"Loaded {len(app.state.tram_stops)} tram stops.")
     print(f"Loaded {len(app.state.tram_shapes)} tram line shapes.")
 
-    simulation_engine._cached_stops = app.state.tram_stops
+    # simulation_engine already loaded default service and its stops in __init__
+    app.state.tram_stops = getattr(simulation_engine, "_cached_stops", {})
+    print(f"Initialized with {len(app.state.tram_stops)} tram stops for current service.")
+
     await simulation_engine.start()
 
 
@@ -57,7 +58,8 @@ app.mount("/static", StaticFiles(directory=FRONTEND_DIR / "src"), name="static")
 @app.get("/api/stops")
 async def get_stops_data():
     """Serves the tram stops data as GeoJSON FeatureCollection."""
-    geojson_data = stops_to_geojson(app.state.tram_stops)
+    stops = getattr(simulation_engine, "_cached_stops", app.state.tram_stops)
+    geojson_data = stops_to_geojson(stops)
     return JSONResponse(content=geojson_data)
 
 

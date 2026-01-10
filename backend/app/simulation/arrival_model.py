@@ -82,6 +82,7 @@ class ArrivalRateModel:
         
         # Stop weights registry
         self.stop_weights: Dict[str, float] = {}
+        self.stop_weights_by_full_name: Dict[str, float] = {}
         self.total_system_weight: float = 0.0
 
         # Load weights from file
@@ -213,6 +214,7 @@ class ArrivalRateModel:
         Applies weights from loaded configuration.
         """
         self.stop_weights = {}
+        self.stop_weights_by_full_name = {}
         self.total_system_weight = 0.0
 
         for stop in stops:
@@ -233,6 +235,9 @@ class ArrivalRateModel:
                         break
 
             self.stop_weights[stop.stop_id] = weight
+            if stop.full_name:
+                self.stop_weights_by_full_name[stop.full_name] = weight
+                
             self.total_system_weight += weight
 
         print(
@@ -303,7 +308,7 @@ class DestinationModel:
 
         origin_idx = None
         for i, stop_time in enumerate(trip.stop_times):
-            if stop_time.stop_num == origin_stop_id:
+            if stop_time.full_name == origin_stop_id:
                 origin_idx = i
                 break
 
@@ -315,39 +320,25 @@ class DestinationModel:
             return None
 
         weights = []
-        origin_dist = trip.stop_times[origin_idx].shape_dist_traveled
-        
-        for i, stop_time in enumerate(possible_destinations):
-            # Distance based weight (Inverse distance or Gravity model)
-            # Gravity: Mass / Distance^2 (or just Distance for simplicity)
+        for stop_time in possible_destinations:
+            # Passenger distribution should be only influenced by stop weights
+            # to ensure even distribution as requested by user.
             
             # 1. Get Stop "Mass" (Weight)
-            stop_mass = self.stop_weights.get(stop_time.stop_num, 1.0)
+            stop_mass = self.stop_weights.get(stop_time.full_name, 1.0)
             
-            # 2. Get Distance
-            dist = max(0.1, stop_time.shape_dist_traveled - origin_dist) # Avoid div/0
-            
-            # 3. Calculate Weight
-            # Using (Mass / Distance) gives a good balance. 
-            # High mass (popular stops) attract more, but close stops also attract.
-            # Adding a small constant to distance prevents nearby minor stops from dominating too much
-            w = stop_mass / (dist + 500.0) # Assume dist is in meters
-            
-            # Boost the last stop slightly as it's often a major hub/terminus
-            if i == len(possible_destinations) - 1:
-                w *= 1.5
-                
-            weights.append(w)
+            # Use only mass for weight
+            weights.append(stop_mass)
 
         total_weight = sum(weights)
         if total_weight == 0:
-            return possible_destinations[0].stop_num
+            return possible_destinations[0].full_name
 
         r = random.random() * total_weight
         cumulative = 0
         for i, w in enumerate(weights):
             cumulative += w
             if r <= cumulative:
-                return possible_destinations[i].stop_num
+                return possible_destinations[i].full_name
 
-        return possible_destinations[-1].stop_num
+        return possible_destinations[-1].full_name

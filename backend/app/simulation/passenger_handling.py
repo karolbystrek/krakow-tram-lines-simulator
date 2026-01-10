@@ -44,11 +44,11 @@ class PassengerManager:
         # Step 1: Alighting (skip if requested - used when multiple stops share coordinates)
         if not skip_alighting:
             # Find passengers whose destination is this stop
-            # Only alight passengers whose destination exactly matches this stop's stop_num
+            # Only alight passengers whose destination exactly matches this stop's full_name
             passengers_to_alight = [
                 p
                 for p in tram_state.passengers
-                if p.status == "ON_TRAM" and p.destination_stop_id == stop_time.stop_num
+                if p.status == "ON_TRAM" and p.destination_stop_id == stop_time.full_name
             ]
 
             for passenger in passengers_to_alight:
@@ -93,7 +93,7 @@ class PassengerManager:
             # Assign destination if not already set
             if not passenger.destination_stop_id or passenger.destination_stop_id == "":
                 destination = self.destination_model.select_destination(
-                    stop_time.stop_num, active_trip
+                    stop_time.full_name, active_trip
                 )
                 if destination:
                     passenger.destination_stop_id = destination

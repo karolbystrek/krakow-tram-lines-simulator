@@ -13,6 +13,9 @@ class Stop(BaseModel):
     lat: float
     lon: float
     kod_busman: str
+    stop_num: str = ""
+    clean_name: str = ""
+    full_name: str = ""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -53,6 +56,7 @@ class StopTime:
     stop_sequence: int
     trip_id: str
     trip_num: int
+    full_name: str = ""
     shape_dist_traveled: float = 0.0  # Distance along the shape from start
 
     def to_minutes(self) -> int:

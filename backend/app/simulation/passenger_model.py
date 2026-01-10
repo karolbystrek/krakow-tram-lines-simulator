@@ -26,6 +26,7 @@ class StopState:
 
     stop_id: str
     name: str = ""
+    full_name: str = ""
     waiting_passengers: List[Passenger] = field(default_factory=list)
     total_arrived: int = 0
     total_boarded: int = 0

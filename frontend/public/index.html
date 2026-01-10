@@ -135,13 +135,23 @@
             <div class="detailed-stats-container">
                  <details class="stats-details">
                      <summary class="stats-summary">Detailed Stop Statistics</summary>
+                     <div style="padding: 0 0 10px 0;">
+                         <input type="text" id="stop-search-input" placeholder="Search stops..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                     </div>
                      <div class="stats-table-wrapper">
                          <table id="top-stops-table" style="width: 100%; text-align: left; border-collapse: collapse;">
                              <thead>
                                  <tr style="border-bottom: 2px solid #eee;">
                                      <th style="padding: 12px;">Stop Name</th>
-                                     <th style="padding: 12px; text-align: right;">Boarded</th>
-                                     <th style="padding: 12px; text-align: right;">Alighted</th>
+                                     <th class="sort-header" data-column="traffic" style="padding: 12px; text-align: right; cursor: pointer;" title="Sort by Total Traffic">
+                                        Total <i class="fas fa-sort-down"></i>
+                                     </th>
+                                     <th class="sort-header" data-column="boarded" style="padding: 12px; text-align: right; cursor: pointer;" title="Sort by Boarded">
+                                        Boarded <i class="fas fa-sort"></i>
+                                     </th>
+                                     <th class="sort-header" data-column="alighted" style="padding: 12px; text-align: right; cursor: pointer;" title="Sort by Alighted">
+                                        Alighted <i class="fas fa-sort"></i>
+                                     </th>
                                  </tr>
                              </thead>
                              <tbody>

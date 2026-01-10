@@ -1,5 +1,5 @@
 import { TramMarker } from '../map/tramMarker.js';
-import { updateStopMarker } from '../map/stopsLayer.js';
+import { updateStopMarker, loadTramStops } from '../map/stopsLayer.js';
 import { SimulationClient } from './SimulationClient.js';
 import { SimulationUI } from './SimulationUI.js';
 import { StatisticsUI } from '../ui/stats.js';
@@ -28,6 +28,7 @@ export class SimulationController {
     this.statsUI = new StatisticsUI();
     this.generationModal = new PassengerGenerationModal(this.client, this);
     this.weightSettings = new WeightSettings(this.client, this);
+    this.stopsLayer = null;
     
     this.isPaused = false;
     this.wasRunningBeforeStats = false;
@@ -155,6 +156,12 @@ export class SimulationController {
 
     if (data.type === 'service_changed') {
         this.updateTrams([]);
+        if (this.stopsLayer) {
+            console.log('Service changed, refreshing stops...');
+            this.stopsLayer.clearLayers();
+            this.stopMarkers = {};
+            loadTramStops(this.stopsLayer, this.map, this);
+        }
         return;
     }
 

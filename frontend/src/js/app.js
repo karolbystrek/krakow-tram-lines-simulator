@@ -14,6 +14,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     createVoyagerTileLayer().addTo(map);
 
     const simulation = new SimulationController(map);
+    simulation.stopsLayer = stopsLayer;
     simulation.connect();
 
     const [routesResult, stopsLoaded] = await Promise.all([

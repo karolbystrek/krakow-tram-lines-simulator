@@ -99,7 +99,15 @@ class SimulationEngine:
     def _load_service(self, service_id: str):
         """Load a service into cache if not already loaded."""
         if service_id in self.cached_services:
-            return  # Already loaded
+            # Still need to set _cached_stops even if service is cached
+            all_blocks = self.cached_services[service_id]
+            active_full_names = set()
+            for block in all_blocks:
+                for trip in block.trips:
+                    for stop_time in trip.stop_times:
+                        active_full_names.add(stop_time.full_name)
+            self._cached_stops = load_tram_stops(filter_names=active_full_names)
+            return
 
         print(f"Loading {service_id}...")
         blocks_by_line = load_tram_blocks(service=service_id)
@@ -108,6 +116,16 @@ class SimulationEngine:
             all_blocks.extend(line_blocks)
 
         self.cached_services[service_id] = all_blocks
+
+        # Collect active stop names for filtering
+        active_full_names = set()
+        for block in all_blocks:
+            for trip in block.trips:
+                for stop_time in trip.stop_times:
+                    active_full_names.add(stop_time.full_name)
+        
+        print(f"Filtering stops for {service_id}, found {len(active_full_names)} unique stop names in schedule")
+        self._cached_stops = load_tram_stops(filter_names=active_full_names)
 
         # Calculate bounds for this service
         min_time = 24 * 60
@@ -501,12 +519,12 @@ class SimulationEngine:
 
         self.stop_states = {}
         for stop_id, stop in stops.items():
-            self.stop_states[stop_id] = StopState(stop_id=stop_id, name=stop.name)
+            self.stop_states[stop_id] = StopState(stop_id=stop_id, name=stop.name, full_name=stop.full_name)
 
         self.arrival_model.initialize_weights(list(self.stop_states.values()))
 
         # Share weights with destination model
-        self.passenger_manager.destination_model.set_weights(self.arrival_model.stop_weights)
+        self.passenger_manager.destination_model.set_weights(self.arrival_model.stop_weights_by_full_name)
 
         self.stop_num_to_kod_busman = {}
 
@@ -609,7 +627,7 @@ class SimulationEngine:
                     if not matching_stop_states:
                         stop_id = stop_time.stop_num
                         stop_state = StopState(
-                            stop_id=stop_id, name=stop_time.stop_name
+                            stop_id=stop_id, name=stop_time.stop_name, full_name=stop_time.full_name
                         )
                         self.stop_states[stop_id] = stop_state
                         matching_stop_states.append(stop_state)

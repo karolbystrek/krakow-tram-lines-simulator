@@ -1,0 +1,10 @@
+FEATURE: Fix Passenger Simulation Distribution and Alighting
+
+Improved passenger distribution logic by removing distance-based penalties and artificial boosts for terminus stops. Ensured consistent stop name matching across data loaders to fix an issue where passengers were unable to alight at certain stops.
+
+Key changes:
+- Simplified DestinationModel to use only stop weights for destination selection.
+- Removed gravity model (distance-based weight) from select_destination.
+- Removed last-stop boost from select_destination.
+- Standardized full_name construction using .strip() in both load_tram_stops and load_tram_blocks.
+- Updated User Stories documentation.
