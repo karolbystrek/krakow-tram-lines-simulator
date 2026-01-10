@@ -566,13 +566,6 @@ body {
     font-size: 16px;
 }
 
-.error-icon {
-    color: #ef5350;
-    margin-bottom: 20px;
-    display: inline-block;
-    line-height: 1;
-}
-
 @keyframes tram-pulse {
     0% {
         transform: scale(0.95);

@@ -320,15 +320,24 @@ class DestinationModel:
             return None
 
         weights = []
+        origin_dist = trip.stop_times[origin_idx].shape_dist_traveled
+        
         for stop_time in possible_destinations:
-            # Passenger distribution should be only influenced by stop weights
-            # to ensure even distribution as requested by user.
+            # Passenger distribution should be influenced by stop weights
+            # AND distance (Gravity Model) to avoid excessive accumulation at terminals.
             
             # 1. Get Stop "Mass" (Weight)
             stop_mass = self.stop_weights.get(stop_time.full_name, 1.0)
             
-            # Use only mass for weight
-            weights.append(stop_mass)
+            # 2. Get Distance along the shape
+            dist = max(50.0, stop_time.shape_dist_traveled - origin_dist)
+            
+            # 3. Calculate Weight using a balanced decay function
+            # Adding a constant (800m) to distance makes short trips likely 
+            # but doesn't make long trips impossible.
+            w = stop_mass / (dist + 800.0)
+            
+            weights.append(w)
 
         total_weight = sum(weights)
         if total_weight == 0:

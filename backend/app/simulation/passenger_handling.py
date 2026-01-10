@@ -43,12 +43,16 @@ class PassengerManager:
 
         # Step 1: Alighting (skip if requested - used when multiple stops share coordinates)
         if not skip_alighting:
+            # Check if this is the last stop of the trip
+            active_trip = tram_block.get_active_trip(current_time_minutes)
+            is_last_stop = active_trip and stop_time == active_trip.stop_times[-1]
+
             # Find passengers whose destination is this stop
-            # Only alight passengers whose destination exactly matches this stop's full_name
+            # OR force alight all if it's the last stop
             passengers_to_alight = [
                 p
                 for p in tram_state.passengers
-                if p.status == "ON_TRAM" and p.destination_stop_id == stop_time.full_name
+                if p.status == "ON_TRAM" and (is_last_stop or p.destination_stop_id == stop_time.full_name)
             ]
 
             for passenger in passengers_to_alight:

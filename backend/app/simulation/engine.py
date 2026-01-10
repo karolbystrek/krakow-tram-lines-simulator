@@ -543,8 +543,8 @@ class SimulationEngine:
                                 geojson_lon = round(float(geojson_stop.lon), 6)
 
                                 if (
-                                    abs(sched_lat - geojson_lat) < 0.001
-                                    and abs(sched_lon - geojson_lon) < 0.001
+                                    abs(sched_lat - geojson_lat) < 0.0002
+                                    and abs(sched_lon - geojson_lon) < 0.0002
                                 ):
                                     matching_stops.append(kod_busman)
 
@@ -596,7 +596,9 @@ class SimulationEngine:
                 for kod_busman in kod_busman_list:
                     stop_state = self.stop_states.get(kod_busman)
                     if stop_state:
-                        matching_stop_states.append(stop_state)
+                        # Only add if name matches or if it's the only option
+                        if stop_state.full_name == stop_time.full_name or len(kod_busman_list) == 1:
+                            matching_stop_states.append(stop_state)
 
         if not matching_stop_states:
             stop_id = stop_time.stop_num

@@ -25,7 +25,7 @@
             <option value="service_3">Sunday</option>
         </select>
     </div>
-    
+
     <div class="vertical-separator"></div>
 
     <div class="control-group-vertical">
@@ -59,7 +59,8 @@
 <div class="right-controls">
     <!-- Simulation Configuration -->
     <div id="config-panel" class="control-panel-item">
-        <button id="config-toggle" class="btn btn-icon" title="Simulation Configuration" style="width: 44px; height: 44px;">
+        <button id="config-toggle" class="btn btn-icon" title="Simulation Configuration"
+                style="width: 44px; height: 44px;">
             <i class="fas fa-sliders-h"></i>
         </button>
         <div id="config-content" class="settings-content config-content-right">
@@ -106,7 +107,6 @@
 
 <div id="connection-error-overlay" class="overlay hidden">
     <div class="overlay-content error-content">
-        <i class="fas fa-wifi-slash fa-4x error-icon"></i>
         <h2>Connection Lost</h2>
         <p>Unable to connect to the simulation server.</p>
     </div>
@@ -133,32 +133,37 @@
                 <canvas id="passenger-chart"></canvas>
             </div>
             <div class="detailed-stats-container">
-                 <details class="stats-details">
-                     <summary class="stats-summary">Detailed Stop Statistics</summary>
-                     <div style="padding: 0 0 10px 0;">
-                         <input type="text" id="stop-search-input" placeholder="Search stops..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
-                     </div>
-                     <div class="stats-table-wrapper">
-                         <table id="top-stops-table" style="width: 100%; text-align: left; border-collapse: collapse;">
-                             <thead>
-                                 <tr style="border-bottom: 2px solid #eee;">
-                                     <th style="padding: 12px;">Stop Name</th>
-                                     <th class="sort-header" data-column="traffic" style="padding: 12px; text-align: right; cursor: pointer;" title="Sort by Total Traffic">
-                                        Total <i class="fas fa-sort-down"></i>
-                                     </th>
-                                     <th class="sort-header" data-column="boarded" style="padding: 12px; text-align: right; cursor: pointer;" title="Sort by Boarded">
-                                        Boarded <i class="fas fa-sort"></i>
-                                     </th>
-                                     <th class="sort-header" data-column="alighted" style="padding: 12px; text-align: right; cursor: pointer;" title="Sort by Alighted">
-                                        Alighted <i class="fas fa-sort"></i>
-                                     </th>
-                                 </tr>
-                             </thead>
-                             <tbody>
-                             </tbody>
-                         </table>
-                     </div>
-                 </details>
+                <details class="stats-details">
+                    <summary class="stats-summary">Detailed Stop Statistics</summary>
+                    <div style="padding: 0 0 10px 0;">
+                        <input type="text" id="stop-search-input" placeholder="Search stops..."
+                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+                    </div>
+                    <div class="stats-table-wrapper">
+                        <table id="top-stops-table" style="width: 100%; text-align: left; border-collapse: collapse;">
+                            <thead>
+                            <tr style="border-bottom: 2px solid #eee;">
+                                <th style="padding: 12px;">Stop Name</th>
+                                <th class="sort-header" data-column="traffic"
+                                    style="padding: 12px; text-align: right; cursor: pointer;"
+                                    title="Sort by Total Traffic">
+                                    Total <i class="fas fa-sort-down"></i>
+                                </th>
+                                <th class="sort-header" data-column="boarded"
+                                    style="padding: 12px; text-align: right; cursor: pointer;" title="Sort by Boarded">
+                                    Boarded <i class="fas fa-sort"></i>
+                                </th>
+                                <th class="sort-header" data-column="alighted"
+                                    style="padding: 12px; text-align: right; cursor: pointer;" title="Sort by Alighted">
+                                    Alighted <i class="fas fa-sort"></i>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
             </div>
         </div>
     </div>
