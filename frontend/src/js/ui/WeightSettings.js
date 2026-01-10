@@ -145,7 +145,7 @@ export class WeightSettings {
       el.innerHTML = `
         <span class="weight-name" title="${item.name} (${item.id})">${item.name}</span>
         <div class="weight-control">
-          <input type="range" min="0.1" max="20.0" step="0.1" value="${item.weight}" data-id="${item.id}">
+          <input type="range" min="0.1" max="20.0" step="0.1" value="${item.weight}" data-id="${item.id}" class="slider-input">
           <span class="weight-value">${item.weight.toFixed(1)}</span>
         </div>
       `;

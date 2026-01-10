@@ -966,8 +966,9 @@ details[open] .stats-summary::after {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #eee;
+    gap: 20px;
 }
 
 .weight-name {
@@ -976,14 +977,30 @@ details[open] .stats-summary::after {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-right: 15px;
+    min-width: 0; /* Allow name to shrink and ellipsis to work */
 }
 
 .weight-control {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
+    flex: 0 0 250px; /* Give control a fixed width */
 }
+
+.weight-control input[type="range"] {
+    flex: 1;
+    margin: 0;
+    cursor: pointer;
+}
+
+.weight-value {
+    min-width: 35px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
 
 .weights-list-header {
     display: flex;
