@@ -60,6 +60,14 @@ body {
     box-shadow: none;
 }
 
+#config-panel {
+    top: 85px;
+    left: 20px;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
 .service-selector {
     appearance: none;
     -webkit-appearance: none;
@@ -185,6 +193,11 @@ body {
     pointer-events: all;
     padding: 20px;
     overflow-y: auto;
+}
+
+.config-content {
+    left: 0;
+    right: auto;
 }
 
 .settings-title {
@@ -541,6 +554,9 @@ body {
 .stats-content {
     max-width: 1200px;
     width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px;
 }
 
 .stats-summary {

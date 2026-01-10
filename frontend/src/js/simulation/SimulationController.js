@@ -33,6 +33,37 @@ export class SimulationController {
     this.wasRunningBeforeStats = false;
     
     this.setupStatistics();
+    this.setupConfiguration();
+  }
+
+  setupConfiguration() {
+    const configToggle = document.getElementById('config-toggle');
+    const configContent = document.getElementById('config-content');
+    
+    if (configToggle && configContent) {
+        configToggle.addEventListener('click', () => {
+            configContent.classList.toggle('settings-content-open');
+            configToggle.classList.toggle('settings-toggle-btn-active');
+        });
+    }
+
+    const btnDemand = document.getElementById('btn-config-demand');
+    if (btnDemand) {
+        btnDemand.addEventListener('click', () => {
+            if (this.generationModal) this.generationModal.open();
+            configContent.classList.remove('settings-content-open');
+            configToggle.classList.remove('settings-toggle-btn-active');
+        });
+    }
+
+    const btnWeights = document.getElementById('btn-config-weights');
+    if (btnWeights) {
+        btnWeights.addEventListener('click', () => {
+            if (this.weightSettings) this.weightSettings.open();
+            configContent.classList.remove('settings-content-open');
+            configToggle.classList.remove('settings-toggle-btn-active');
+        });
+    }
   }
 
   setupStatistics() {

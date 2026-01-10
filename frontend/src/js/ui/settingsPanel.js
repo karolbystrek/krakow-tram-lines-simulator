@@ -57,43 +57,6 @@ export function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers
     }
   });
 
-  // --- Passenger Generation Controls ---
-  const genHeader = document.createElement('h3');
-  genHeader.className = 'settings-section-header';
-  genHeader.textContent = 'Passenger Generation';
-  content.appendChild(genHeader);
-
-  const genControls = document.createElement('div');
-  genControls.className = 'generation-controls';
-  
-  const openModalBtn = document.createElement('button');
-  openModalBtn.className = 'btn btn-secondary';
-  openModalBtn.style.width = '100%';
-  openModalBtn.textContent = 'Configure Demand Scenarios';
-  openModalBtn.onclick = () => {
-      if (simulation.generationModal) {
-          simulation.generationModal.open();
-      }
-  };
-  genControls.appendChild(openModalBtn);
-
-  const openWeightsBtn = document.createElement('button');
-  openWeightsBtn.className = 'btn btn-secondary';
-  openWeightsBtn.style.width = '100%';
-  openWeightsBtn.style.marginTop = '10px';
-  openWeightsBtn.textContent = 'Configure Stop Weights';
-  openWeightsBtn.onclick = () => {
-      if (simulation.weightSettings) {
-          simulation.weightSettings.open();
-      }
-  };
-  genControls.appendChild(openWeightsBtn);
-
-  // Separator
-  const separator = document.createElement('hr');
-  separator.className = 'settings-separator';
-  content.appendChild(separator);
-
   // --- Line Controls ---
   const linesHeader = document.createElement('h3');
   linesHeader.className = 'settings-section-header';
