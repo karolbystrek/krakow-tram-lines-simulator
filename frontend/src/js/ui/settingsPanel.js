@@ -76,7 +76,18 @@ export function initializeSettingsPanel(map, stopsLayer, lineLayers, lineNumbers
       }
   };
   genControls.appendChild(openModalBtn);
-  content.appendChild(genControls);
+
+  const openWeightsBtn = document.createElement('button');
+  openWeightsBtn.className = 'btn btn-secondary';
+  openWeightsBtn.style.width = '100%';
+  openWeightsBtn.style.marginTop = '10px';
+  openWeightsBtn.textContent = 'Configure Stop Weights';
+  openWeightsBtn.onclick = () => {
+      if (simulation.weightSettings) {
+          simulation.weightSettings.open();
+      }
+  };
+  genControls.appendChild(openWeightsBtn);
 
   // Separator
   const separator = document.createElement('hr');

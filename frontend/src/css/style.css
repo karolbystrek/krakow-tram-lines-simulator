@@ -572,7 +572,7 @@ body {
     font-weight: 600;
     color: var(--color-text);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .settings-section-header:first-child {
@@ -690,7 +690,7 @@ body {
     height: 85vh;
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
 }
@@ -788,7 +788,7 @@ body {
     border: 1px solid var(--color-border);
     border-radius: 6px;
     padding: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .peak-header {
@@ -843,4 +843,50 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+/* Weight Settings Modal */
+.weights-list {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.weight-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.weight-name {
+    flex: 1;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 15px;
+}
+
+.weight-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.weights-list-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    font-weight: bold;
+    background: #f5f5f5;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.weights-search-container {
+    margin-bottom: 10px;
 }

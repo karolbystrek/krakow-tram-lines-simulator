@@ -123,4 +123,34 @@ export class StatisticsUI {
             }
         });
     }
+
+    async loadDetailedStats() {
+        try {
+            const response = await fetch('/api/simulation/stats/detailed');
+            const data = await response.json();
+            
+            this.show(data.global);
+            this.renderTopStops(data.top_stops);
+            
+        } catch (e) {
+            console.error("Failed to load detailed stats", e);
+        }
+    }
+
+    renderTopStops(stops) {
+        const tbody = document.querySelector('#top-stops-table tbody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = '';
+        stops.forEach(stop => {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid #eee';
+            row.innerHTML = `
+                <td style="padding: 6px;">${stop.name}</td>
+                <td style="padding: 6px;">${stop.boarded.toLocaleString()}</td>
+                <td style="padding: 6px;">${stop.alighted.toLocaleString()}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
 }

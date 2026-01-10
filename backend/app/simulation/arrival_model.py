@@ -14,6 +14,7 @@ from .passenger_model import Passenger, StopState
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 DEMAND_PROFILE_PATH = DATA_DIR / "demand_profile.json"
+STOP_WEIGHTS_PATH = DATA_DIR / "stop_weights.json"
 
 @dataclass
 class Peak:
@@ -83,21 +84,8 @@ class ArrivalRateModel:
         self.stop_weights: Dict[str, float] = {}
         self.total_system_weight: float = 0.0
 
-        # Known major hubs in Krakow with higher passenger generation
-        # These are partial string matches for stop names
-        self.HUB_WEIGHTS = {
-            "Rondo Mogilskie": 8.0,
-            "Teatr Bagatela": 7.5,
-            "Dworzec Główny": 9.0,
-            "Rondo Grzegórzeckie": 6.5,
-            "Starowiślna": 6.0,
-            "Plac Wszystkich Świętych": 5.5,
-            "Poczta Główna": 5.5,
-            "Rondo Matecznego": 5.0,
-            "Rondo Czyżyńskie": 5.0,
-            "Biprostal": 4.0,
-            "Stary Kleparz": 4.5,
-        }
+        # Load weights from file
+        self.file_weights = self.load_weights_from_file()
 
     def load_from_file(self) -> Optional[DemandProfile]:
         """Load demand profile from JSON file."""
@@ -112,6 +100,21 @@ class ArrivalRateModel:
         except Exception as e:
             print(f"Error loading demand profile: {e}")
             return None
+            
+    def load_weights_from_file(self) -> Dict[str, float]:
+        """Load stop weights from JSON file."""
+        if not STOP_WEIGHTS_PATH.exists():
+            print("No stop weights file found, using defaults.")
+            return {}
+            
+        try:
+            with open(STOP_WEIGHTS_PATH, 'r') as f:
+                weights = json.load(f)
+                print(f"Loaded {len(weights)} stop weights from {STOP_WEIGHTS_PATH}")
+                return weights
+        except Exception as e:
+            print(f"Error loading stop weights: {e}")
+            return {}
 
     def save_to_file(self):
         """Save current demand profile to JSON file."""
@@ -124,6 +127,21 @@ class ArrivalRateModel:
             print(f"Saved demand profile to {DEMAND_PROFILE_PATH}")
         except Exception as e:
             print(f"Error saving demand profile: {e}")
+
+    def save_weights(self):
+        """Save current stop weights to JSON file."""
+        try:
+            STOP_WEIGHTS_PATH.parent.mkdir(parents=True, exist_ok=True)
+            # We save the aggregated weights by name if possible, or just the current map?
+            # The current map has IDs. The input file had names. 
+            # Ideally we want to save the configuration, not the expanded map.
+            # For simplicity, we save the file_weights which stores the configuration.
+            
+            with open(STOP_WEIGHTS_PATH, 'w') as f:
+                json.dump(self.file_weights, f, indent=2)
+            print(f"Saved stop weights to {STOP_WEIGHTS_PATH}")
+        except Exception as e:
+            print(f"Error saving stop weights: {e}")
 
     def update_profile(self, params: Dict):
         """
@@ -172,16 +190,29 @@ class ArrivalRateModel:
 
     def set_stop_weight(self, stop_id: str, weight: float):
         """Updates weight for a specific stop and recalculates total."""
+        # Update run-time map
         if stop_id in self.stop_weights:
             self.total_system_weight -= self.stop_weights[stop_id]
-
+        
         self.stop_weights[stop_id] = weight
         self.total_system_weight += weight
+        
+        # Also update the configuration map (by name if possible, or ID)
+        # This is tricky because we don't have the name here easily unless we look it up.
+        # For now, we update the runtime mainly. 
+        # If we want persistence, we should probably update self.file_weights too using the stop name.
+        pass 
+
+    def update_weight_config(self, name_or_id: str, weight: float):
+        """Update the persistent configuration for a stop weight."""
+        self.file_weights[name_or_id] = weight
+        # Note: This doesn't automatically update self.stop_weights until re-initialization
+        # or we need to iterate and update all matching stops.
 
     def initialize_weights(self, stops: List[StopState]):
         """
         Initialize weights for all provided stops.
-        Applies heuristic boosting for major hubs based on name.
+        Applies weights from loaded configuration.
         """
         self.stop_weights = {}
         self.total_system_weight = 0.0
@@ -189,11 +220,19 @@ class ArrivalRateModel:
         for stop in stops:
             weight = 1.0
 
-            # Apply Hub Multipliers
-            for hub_name, multiplier in self.HUB_WEIGHTS.items():
-                if hub_name in stop.name:
-                    weight = multiplier
-                    break
+            # 1. Try exact match by Stop ID
+            if stop.stop_id in self.file_weights:
+                weight = self.file_weights[stop.stop_id]
+            # 2. Try exact match by Name
+            elif stop.name in self.file_weights:
+                weight = self.file_weights[stop.name]
+            else:
+                # 3. Partial match for names (e.g. "Rondo Mogilskie" in "Rondo Mogilskie 01")
+                # Sort keys by length descending to match longest specific name first
+                for key in sorted(self.file_weights.keys(), key=len, reverse=True):
+                    if key in stop.name:
+                        weight = self.file_weights[key]
+                        break
 
             self.stop_weights[stop.stop_id] = weight
             self.total_system_weight += weight
@@ -251,6 +290,13 @@ class ArrivalRateModel:
 
 class DestinationModel:
     """Models passenger destination selection."""
+    
+    def __init__(self):
+        self.stop_weights: Dict[str, float] = {}
+
+    def set_weights(self, weights: Dict[str, float]):
+        """Update the knowledge of stop weights for destination logic."""
+        self.stop_weights = weights
 
     def select_destination(self, origin_stop_id: str, trip: Trip) -> Optional[str]:
 
@@ -271,10 +317,28 @@ class DestinationModel:
             return None
 
         weights = []
+        origin_dist = trip.stop_times[origin_idx].shape_dist_traveled
+        
         for i, stop_time in enumerate(possible_destinations):
-            w = 1.0 / (i + 1)
+            # Distance based weight (Inverse distance or Gravity model)
+            # Gravity: Mass / Distance^2 (or just Distance for simplicity)
+            
+            # 1. Get Stop "Mass" (Weight)
+            stop_mass = self.stop_weights.get(stop_time.stop_num, 1.0)
+            
+            # 2. Get Distance
+            dist = max(0.1, stop_time.shape_dist_traveled - origin_dist) # Avoid div/0
+            
+            # 3. Calculate Weight
+            # Using (Mass / Distance) gives a good balance. 
+            # High mass (popular stops) attract more, but close stops also attract.
+            # Adding a small constant to distance prevents nearby minor stops from dominating too much
+            w = stop_mass / (dist + 500.0) # Assume dist is in meters
+            
+            # Boost the last stop slightly as it's often a major hub/terminus
             if i == len(possible_destinations) - 1:
-                w *= 2.0
+                w *= 1.5
+                
             weights.append(w)
 
         total_weight = sum(weights)

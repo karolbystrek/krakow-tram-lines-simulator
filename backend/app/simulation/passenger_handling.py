@@ -56,6 +56,8 @@ class PassengerManager:
                 passenger.alighting_time_minutes = current_time_minutes
                 passenger.current_tram_id = None
                 passengers_alighted += 1
+            
+            stop_state.total_alighted += passengers_alighted
 
             # Remove alighted passengers from tram
             # Keep only passengers that are still ON_TRAM

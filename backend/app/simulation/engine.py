@@ -504,6 +504,10 @@ class SimulationEngine:
             self.stop_states[stop_id] = StopState(stop_id=stop_id, name=stop.name)
 
         self.arrival_model.initialize_weights(list(self.stop_states.values()))
+
+        # Share weights with destination model
+        self.passenger_manager.destination_model.set_weights(self.arrival_model.stop_weights)
+
         self.stop_num_to_kod_busman = {}
 
         for block in self.blocks:

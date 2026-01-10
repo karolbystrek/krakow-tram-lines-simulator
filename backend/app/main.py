@@ -3,7 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Body
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -66,6 +66,64 @@ async def get_routes_data():
     """Serves the tram line shapes data as GeoJSON FeatureCollection."""
     geojson_data = shapes_to_geojson(app.state.tram_shapes)
     return JSONResponse(content=geojson_data)
+
+
+@app.get("/api/simulation/weights")
+async def get_stop_weights():
+    """Get current stop weights with names."""
+    if not simulation_engine.arrival_model:
+        return JSONResponse(content=[])
+
+    weights = simulation_engine.arrival_model.stop_weights
+    result = []
+
+    for stop_id, weight in weights.items():
+        name = stop_id
+        if stop_id in simulation_engine.stop_states:
+            name = simulation_engine.stop_states[stop_id].name
+
+        result.append({"id": stop_id, "name": name, "weight": weight})
+
+    return JSONResponse(content=result)
+
+
+@app.post("/api/simulation/weights")
+async def update_stop_weights(weights: Dict[str, float] = Body(...)):
+    """Update stop weights."""
+    if simulation_engine.arrival_model:
+        for stop_id, weight in weights.items():
+            simulation_engine.arrival_model.set_stop_weight(stop_id, weight)
+            simulation_engine.arrival_model.update_weight_config(stop_id, weight)
+
+        simulation_engine.arrival_model.save_weights()
+        return JSONResponse(content={"status": "updated", "count": len(weights)})
+    return JSONResponse(
+        content={"status": "error", "message": "Engine not ready"}, status_code=500
+    )
+
+
+@app.get("/api/simulation/stats/detailed")
+async def get_detailed_stats():
+    """Get detailed statistics including top stops."""
+    stats = simulation_engine.get_statistics()
+
+    stop_stats = []
+    if simulation_engine.stop_states:
+        for stop_state in simulation_engine.stop_states.values():
+            stop_stats.append(
+                {
+                    "id": stop_state.stop_id,
+                    "name": stop_state.name,
+                    "boarded": stop_state.total_boarded,
+                    "alighted": stop_state.total_alighted,
+                    "arrived": stop_state.total_arrived,
+                }
+            )
+
+    top_stops = sorted(stop_stats, key=lambda x: x["boarded"], reverse=True)[:50]
+
+    response_data = {"global": stats, "top_stops": top_stops}
+    return JSONResponse(content=response_data)
 
 
 @app.websocket("/ws/simulation")

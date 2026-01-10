@@ -4,6 +4,7 @@ import { SimulationClient } from './SimulationClient.js';
 import { SimulationUI } from './SimulationUI.js';
 import { StatisticsUI } from '../ui/stats.js';
 import { PassengerGenerationModal } from '../ui/PassengerGenerationModal.js';
+import { WeightSettings } from '../ui/WeightSettings.js';
 
 export class SimulationController {
   constructor(map) {
@@ -26,6 +27,7 @@ export class SimulationController {
     this.ui = new SimulationUI(this.client);
     this.statsUI = new StatisticsUI();
     this.generationModal = new PassengerGenerationModal(this.client, this);
+    this.weightSettings = new WeightSettings(this.client, this);
     
     this.isPaused = false;
     this.wasRunningBeforeStats = false;
@@ -53,7 +55,7 @@ export class SimulationController {
         this.client.sendCommand('pause');
     }
 
-    this.client.sendCommand('get_statistics');
+    this.statsUI.loadDetailedStats();
   }
 
   closeStatistics() {
@@ -88,6 +90,7 @@ export class SimulationController {
     if ((data.type === 'simulation_ended' || data.type === 'statistics_update') && data.statistics) {
         console.log("Received statistics. Showing UI.");
         this.statsUI.show(data.statistics);
+        this.statsUI.loadDetailedStats();
         if (data.type === 'simulation_ended') {
             this.wasRunningBeforeStats = false; 
         }

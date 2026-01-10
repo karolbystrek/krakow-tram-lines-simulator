@@ -29,6 +29,7 @@ class StopState:
     waiting_passengers: List[Passenger] = field(default_factory=list)
     total_arrived: int = 0
     total_boarded: int = 0
+    total_alighted: int = 0
     arrival_rate_per_minute: float = 0.0
 
 

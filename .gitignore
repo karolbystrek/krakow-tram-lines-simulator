@@ -46,3 +46,4 @@ Thumbs.db
 GEMINI.md
 .geminiignore
 plans/
+.commit_message*.txt

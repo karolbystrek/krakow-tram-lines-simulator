@@ -97,6 +97,23 @@
         <div class="stats-chart-container">
             <canvas id="passenger-chart"></canvas>
         </div>
+        <div class="detailed-stats-container" style="margin-top: 20px; width: 100%; max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 8px;">
+             <h3 style="margin-top: 0;">Top Busy Stops</h3>
+             <table id="top-stops-table" style="width: 100%; text-align: left; border-collapse: collapse;">
+                 <thead>
+                     <tr style="border-bottom: 2px solid #eee;">
+                         <th style="padding: 8px;">Stop Name</th>
+                         <th style="padding: 8px;">Boarded</th>
+                         <th style="padding: 8px;">Alighted</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                 </tbody>
+             </table>
+        </div>
+        <div style="margin-top: 20px;">
+            <button id="close-stats-btn" class="btn btn-primary">Close Statistics</button>
+        </div>
     </div>
 </div>
 
