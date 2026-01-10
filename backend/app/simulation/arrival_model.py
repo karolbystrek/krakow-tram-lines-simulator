@@ -132,13 +132,11 @@ class ArrivalRateModel:
         """Save current stop weights to JSON file."""
         try:
             STOP_WEIGHTS_PATH.parent.mkdir(parents=True, exist_ok=True)
-            # We save the aggregated weights by name if possible, or just the current map?
-            # The current map has IDs. The input file had names. 
-            # Ideally we want to save the configuration, not the expanded map.
-            # For simplicity, we save the file_weights which stores the configuration.
             
+            # Save the full runtime state (ID -> Weight)
+            # This ensures we persist exactly what the simulation is using
             with open(STOP_WEIGHTS_PATH, 'w') as f:
-                json.dump(self.file_weights, f, indent=2)
+                json.dump(self.stop_weights, f, indent=2)
             print(f"Saved stop weights to {STOP_WEIGHTS_PATH}")
         except Exception as e:
             print(f"Error saving stop weights: {e}")
