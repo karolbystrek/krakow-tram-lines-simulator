@@ -13,7 +13,7 @@ class Passenger:
     passenger_id: str
     origin_stop_id: str
     destination_stop_id: str
-    target_line: str
+    target_line: str  # The line this passenger was generated for (preferred), but can board any valid line
     arrival_time_minutes: float
     boarding_time_minutes: Optional[float] = None
     alighting_time_minutes: Optional[float] = None

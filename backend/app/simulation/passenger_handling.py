@@ -59,7 +59,6 @@ class PassengerManager:
         Steps:
         1. Alighting: Passengers alight if their destination_stop_id matches current stop.
         2. Boarding: Board passengers if:
-            - target_line == tram line number
             - destination is reachable in the block's future path
             - capacity allows
         """
@@ -107,11 +106,7 @@ class PassengerManager:
             if available_space <= 0:
                 break
 
-            # 2. Check if this tram is on the passenger's target line
-            if passenger.target_line != tram_block.line_number:
-                continue
-            
-            # 3. Check if destination is reachable with this tram block
+            # 2. Check if destination is reachable with this tram block
             if not self._is_stop_reachable(tram_block, stop_time, passenger.destination_stop_id):
                 continue
 
