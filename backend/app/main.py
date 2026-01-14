@@ -10,11 +10,10 @@ from fastapi.staticfiles import StaticFiles
 from .simulation.engine import SimulationEngine
 from .simulation.geojson_utils import stops_to_geojson, shapes_to_geojson
 from .simulation.loader import (
-    load_tram_stops,
     load_shapes_from_geojson,
     get_service_for_weekday,
 )
-from .simulation.models import Stop, Shape
+from .simulation.models import Shape
 
 APP_DIR = Path(__file__).resolve().parent
 FRONTEND_DIR = APP_DIR.parent.parent / "frontend"
@@ -23,7 +22,9 @@ app = FastAPI()
 
 current_weekday = datetime.now().weekday()
 default_service_id = get_service_for_weekday(current_weekday)
-print(f"Current weekday index: {current_weekday}, Default service: {default_service_id}")
+print(
+    f"Current weekday index: {current_weekday}, Default service: {default_service_id}"
+)
 
 simulation_engine = SimulationEngine(service_id=default_service_id)
 
@@ -36,7 +37,9 @@ async def startup_event():
 
     # simulation_engine already loaded default service and its stops in __init__
     app.state.tram_stops = getattr(simulation_engine, "_cached_stops", {})
-    print(f"Initialized with {len(app.state.tram_stops)} tram stops for current service.")
+    print(
+        f"Initialized with {len(app.state.tram_stops)} tram stops for current service."
+    )
 
     await simulation_engine.start()
 
@@ -209,7 +212,9 @@ async def websocket_endpoint(websocket: WebSocket):
                     and not simulation_engine.running
                     and not simulation_engine.paused
                 ):
-                    print("Simulation finished detected in WS loop. Sending statistics.")
+                    print(
+                        "Simulation finished detected in WS loop. Sending statistics."
+                    )
                     stats = simulation_engine.get_statistics()
                     await websocket.send_json(
                         {"type": "simulation_ended", "statistics": stats}

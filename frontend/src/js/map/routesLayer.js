@@ -25,27 +25,6 @@ function createRoutePolyline(feature, lineNumber, simulationController) {
   polyline.bindPopup(() => {
     const container = document.createElement('div');
     container.innerHTML = `<b>Tram Line ${lineNumber}</b>`;
-
-    if (simulationController && simulationController.lineWeightSettings) {
-      const btn = document.createElement('button');
-      btn.textContent = 'Adjust Weight';
-      btn.style.marginTop = '8px';
-      btn.style.width = '100%';
-      btn.style.backgroundColor = '#6c757d';
-      btn.style.color = 'white';
-      btn.style.border = 'none';
-      btn.style.padding = '4px 8px';
-      btn.style.borderRadius = '4px';
-      btn.style.cursor = 'pointer';
-
-      btn.onclick = () => {
-        simulationController.lineWeightSettings.open(lineNumber);
-        polyline.closePopup();
-      };
-
-      container.appendChild(document.createElement('br'));
-      container.appendChild(btn);
-    }
     return container;
   }, { maxWidth: 300 });
 

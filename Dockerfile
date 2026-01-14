@@ -5,8 +5,6 @@ WORKDIR /app
 RUN apk add --no-cache \
     g++ \
     make \
-    cmake \
-    libffi-dev \
     musl-dev \
     && pip install --no-cache-dir --upgrade pip
 

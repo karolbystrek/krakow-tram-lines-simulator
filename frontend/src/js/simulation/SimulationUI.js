@@ -1,4 +1,3 @@
-import { debounce } from '../utils/debounce.js';
 import { getDefaultService } from '../utils/time.js';
 
 export class SimulationUI {
@@ -14,6 +13,8 @@ export class SimulationUI {
 
     this.isDraggingTimeSlider = false;
     this.isDraggingSpeedSlider = false;
+    this.wasPlayingBeforeDrag = false;
+    this.isPaused = true;
 
     this.loadingOverlay = document.getElementById('loading-overlay');
     this.connectionErrorOverlay = document.getElementById('connection-error-overlay');
@@ -33,27 +34,51 @@ export class SimulationUI {
   initializeTimeSlider() {
     if (!this.timeSlider) return;
 
-    const debouncedSetTime = debounce((time) => {
-      this.client.sendCommand('set_time', { time: time });
-    }, 100);
+    const startDrag = () => {
+      this.isDraggingTimeSlider = true;
+      // We use the last known state. If we are currently paused, we don't need to resume later.
+      // If we are running, we pause now and remember to resume later.
+      this.wasPlayingBeforeDrag = !this.isPaused;
+      
+      if (this.wasPlayingBeforeDrag) {
+        this.client.sendCommand('pause');
+      }
+    };
+
+    const endDrag = () => {
+      if (!this.isDraggingTimeSlider) return;
+      this.isDraggingTimeSlider = false;
+
+      // If 'change' fired, it sent set_time. 
+      // If 'change' didn't fire (no value change), we just resume.
+      // If 'change' is pending, it will send set_time, then we resume here.
+      // Note: If mouseup fires before change, we Resume then Set Time. 
+      // The backend handles set_time while running, so this is safe.
+      
+      if (this.wasPlayingBeforeDrag) {
+          this.client.sendCommand('resume');
+      }
+      this.wasPlayingBeforeDrag = false;
+    };
+
+    this.timeSlider.addEventListener('mousedown', startDrag);
+    this.timeSlider.addEventListener('touchstart', startDrag);
 
     this.timeSlider.addEventListener('input', (e) => {
       this.isDraggingTimeSlider = true;
       const time = parseFloat(e.target.value);
       this.renderTime(time);
-      debouncedSetTime(time);
     });
 
     this.timeSlider.addEventListener('change', (e) => {
-      this.isDraggingTimeSlider = false;
+      // This runs on commit (release).
       this.showLoading("Updating time...");
       this.client.sendCommand('set_time', { time: parseFloat(e.target.value) });
     });
 
-    const clearDrag = () => { this.isDraggingTimeSlider = false; };
-    this.timeSlider.addEventListener('mouseup', clearDrag);
-    this.timeSlider.addEventListener('mouseleave', clearDrag);
-    this.timeSlider.addEventListener('touchend', clearDrag);
+    // Use global listeners for release to catch drags ending outside the slider
+    window.addEventListener('mouseup', endDrag);
+    window.addEventListener('touchend', endDrag);
   }
 
   initializeSpeedSlider() {
@@ -136,6 +161,10 @@ export class SimulationUI {
     if (data.time) {
       this.updateTimeDisplay(data.time);
       this.hideLoading();
+    }
+
+    if (data.status) {
+        this.isPaused = data.status === 'paused';
     }
 
     if (this.pauseBtn && data.status) {

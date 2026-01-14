@@ -1,4 +1,5 @@
 import json
+import re
 from datetime import time
 from typing import Dict, Tuple, List, Optional, Set
 
@@ -38,16 +39,14 @@ _cached_stop_details = None
 
 def clean_stop_name(name: str) -> str:
     """
-    Remove suffixes like (nż), (nz) from stop names, handling variations and spaces.
+    Remove suffixes like (nż) from stop names, handling variations and spaces.
     """
     if not name:
         return ""
-    
-    import re
-    # Remove suffixes like (nż), (nz), (nż.), (nz.) with or without parentheses
+
+    # Remove suffixes like (nż), (nż.) with or without parentheses
     cleaned = re.sub(r"\(?nż\.?\)?", "", name, flags=re.IGNORECASE)
-    cleaned = re.sub(r"\(?nz\.?\)?", "", cleaned, flags=re.IGNORECASE)
-    
+
     # Remove extra spaces and return
     return " ".join(cleaned.split())
 
@@ -94,12 +93,12 @@ def get_tram_stop_names_from_schedules() -> Set[str]:
                     for stop_time_data in data.get("stop_times", []):
                         stop_name = stop_time_data.get("stop_name", "")
                         stop_num = stop_time_data.get("stop_num", "")
-                        
+
                         clean_name = clean_stop_name(stop_name)
                         full_name = f"{clean_name} {stop_num}".strip()
                         if full_name:
                             stop_names.add(full_name)
-                            
+
                 except Exception as e:
                     # Skip files that can't be read
                     continue
@@ -132,7 +131,9 @@ def load_tram_stops(
     if filter_by_tram_schedules and active_full_names is None:
         print("Collecting stop names from tram schedules...")
         active_full_names = get_tram_stop_names_from_schedules()
-        print(f"Found {len(active_full_names)} unique stop names used in tram schedules")
+        print(
+            f"Found {len(active_full_names)} unique stop names used in tram schedules"
+        )
 
     with open(GEOJSON_STOPS_PATH, "r", encoding="utf-8") as f:
         geojson_data = json.load(f)
@@ -223,7 +224,6 @@ def load_tram_stops(
             skipped_count += 1
             continue
 
-
     if skipped_count > 0:
         print(
             f"Warning: Skipped {skipped_count} stops due to missing or invalid kod_busman"
@@ -233,7 +233,6 @@ def load_tram_stops(
         print(
             f"Filtered out {filtered_count} stops not used in tram schedules (bus-only or inactive stops):"
         )
-        print(f"Dropped: {sorted(filtered_names_dropped)}")
 
     print(f"Loaded {len(stops_dict)} valid tram stops")
     return stops_dict

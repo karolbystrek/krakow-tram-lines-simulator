@@ -82345,6 +82345,7 @@
         "Ławki_inne_poza_wiatą": 0
       }
     },
+    {"type":"Feature","id":5268,"geometry":{"type":"Point","coordinates":[19.9827973991632,50.0710671427843]},"properties":{"OBJECTID":5268,"kod_busman":"805-02","Nazwa_przystanku_nr":"TAURON Arena Kraków Wieczysta 02","Typ_przystanku":"T","Rodzaj_przystanku":"przelotowy","Przystanek_podwojny":"nie","Na_żądanie":"nie","Geometria_przystanku":"wydzielone_torowisko","Nawierzchnia_przystanku":"beton","Nawierzchnia_peronu":"kostka","Pasy_medialne":"tak","Krawężnik_peronowy":"tak","Słupek_liniowy":1,"Słupek_inny":0,"Gablota_rozkładowa":0,"Dodatkowa_gablota":0,"Gablota_na_mapy":0,"Ławki_poza_wiatą":0,"Inne_do_siedzenia":0,"Kosze_przystankowe":1,"Kosz_inny":0,"Inne_konstukcje":null,"GlobalID":"f4d2e68c-dcb4-4d12-a2f3-e29b83952561","Wiata_liczba":0,"EditDate":"Mon, 29 Dec 2025 10:24:07 GMT","Editor":"lodzinskij","Skrzynka_rozkładowa":0,"validFrom":"Sat, 13 Dec 2025 00:00:00 GMT","validUntil":null,"Strefa_Biletowa":"I","Ławki_inne_poza_wiatą":0,"Grupa":"KMK"}},
     {
       "type": "Feature",
       "id": 5263,

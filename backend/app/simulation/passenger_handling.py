@@ -1,7 +1,3 @@
-"""
-Passenger boarding and alighting logic
-"""
-
 from typing import Tuple
 
 from .models import TramBlock, StopTime
@@ -33,7 +29,7 @@ class PassengerManager:
                     if st == current_stop_time:
                         found_current = True
                     continue
-                
+
                 # Once we found current stop, all subsequent stops are potential destinations
                 if st.full_name == destination_stop_id:
                     return True
@@ -72,7 +68,8 @@ class PassengerManager:
             passengers_to_alight = [
                 p
                 for p in tram_state.passengers
-                if p.status == "ON_TRAM" and p.destination_stop_id == stop_time.full_name
+                if p.status == "ON_TRAM"
+                and p.destination_stop_id == stop_time.full_name
             ]
 
             for passenger in passengers_to_alight:
@@ -80,7 +77,7 @@ class PassengerManager:
                 passenger.alighting_time_minutes = current_time_minutes
                 passenger.current_tram_id = None
                 passengers_alighted += 1
-            
+
             stop_state.total_alighted += passengers_alighted
 
             # Remove alighted passengers from tram
@@ -107,7 +104,9 @@ class PassengerManager:
                 break
 
             # 2. Check if destination is reachable with this tram block
-            if not self._is_stop_reachable(tram_block, stop_time, passenger.destination_stop_id):
+            if not self._is_stop_reachable(
+                tram_block, stop_time, passenger.destination_stop_id
+            ):
                 continue
 
             # Board the passenger

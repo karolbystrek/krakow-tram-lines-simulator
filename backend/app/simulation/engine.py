@@ -59,7 +59,7 @@ class SimulationEngine:
             return
 
         self.running = True
-        self.paused = False
+        self.paused = True
 
         # Load blocks from cache if not already loaded
         if not self.blocks:
