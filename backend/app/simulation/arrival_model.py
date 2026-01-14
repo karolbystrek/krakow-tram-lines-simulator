@@ -104,6 +104,16 @@ class ArrivalRateModel:
         self.current_blocks: List[TramBlock] = []
         self.accessibility_scores: Dict[str, float] = {}
 
+        self.last_departure_by_stop_id: Dict[str, int] = {}
+
+        self._skipped_generation_after_service: int = 0
+        self._skipped_generation_no_future_service: int = 0
+        self._skipped_generation_depot_destination: int = 0
+        self._skipped_depot_trips_count: int = 0
+        self._skipped_generation_due_to_long_trip: int = 0
+        self.max_wait_to_board_minutes: int = 30
+        self.max_allowed_trip_duration_minutes: int = 120
+
     def load_from_file(self) -> Optional[DemandProfile]:
         """Load demand profile from JSON file."""
         if not DEMAND_PROFILE_PATH.exists():
@@ -305,6 +315,11 @@ class ArrivalRateModel:
         for block in blocks:
             ln = block.line_number
             for trip in block.trips:
+                # Skip trips that start or end at depot (likely deadhead/repositioning trips)
+                if self._is_depot_trip(trip):
+                    self._skipped_depot_trips_count += 1
+                    continue
+
                 for i, stop_time_origin in enumerate(trip.stop_times):
                     origin = stop_time_origin.full_name
                     if not origin:
@@ -436,6 +451,24 @@ class ArrivalRateModel:
         print(
             f"Initialized global reachability for {len(self.global_reachability)} origins"
         )
+        print(f"Skipped {self._skipped_depot_trips_count} depot/reposition trips when building reachability")
+
+        self.last_departure_by_stop_id = {}
+        for block in blocks:
+            for trip in block.trips:
+                if self._is_depot_trip(trip):
+                    continue
+                for st in trip.stop_times:
+                    if not st.full_name:
+                        continue
+                    stop_id = self._get_stop_id_by_name(st.full_name)
+                    if not stop_id:
+                        continue
+                    prev = self.last_departure_by_stop_id.get(stop_id, -1)
+                    if st.departure_time_minutes > prev:
+                        self.last_departure_by_stop_id[stop_id] = st.departure_time_minutes
+
+        print(f"Computed last departures for {len(self.last_departure_by_stop_id)} stops.")
 
     def get_arrival_rate(self, stop_id: str, time_minutes: float) -> float:
         """
@@ -492,14 +525,80 @@ class ArrivalRateModel:
                 return s.stop_id
         return None
 
+    def _is_depot_stop(self, full_name: str) -> bool:
+        """Return True if a stop name points to a depot/garage or is a technical stop."""
+        if not full_name:
+            return False
+        fn = full_name.lower()
+        if fn.startswith("ph") or fn.startswith("pt"):
+            return True
+        return False
+
+    def _is_depot_trip(self, trip) -> bool:
+        """Return True if a trip appears to start or end at a depot stop."""
+        if not trip.stop_times:
+            return False
+        start_fn = trip.stop_times[0].full_name or ""
+        end_fn = trip.stop_times[-1].full_name or ""
+        return self._is_depot_stop(start_fn) or self._is_depot_stop(end_fn)
+
+    def _has_future_service(self, origin_full_name: str, destination_full_name: str, time_minutes: float) -> bool:
+        """Return True if there exists a trip after time_minutes that serves origin -> destination.
+
+        This checks all known blocks and their trips on lines that serve the O-D pair.
+        """
+
+        if origin_full_name not in self.od_lines:
+            return False
+        if destination_full_name not in self.od_lines[origin_full_name]:
+            return False
+
+        valid_lines = self.od_lines[origin_full_name][destination_full_name]
+
+        found_but_too_long_or_late = False
+        for block in self.current_blocks:
+            if block.line_number not in valid_lines:
+                continue
+            for trip in block.trips:
+                if self._is_depot_trip(trip):
+                    continue
+
+                origin_td = None
+                dest_td = None
+                for st in trip.stop_times:
+                    if st.full_name == origin_full_name:
+                        origin_td = st.departure_time_minutes
+                    if st.full_name == destination_full_name:
+                        dest_td = st.departure_time_minutes
+
+                if origin_td is not None and dest_td is not None:
+                    if origin_td <= time_minutes or dest_td < origin_td:
+                        continue
+
+                    wait_minutes = origin_td - time_minutes
+                    trip_duration = dest_td - origin_td
+
+                    if (
+                        wait_minutes <= self.max_wait_to_board_minutes
+                        and trip_duration <= self.max_allowed_trip_duration_minutes
+                    ):
+                        return True
+
+                    found_but_too_long_or_late = True
+
+        if found_but_too_long_or_late:
+            self._skipped_generation_due_to_long_trip += 1
+
+        return False
+
     def generate_arrivals(
         self, stop_state: StopState, time_minutes: float, delta_time: float
     ) -> List[Passenger]:
 
-        # Skip generation for technical stops
+        # Skip generation for technical stops or depot stops
         if stop_state.full_name.startswith("PH") or stop_state.full_name.startswith(
             "PT"
-        ):
+        ) or self._is_depot_stop(stop_state.full_name):
             return []
 
         arrival_rate = self.get_arrival_rate(stop_state.stop_id, time_minutes)
@@ -517,12 +616,35 @@ class ArrivalRateModel:
         else:
             num_arrivals = 1 if random.random() < expected_arrivals else 0
 
+        last_dep = self.last_departure_by_stop_id.get(stop_state.stop_id)
+        if last_dep is not None and time_minutes >= last_dep:
+            self._skipped_generation_after_service += num_arrivals
+            return []
+
         for i in range(num_arrivals):
-            line_and_dest = self._select_destination_gravity(stop_state.full_name)
-            if not line_and_dest:
+            attempts = 0
+            chosen = None
+            while attempts < 3:
+                line_and_dest = self._select_destination_gravity(stop_state.full_name)
+                if not line_and_dest:
+                    break
+
+                target_line, destination_stop_id = line_and_dest
+                if self._is_depot_stop(destination_stop_id):
+                    self._skipped_generation_depot_destination += 1
+                    attempts += 1
+                    continue
+                if self._has_future_service(stop_state.full_name, destination_stop_id, time_minutes):
+                    chosen = (target_line, destination_stop_id)
+                    break
+
+                attempts += 1
+
+            if not chosen:
+                self._skipped_generation_no_future_service += 1
                 continue
 
-            target_line, destination_stop_id = line_and_dest
+            target_line, destination_stop_id = chosen
 
             passenger_id = f"p_{stop_state.stop_id}_{int(time_minutes * 10)}_{i}"
             passenger = Passenger(

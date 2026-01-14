@@ -17,13 +17,16 @@ class PassengerManager:
         tram_block: TramBlock,
         current_stop_time: StopTime,
         destination_stop_id: str,
+        current_time_minutes: float,
     ) -> bool:
         """
         Check if a stop is reachable from current position in the future path of the block.
         Enforces a maximum transfer time between trips (e.g., 20 minutes) to prevent
-        passengers from staying on board during long layovers.
+        passengers from staying on board during long layovers. Additionally, reject
+        journeys whose arrival time would be unreasonably late (configurable threshold).
         """
         MAX_LAYOVER_MINUTES = 20
+        MAX_TOTAL_TRAVEL_FROM_NOW = 120
         found_current = False
 
         for i, trip in enumerate(tram_block.trips):
@@ -38,7 +41,10 @@ class PassengerManager:
                 # Check if destination is in this trip
                 for st in trip.stop_times:
                     if st.full_name == destination_stop_id:
-                        return True
+                        arrival_time = st.departure_time_minutes
+                        if (arrival_time - current_time_minutes) <= MAX_TOTAL_TRAVEL_FROM_NOW:
+                            return True
+                        # otherwise, this trip would take too long from now, skip it
                 continue
 
             # Case 2: We are still looking for the current stop in this trip
@@ -50,7 +56,10 @@ class PassengerManager:
 
                 # We found current stop earlier in this trip, checking subsequent stops
                 if st.full_name == destination_stop_id:
-                    return True
+                    arrival_time = st.departure_time_minutes
+                    if (arrival_time - current_time_minutes) <= MAX_TOTAL_TRAVEL_FROM_NOW:
+                        return True
+                    # otherwise, skip: journey would take too long
 
         return False
 
@@ -124,7 +133,7 @@ class PassengerManager:
 
             # 2. Check if destination is reachable with this tram block
             if not self._is_stop_reachable(
-                tram_block, stop_time, passenger.destination_stop_id
+                tram_block, stop_time, passenger.destination_stop_id, current_time_minutes
             ):
                 continue
 

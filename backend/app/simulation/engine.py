@@ -38,9 +38,10 @@ class SimulationEngine:
         self.arrival_model = ArrivalRateModel()
         self.stop_states: Dict[str, StopState] = {}
         self.tram_states: Dict[str, TramState] = {}
+        self.max_wait_minutes: int = 60
 
         # Statistics
-        self.stats = {"total_boarded": 0, "total_alighted": 0, "hourly_stats": {}}
+        self.stats = {"total_boarded": 0, "total_alighted": 0, "hourly_stats": {}, "total_removed_timeout": 0}
 
         # Lazy-load services: Only load the needed service initially for faster startup
         # Other services will be loaded on-demand when switching services
@@ -613,6 +614,26 @@ class SimulationEngine:
                 stop_state, current_time, delta_time
             )
             stop_state.waiting_passengers.extend(new_passengers)
+
+            # Purge waiting passengers who exceeded max wait time
+            # We treat only passengers with status == 'WAITING'
+            if self.max_wait_minutes is not None and self.max_wait_minutes > 0:
+                timed_out = [
+                    p
+                    for p in stop_state.waiting_passengers
+                    if p.status == "WAITING"
+                    and (current_time - p.arrival_time_minutes) >= self.max_wait_minutes
+                ]
+
+                if timed_out:
+                    count = len(timed_out)
+                    # Remove them from waiting list
+                    remaining = [p for p in stop_state.waiting_passengers if p not in timed_out]
+                    stop_state.waiting_passengers = remaining
+
+                    # Update counters
+                    stop_state.total_timed_out += count
+                    self.stats["total_removed_timeout"] += count
 
     def _find_matching_stop_states(self, stop_time: Any) -> List[StopState]:
         """Find matching StopStates for a given stop_time from schedule using full_name."""

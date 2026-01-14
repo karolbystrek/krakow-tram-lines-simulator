@@ -25,6 +25,7 @@ class StopState:
     total_boarded: int = 0
     total_alighted: int = 0
     arrival_rate_per_minute: float = 0.0
+    total_timed_out: int = 0
 
 
 @dataclass
