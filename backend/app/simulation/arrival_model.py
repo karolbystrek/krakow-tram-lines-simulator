@@ -102,11 +102,47 @@ class ArrivalRateModel:
         # Cache for current simulation state to allow runtime weight updates
         self.current_stops: List[StopState] = []
         self.current_blocks: List[TramBlock] = []
+        self.accessibility_scores: Dict[str, float] = {}
 
     def load_from_file(self) -> Optional[DemandProfile]:
         """Load demand profile from JSON file."""
         if not DEMAND_PROFILE_PATH.exists():
             return None
+
+    def get_detailed_weights(self) -> List[Dict]:
+        """Return detailed weight breakdown for UI."""
+        details = []
+        for stop_id, gen_weight in self.stop_weights.items():
+            # Find full name
+            full_name = None
+            for name, sid in self.fullname_to_id.items():
+                if sid == stop_id:
+                    full_name = name
+                    break
+            
+            base_weight = 1.0
+            if full_name and full_name in self.stop_weights_by_full_name:
+                base_weight = self.stop_weights_by_full_name[full_name]
+            elif stop_id in self.file_weights:
+                base_weight = self.file_weights[stop_id]
+                
+            acc_score = self.accessibility_scores.get(stop_id, 0.0)
+            
+            details.append({
+                "id": stop_id,
+                "name": full_name if full_name else stop_id,
+                "base_weight": base_weight,
+                "accessibility_score": acc_score,
+                "final_weight": gen_weight
+            })
+        return details
+
+    def update_base_weights(self, updates: Dict[str, float]):
+        """Update base weights and re-initialize model."""
+        self.file_weights.update(updates)
+        # Re-initialize to propagate changes (Mass update affects Accessibility of others)
+        if self.current_stops and self.current_blocks:
+            self.initialize_weights(self.current_stops, self.current_blocks)
 
         try:
             with open(DEMAND_PROFILE_PATH, "r") as f:
@@ -145,14 +181,20 @@ class ArrivalRateModel:
             print(f"Error saving demand profile: {e}")
 
     def save_weights(self):
-        """Save current stop weights to JSON file."""
+        """Save current stop weights (BASE WEIGHTS) to JSON file."""
         try:
             STOP_WEIGHTS_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-            # Save the full runtime state (ID -> Weight)
-            # This ensures we persist exactly what the simulation is using
+            # Reconstruct ID -> BaseWeight map
+            weights_to_save = {}
+            # Use fullname_to_id to reverse map
+            for full_name, base_weight in self.stop_weights_by_full_name.items():
+                if full_name in self.fullname_to_id:
+                    stop_id = self.fullname_to_id[full_name]
+                    weights_to_save[stop_id] = base_weight
+            
             with open(STOP_WEIGHTS_PATH, "w") as f:
-                json.dump(self.stop_weights, f, indent=2)
+                json.dump(weights_to_save, f, indent=2)
             print(f"Saved stop weights to {STOP_WEIGHTS_PATH}")
         except Exception as e:
             print(f"Error saving stop weights: {e}")
@@ -248,6 +290,7 @@ class ArrivalRateModel:
         self.stop_weights_by_full_name = {}
         self.fullname_to_id = {}
         self.total_system_weight = 0.0
+        self.accessibility_scores = {}
 
         # 1. Build Global Direct Reachability Map
         #    Structure: OriginFullName -> {DestFullName -> MinDistance}
@@ -327,10 +370,13 @@ class ArrivalRateModel:
             # But for gravity model (attraction), it needs full weight.
             # We accept that termini have weights.
 
-            self.stop_weights[stop.stop_id] = weight
+            # Store BASE weight for Attraction (Mass)
             if stop.full_name:
                 self.stop_weights_by_full_name[stop.full_name] = weight
                 self.fullname_to_id[stop.full_name] = stop.stop_id
+            
+            # Initialize Generation Weight to 0.0 (will be updated in Step 3 if active)
+            self.stop_weights[stop.stop_id] = 0.0
 
             # Only add to total system weight if it can actually generate passengers?
             # If we add Terminus to total_weight, it dilutes the global rate.
@@ -342,24 +388,47 @@ class ArrivalRateModel:
             if stop.full_name in boarding_capable_full_names:
                 self.total_system_weight += weight
 
-        # 3. Pre-calculate Gravity Weights for all origins
-        print("Pre-calculating gravity weights...")
+        # 3. Pre-calculate Gravity Weights for all origins AND update Stop Weights based on Accessibility
+        print("Pre-calculating gravity weights and accessibility scores...")
+        
+        # We need to rebuild total_system_weight based on the new accessibility-weighted values
+        self.total_system_weight = 0.0
+        
         for origin in self.global_reachability:
             destinations_dict = self.global_reachability[origin]
             if not destinations_dict:
+                # If no destinations, accessibility is 0. 
+                if origin in self.fullname_to_id:
+                    stop_id = self.fullname_to_id[origin]
+                    self.stop_weights[stop_id] = 0.0
+                    self.accessibility_scores[stop_id] = 0.0
                 continue
 
             dest_names = list(destinations_dict.keys())
             dest_weights = []
+            accessibility_sum = 0.0
 
             for d_name in dest_names:
                 dist = destinations_dict[d_name]
+                # Use Base Weight for Attraction (Mass)
                 stop_mass = self.stop_weights_by_full_name.get(d_name, 1.0)
                 # Gravity Formula
                 w = stop_mass / (dist + 800.0)
                 dest_weights.append(w)
+                accessibility_sum += w
 
             self.cached_gravity_weights[origin] = (dest_names, dest_weights)
+
+            # Update Generation Weight based on Accessibility
+            # We multiply the Base Weight (User Input) by the Accessibility Score
+            if origin in self.fullname_to_id:
+                stop_id = self.fullname_to_id[origin]
+                base_weight = self.stop_weights_by_full_name.get(origin, 1.0)
+                
+                new_gen_weight = base_weight * accessibility_sum
+                self.stop_weights[stop_id] = new_gen_weight
+                self.accessibility_scores[stop_id] = accessibility_sum
+                self.total_system_weight += new_gen_weight
 
         print(
             f"Initialized weights for {len(stops)} stops. Boarding-capable: {len(boarding_capable_full_names)}. Total system weight: {self.total_system_weight:.2f}"

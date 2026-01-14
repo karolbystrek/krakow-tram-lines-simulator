@@ -17,7 +17,7 @@ export class WeightSettings {
     this.modal.id = 'weight-settings-modal';
     this.modal.className = 'modal hidden';
     this.modal.innerHTML = `
-      <div class="modal-content">
+      <div class="modal-content" style="max-width: 900px;">
         <div class="modal-header">
           <h2>Stop Weights Configuration</h2>
           <button class="close-modal-btn">&times;</button>
@@ -27,9 +27,12 @@ export class WeightSettings {
             <div class="weights-search-container">
                 <input type="text" id="weights-search" placeholder="Search stops..." class="form-control" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;">
             </div>
-            <div class="weights-list-header">
+            
+            <div class="weights-list-header" style="display: grid; grid-template-columns: 2fr 2fr 1fr 1fr; gap: 10px; align-items: center;">
                 <span>Stop Name</span>
-                <span>Weight (0.1 - 20.0)</span>
+                <span>Base Weight (Mass)</span>
+                <span style="text-align: right;">Connectivity (%)</span>
+                <span style="text-align: right;">Flow Index</span>
             </div>
             <div id="weights-list" class="weights-list">
             </div>
@@ -101,22 +104,22 @@ export class WeightSettings {
       const response = await fetch('/api/simulation/weights');
       const data = await response.json();
       
-      this.weightsMap = {};
+      this.weightsMap = {}; // Stores base weights for saving
       this.displayList = [];
+      this.maxScore = 0;
+      this.maxFlow = 0;
       
       if (Array.isArray(data)) {
         this.displayList = data;
         data.forEach(item => {
-          this.weightsMap[item.id] = item.weight;
+          this.weightsMap[item.id] = item.base_weight;
+          if (item.accessibility_score > this.maxScore) this.maxScore = item.accessibility_score;
+          if (item.final_weight > this.maxFlow) this.maxFlow = item.final_weight;
         });
-      } else {
-        this.weightsMap = data;
-        this.displayList = Object.entries(data).map(([id, weight]) => ({
-          id, name: id, weight
-        }));
       }
       
-      this.displayList.sort((a, b) => b.weight - a.weight);
+      // Sort by final flow (importance) by default
+      this.displayList.sort((a, b) => b.final_weight - a.final_weight);
       this.filteredList = [...this.displayList];
     } catch (e) {
       console.error("Failed to fetch weights", e);
@@ -139,14 +142,44 @@ export class WeightSettings {
   renderList() {
     this.listContainer.innerHTML = '';
     
+    // Safety check for div by zero and noise
+    const maxScore = this.maxScore || 1;
+    const maxFlow = (this.maxFlow > 0.001) ? this.maxFlow : 1.0;
+
     this.filteredList.forEach(item => {
       const el = document.createElement('div');
       el.className = 'weight-item';
+      // Use Grid layout matching header
+      el.style.display = 'grid';
+      el.style.gridTemplateColumns = '2fr 2fr 1fr 1fr';
+      el.style.gap = '10px';
+      el.style.alignItems = 'center';
+      
+      // Base Weight from map (editable), others from item (read-only snapshot)
+      const currentBase = this.weightsMap[item.id];
+      const estimatedFlow = currentBase * item.accessibility_score;
+      
+      // Normalization
+      const connPercent = (item.accessibility_score / maxScore) * 100;
+      const flowIndex = (estimatedFlow / maxFlow) * 100;
+      
+      const isTerminus = item.accessibility_score <= 0.000001;
+      const connDisplay = isTerminus ? '<span style="color:#aaa; font-size:11px;">Terminus</span>' : `${connPercent.toFixed(0)}%`;
+      const flowDisplay = isTerminus ? '0' : flowIndex.toFixed(0);
+
       el.innerHTML = `
-        <span class="weight-name" title="${item.name} (${item.id})">${item.name}</span>
-        <div class="weight-control">
-          <input type="range" min="0.1" max="20.0" step="0.1" value="${item.weight}" data-id="${item.id}" class="slider-input">
-          <span class="weight-value">${item.weight.toFixed(1)}</span>
+        <span class="weight-name" title="${item.name} (${item.id})" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</span>
+        <div class="weight-control" style="display: flex; align-items: center; gap: 10px;">
+          <input type="range" min="0.0" max="20.0" step="0.1" value="${currentBase}" data-id="${item.id}" class="slider-input" style="flex: 1;" ${isTerminus ? 'disabled style="opacity:0.5"' : ''}>
+          <span class="weight-value" style="min-width: 40px; text-align: right;">${currentBase.toFixed(1)}</span>
+        </div>
+        <div style="text-align: right;">
+            <div style="font-weight: bold; color: #666;">${connDisplay}</div>
+            <div style="font-size: 10px; color: #999;">${isTerminus ? 'No Dest.' : 'Score'}</div>
+        </div>
+        <div class="weight-flow-display-container" style="text-align: right;">
+            <div class="weight-flow-value" style="font-weight: bold; color: #2196F3;">${flowDisplay}</div>
+            <div style="font-size: 10px; color: #999;">Index</div>
         </div>
       `;
       this.listContainer.appendChild(el);
@@ -155,14 +188,33 @@ export class WeightSettings {
     this.listContainer.querySelectorAll('input[type="range"]').forEach(input => {
       input.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
+        const id = e.target.dataset.id;
+        
+        // Update model
+        this.weightsMap[id] = val;
+        
+        // Update UI immediate feedback
         e.target.nextElementSibling.textContent = val.toFixed(1);
-        this.weightsMap[e.target.dataset.id] = val;
+        
+        // Update Flow calculation (approximate immediate feedback)
+        const item = this.displayList.find(i => i.id === id);
+        if (item) {
+             const flowContainer = e.target.closest('.weight-item').querySelector('.weight-flow-value');
+             const estFlow = val * item.accessibility_score;
+             const newFlowIndex = (estFlow / maxFlow) * 100;
+             if (flowContainer) {
+                flowContainer.textContent = newFlowIndex.toFixed(0);
+             }
+        }
       });
     });
   }
 
   async save() {
     try {
+      this.saveBtn.textContent = 'Saving...';
+      this.saveBtn.disabled = true;
+
       const response = await fetch('/api/simulation/weights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -170,17 +222,23 @@ export class WeightSettings {
       });
       
       if (response.ok) {
-        const originalText = this.saveBtn.textContent;
+        const originalText = 'Save Changes'; // Hardcoded backup
         this.saveBtn.textContent = 'Saved!';
-        this.saveBtn.disabled = true;
         setTimeout(() => {
           this.saveBtn.textContent = originalText;
           this.saveBtn.disabled = false;
           this.close();
+          // Reload to refresh the exact calculated flow values
+          this.fetchWeights();
         }, 1000);
+      } else {
+         this.saveBtn.textContent = 'Error';
+         this.saveBtn.disabled = false;
       }
     } catch (e) {
       console.error("Error saving weights", e);
+      this.saveBtn.textContent = 'Error';
+      this.saveBtn.disabled = false;
     }
   }
 }

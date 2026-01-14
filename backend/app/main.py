@@ -75,32 +75,24 @@ async def get_routes_data():
 
 @app.get("/api/simulation/weights")
 async def get_stop_weights():
-    """Get current stop weights with names."""
+    """Get current stop weights with names and details."""
     if not simulation_engine.arrival_model:
         return JSONResponse(content=[])
 
-    weights = simulation_engine.arrival_model.stop_weights
-    result = []
-
-    for stop_id, weight in weights.items():
-        name = stop_id
-        if stop_id in simulation_engine.stop_states:
-            name = simulation_engine.stop_states[stop_id].name
-
-        result.append({"id": stop_id, "name": name, "weight": weight})
-
-    return JSONResponse(content=result)
+    # Use the new detailed method
+    return JSONResponse(content=simulation_engine.arrival_model.get_detailed_weights())
 
 
 @app.post("/api/simulation/weights")
 async def update_stop_weights(weights: Dict[str, float] = Body(...)):
-    """Update stop weights."""
+    """Update stop base weights."""
     if simulation_engine.arrival_model:
-        for stop_id, weight in weights.items():
-            simulation_engine.arrival_model.set_stop_weight(stop_id, weight)
-            simulation_engine.arrival_model.update_weight_config(stop_id, weight)
-
+        # Update base weights and trigger re-initialization
+        simulation_engine.arrival_model.update_base_weights(weights)
+        
+        # Persist to file
         simulation_engine.arrival_model.save_weights()
+        
         return JSONResponse(content={"status": "updated", "count": len(weights)})
     return JSONResponse(
         content={"status": "error", "message": "Engine not ready"}, status_code=500

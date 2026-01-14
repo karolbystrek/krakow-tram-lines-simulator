@@ -20,19 +20,38 @@ class PassengerManager:
     ) -> bool:
         """
         Check if a stop is reachable from current position in the future path of the block.
+        Enforces a maximum transfer time between trips (e.g., 20 minutes) to prevent
+        passengers from staying on board during long layovers.
         """
+        MAX_LAYOVER_MINUTES = 20
         found_current = False
-        for trip in tram_block.trips:
+
+        for i, trip in enumerate(tram_block.trips):
+            # Case 1: We have already found the current stop in a previous trip
+            if found_current:
+                prev_trip = tram_block.trips[i - 1]
+                gap = trip.get_start_time_minutes() - prev_trip.get_end_time_minutes()
+
+                if gap > MAX_LAYOVER_MINUTES:
+                    return False
+
+                # Check if destination is in this trip
+                for st in trip.stop_times:
+                    if st.full_name == destination_stop_id:
+                        return True
+                continue
+
+            # Case 2: We are still looking for the current stop in this trip
             for st in trip.stop_times:
                 if not found_current:
-                    # We need to find where we are first (exact object match or ID+time)
                     if st == current_stop_time:
                         found_current = True
                     continue
 
-                # Once we found current stop, all subsequent stops are potential destinations
+                # We found current stop earlier in this trip, checking subsequent stops
                 if st.full_name == destination_stop_id:
                     return True
+
         return False
 
     def handle_tram_at_stop(
