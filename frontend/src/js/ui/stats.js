@@ -1,3 +1,5 @@
+
+
 export class StatisticsUI {
     constructor(onClose) {
         this.overlay = document.getElementById('statistics-overlay');
@@ -6,16 +8,22 @@ export class StatisticsUI {
         this.totalAlightedEl = document.getElementById('stat-total-alighted');
         this.chartCanvas = document.getElementById('passenger-chart');
         this.stopSearchInput = document.getElementById('stop-search-input');
-        
+
         this.chart = null;
         this.onClose = onClose;
         this.allStops = [];
+        this.allTrams = [];
 
         // Sorting state
         this.sortColumn = 'traffic'; // Default sort by Total Traffic
         this.sortDirection = 'desc'; // Default descending
 
+        // Chart modal elements
+        this.chartModal = null;
+        this.chartModalCanvas = null;
+
         this.initEvents();
+        this.createChartModal();
     }
 
     initEvents() {
@@ -36,6 +44,12 @@ export class StatisticsUI {
         if (this.stopSearchInput) {
             this.stopSearchInput.addEventListener('input', () => {
                 this.filterAndRenderStops();
+            });
+        }
+
+        if (this.tramSearchInput) {
+            this.tramSearchInput.addEventListener('input', () => {
+                this.filterAndRenderTrams();
             });
         }
 
@@ -181,7 +195,7 @@ export class StatisticsUI {
         try {
             const response = await fetch('/api/simulation/stats/detailed');
             const data = await response.json();
-            
+
             this.show(data.global);
 
             // Store stops and pre-calculate traffic
@@ -193,7 +207,9 @@ export class StatisticsUI {
             // Initial sort and render
             this.updateSortIcons();
             this.filterAndRenderStops();
-            
+
+            await this.loadTramStats();
+
         } catch (e) {
             console.error("Failed to load detailed stats", e);
         }
@@ -229,13 +245,12 @@ export class StatisticsUI {
     renderTopStops(stops) {
         const tbody = document.querySelector('#top-stops-table tbody');
         if (!tbody) return;
-        
+
         tbody.innerHTML = '';
         stops.forEach(stop => {
             const row = document.createElement('tr');
             row.style.borderBottom = '1px solid #eee';
-            
-            // Format numbers
+
             const traffic = (stop.traffic || 0).toLocaleString();
             const boarded = (stop.boarded || 0).toLocaleString();
             const alighted = (stop.alighted || 0).toLocaleString();
@@ -245,8 +260,240 @@ export class StatisticsUI {
                 <td style="padding: 12px; text-align: right; font-variant-numeric: tabular-nums; font-weight: bold;">${traffic}</td>
                 <td style="padding: 12px; text-align: right; font-variant-numeric: tabular-nums;">${boarded}</td>
                 <td style="padding: 12px; text-align: right; font-variant-numeric: tabular-nums;">${alighted}</td>
+                <td style="padding: 12px; text-align: center;">
+                    <button class="btn btn-small btn-chart" data-stop-id="${stop.id}" title="View passenger chart for ${stop.name}">
+                        <i class="fas fa-chart-line"></i>
+                    </button>
+                </td>
             `;
             tbody.appendChild(row);
+        });
+
+        const chartButtons = tbody.querySelectorAll('.btn-chart');
+        chartButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const stopId = e.currentTarget.dataset.stopId;
+                this.showStopChart(stopId);
+            });
+        });
+    }
+
+    aggregateHalfHour(historyData) {
+    const buckets = new Map();
+
+    historyData.forEach(([time, value]) => {
+        const bucketStart = Math.floor(time / 30) * 30;
+
+        if (!buckets.has(bucketStart)) {
+            buckets.set(bucketStart, { sum: 0, count: 0 });
+        }
+
+        const bucket = buckets.get(bucketStart);
+        bucket.sum += value;
+        bucket.count += 1;
+    });
+
+    const times = [];
+    const values = [];
+
+    [...buckets.entries()]
+        .sort((a, b) => a[0] - b[0])
+        .forEach(([bucketStart, { sum, count }]) => {
+            times.push(bucketStart);
+            values.push(sum / count); // average
+        });
+
+    return { times, values };
+}
+
+
+    createChartModal() {
+        this.chartModal = document.createElement('div');
+        this.chartModal.className = 'overlay hidden';
+        this.chartModal.innerHTML = `
+            <div class="overlay-content chart-modal-content">
+                <div class="modal-header">
+                    <h2 id="chart-modal-title">Passenger Chart</h2>
+                    <button id="close-chart-modal-btn" class="close-modal-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <canvas id="individual-chart-canvas" width="800" height="400"></canvas>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(this.chartModal);
+        const closeBtn = this.chartModal.querySelector('#close-chart-modal-btn');
+        closeBtn.addEventListener('click', () => this.hideChartModal());
+
+        this.chartModal.addEventListener('click', (e) => {
+            if (e.target === this.chartModal) {
+                this.hideChartModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.chartModal && !this.chartModal.classList.contains('hidden')) {
+                this.hideChartModal();
+            }
+        });
+
+        this.chartModalCanvas = this.chartModal.querySelector('#individual-chart-canvas');
+    }
+
+    async showStopChart(stopId) {
+        try {
+            const response = await fetch(`/api/simulation/stats/stop/${stopId}`);
+            const data = await response.json();
+
+            const stopName = this.allStops.find(s => s.id === stopId)?.name || `Stop ${stopId}`;
+            this.showChartModal(`Waiting Passengers at ${stopName}`, data.history, 'Waiting Passengers', 'rgba(75, 192, 192, 1)');
+        } catch (e) {
+            console.error("Failed to load stop chart", e);
+        }
+    }
+
+    async showTramChart(tramId) {
+        try {
+            const response = await fetch(`/api/simulation/stats/tram/${tramId}`);
+            const data = await response.json();
+
+            const tram = this.allTrams.find(t => t.id === tramId);
+            const tramName = tram ? `Line ${tram.line} (${tramId})` : `Tram ${tramId}`;
+            this.showChartModal(`Occupancy for ${tramName}`, data.history, 'Occupancy', 'rgba(255, 159, 64, 1)');
+        } catch (e) {
+            console.error("Failed to load tram chart", e);
+        }
+    }
+
+    showChartModal(title, historyData, label, color) {
+    if (!this.chartModal || !this.chartModalCanvas) return;
+
+    const titleEl = this.chartModal.querySelector('#chart-modal-title');
+    if (titleEl) titleEl.textContent = title;
+
+    // 🔹 Aggregate into 30-minute windows
+    const { times, values } = this.aggregateHalfHour(historyData);
+
+    const labels = times.map(time => {
+        const hours = Math.floor(time / 60);
+        const minutes = time % 60;
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    });
+
+    if (this.chartModalCanvas.chart) {
+        this.chartModalCanvas.chart.destroy();
+    }
+
+    this.chartModalCanvas.chart = new Chart(this.chartModalCanvas, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: `${label} (30 min avg)`,
+                data: values,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: label
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time (30 min windows)'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: title
+                }
+            }
+        }
+    });
+
+    this.chartModal.classList.remove('hidden');
+}
+
+    hideChartModal() {
+        if (this.chartModal) {
+            this.chartModal.classList.add('hidden');
+        }
+    }
+
+    async loadTramStats() {
+        try {
+            const response = await fetch('/api/simulation/stats/trams');
+            const data = await response.json();
+
+            this.allTrams = data.trams;
+            this.filterAndRenderTrams();
+        } catch (e) {
+            console.error("Failed to load tram stats", e);
+        }
+    }
+
+    filterAndRenderTrams() {
+        const searchTerm = this.tramSearchInput ? this.tramSearchInput.value.toLowerCase().trim() : '';
+
+        let filteredTrams = this.allTrams.filter(tram =>
+            tram.id.toLowerCase().includes(searchTerm) ||
+            tram.line.toString().includes(searchTerm)
+        );
+
+        filteredTrams.sort((a, b) => b.occupancy_percent - a.occupancy_percent);
+
+        const tramsToShow = searchTerm ? filteredTrams : filteredTrams.slice(0, 50);
+
+        this.renderTrams(tramsToShow);
+    }
+
+    renderTrams(trams) {
+        const tbody = document.querySelector('#trams-table tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+        trams.forEach(tram => {
+            const row = document.createElement('tr');
+            row.style.borderBottom = '1px solid #eee';
+
+            const occupancyPercent = tram.occupancy_percent.toFixed(1);
+            const occupancyColor = tram.occupancy_percent > 80 ? 'color: #e74c3c;' :
+                                 tram.occupancy_percent > 60 ? 'color: #f39c12;' : 'color: #27ae60;';
+
+            row.innerHTML = `
+                <td style="padding: 12px;">${tram.id}</td>
+                <td style="padding: 12px; text-align: right;">${tram.line}</td>
+                <td style="padding: 12px; text-align: right; font-variant-numeric: tabular-nums;">
+                    <span style="${occupancyColor}">${tram.current_occupancy}</span>
+                </td>
+                <td style="padding: 12px; text-align: right; font-variant-numeric: tabular-nums;">${tram.max_capacity}</td>
+                <td style="padding: 12px; text-align: center;">
+                    <button class="btn btn-small btn-chart" data-tram-id="${tram.id}" title="View occupancy chart for ${tram.id}">
+                        <i class="fas fa-chart-line"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        const chartButtons = tbody.querySelectorAll('.btn-chart');
+        chartButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const tramId = e.currentTarget.dataset.tramId;
+                this.showTramChart(tramId);
+            });
         });
     }
 }

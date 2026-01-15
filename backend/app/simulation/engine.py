@@ -43,6 +43,11 @@ class SimulationEngine:
         # Statistics
         self.stats = {"total_boarded": 0, "total_alighted": 0, "hourly_stats": {}, "total_removed_timeout": 0}
 
+        # Time-series data for charts
+        self.stop_passenger_history: Dict[str, List[Tuple[float, int]]] = {}  # stop_id -> [(time, waiting_count), ...]
+        self.tram_occupancy_history: Dict[str, List[Tuple[float, int]]] = {}  # tram_id -> [(time, occupancy), ...]
+        self.last_history_update = 0.0  # Track last time we updated history
+
         # Lazy-load services: Only load the needed service initially for faster startup
         # Other services will be loaded on-demand when switching services
         print(f"Loading initial service: {service_id}...")
@@ -635,6 +640,11 @@ class SimulationEngine:
                     stop_state.total_timed_out += count
                     self.stats["total_removed_timeout"] += count
 
+        # Record passenger history every minute
+        if current_time - self.last_history_update >= 1.0:
+            self._record_passenger_history(current_time)
+            self.last_history_update = current_time
+
     def _find_matching_stop_states(self, stop_time: Any) -> List[StopState]:
         """Find matching StopStates for a given stop_time from schedule using full_name."""
         matching_stop_states = []
@@ -671,3 +681,26 @@ class SimulationEngine:
     def get_statistics(self) -> Dict[str, Any]:
         """Get current simulation statistics."""
         return self.stats
+
+    def _record_passenger_history(self, current_time: float):
+        """Record current passenger counts for charts."""
+        # Record stop passenger counts
+        for stop_id, stop_state in self.stop_states.items():
+            waiting_count = len([p for p in stop_state.waiting_passengers if p.status == "WAITING"])
+            if stop_id not in self.stop_passenger_history:
+                self.stop_passenger_history[stop_id] = []
+            self.stop_passenger_history[stop_id].append((current_time, waiting_count))
+
+        # Record tram occupancy
+        for tram_id, tram_state in self.tram_states.items():
+            if tram_id not in self.tram_occupancy_history:
+                self.tram_occupancy_history[tram_id] = []
+            self.tram_occupancy_history[tram_id].append((current_time, tram_state.current_occupancy))
+
+    def get_stop_passenger_history(self, stop_id: str) -> List[Tuple[float, int]]:
+        """Get passenger history for a specific stop."""
+        return self.stop_passenger_history.get(stop_id, [])
+
+    def get_tram_occupancy_history(self, tram_id: str) -> List[Tuple[float, int]]:
+        """Get occupancy history for a specific tram."""
+        return self.tram_occupancy_history.get(tram_id, [])

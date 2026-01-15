@@ -158,6 +158,38 @@ async def get_detailed_stats():
     return JSONResponse(content=response_data)
 
 
+@app.get("/api/simulation/stats/stop/{stop_id}")
+async def get_stop_passenger_chart(stop_id: str):
+    """Get passenger history data for a specific stop."""
+    history = simulation_engine.get_stop_passenger_history(stop_id)
+    return JSONResponse(content={"stop_id": stop_id, "history": history})
+
+
+@app.get("/api/simulation/stats/tram/{tram_id}")
+async def get_tram_occupancy_chart(tram_id: str):
+    """Get occupancy history data for a specific tram."""
+    history = simulation_engine.get_tram_occupancy_history(tram_id)
+    return JSONResponse(content={"tram_id": tram_id, "history": history})
+
+
+@app.get("/api/simulation/stats/trams")
+async def get_tram_stats():
+    """Get statistics for all trams."""
+    tram_stats = []
+    for block in simulation_engine.blocks:
+        tram_state = simulation_engine.tram_states.get(block.block_id)
+        if tram_state:
+            tram_stats.append({
+                "id": block.block_id,
+                "line": block.line_number,
+                "current_occupancy": tram_state.current_occupancy,
+                "max_capacity": tram_state.max_capacity,
+                "occupancy_percent": round((tram_state.current_occupancy / tram_state.max_capacity * 100) if tram_state.max_capacity > 0 else 0, 1)
+            })
+
+    return JSONResponse(content={"trams": tram_stats})
+
+
 @app.websocket("/ws/simulation")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
