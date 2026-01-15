@@ -32,7 +32,7 @@ class StopState:
 class TramState:
     block_id: str
     passengers: List[Passenger] = field(default_factory=list)
-    max_capacity: int = 500
+    max_capacity: int = 350
     current_occupancy: int = 0
 
     def get_available_space(self) -> int:
